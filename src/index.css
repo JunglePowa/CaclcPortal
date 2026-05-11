@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 222 47% 8%;
+    --bg-card: 222 47% 12%;
+    --fg: 210 40% 96%;
+    --fg-muted: 218 11% 55%;
+    --border: 215 28% 20%;
+    --accent: 160 84% 39%;
+    color-scheme: dark;
+  }
+
+  .light {
+    --bg: 210 20% 98%;
+    --bg-card: 0 0% 100%;
+    --fg: 222 47% 11%;
+    --fg-muted: 215 16% 47%;
+    --border: 214 32% 88%;
+    --accent: 160 84% 35%;
+    color-scheme: light;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background-color: hsl(var(--bg));
+    color: hsl(var(--fg));
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: hsl(var(--bg-card)); }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--fg-muted)); }
+
+  /* Range slider */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: hsl(var(--border));
+    border-radius: 2px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: hsl(var(--accent));
+    cursor: pointer;
+    box-shadow: 0 0 0 3px hsl(var(--accent) / 0.2);
+    transition: box-shadow 0.15s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 5px hsl(var(--accent) / 0.3);
+  }
+
+  /* Hide number input spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  select {
+    background-color: hsl(var(--bg-card));
+    color: hsl(var(--fg));
+  }
+  select option {
+    background-color: hsl(var(--bg-card));
+    color: hsl(var(--fg));
+  }
+}
+
+/* Gradient mesh background */
+.mesh-bg {
+  background-color: hsl(var(--bg));
+  background-image:
+    radial-gradient(at 20% 30%, hsl(160 84% 39% / 0.08) 0px, transparent 50%),
+    radial-gradient(at 80% 10%, hsl(217 91% 60% / 0.06) 0px, transparent 50%),
+    radial-gradient(at 60% 80%, hsl(272 91% 65% / 0.04) 0px, transparent 50%);
+}
+
+/* Glass card */
+.glass {
+  background: hsl(var(--bg-card) / 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border));
+}
