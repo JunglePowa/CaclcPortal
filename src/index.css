@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import '@fontsource-variable/onest';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,8 +32,8 @@
     margin: 0;
     background-color: hsl(var(--bg));
     color: hsl(var(--fg));
-    font-family: 'Inter', system-ui, sans-serif;
-    font-feature-settings: "cv11", "ss01";
+    font-family: 'Onest Variable', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    font-feature-settings: "ss03", "cv11";
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.2s ease, color 0.2s ease;
   }

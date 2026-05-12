@@ -4,7 +4,7 @@ module.exports = {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+      fontFamily: { sans: ['"Onest Variable"', 'system-ui', 'sans-serif'] },
       colors: {
         emerald: {
           400: '#34d399',
