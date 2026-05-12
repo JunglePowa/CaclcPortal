@@ -6,6 +6,15 @@ export function Footer() {
       <div className="mx-auto flex max-w-[1440px] flex-col gap-3 px-4 py-6 text-xs text-[hsl(var(--fg-muted))] sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <p>© 2026 Калк Портал</p>
         <nav className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <Link to="/finansy" className="hover:text-[hsl(var(--fg))] transition-colors">
+            Финансы
+          </Link>
+          <Link to="/kredity" className="hover:text-[hsl(var(--fg))] transition-colors">
+            Кредиты
+          </Link>
+          <Link to="/nalogi" className="hover:text-[hsl(var(--fg))] transition-colors">
+            Налоги
+          </Link>
           <Link to="/about" className="hover:text-[hsl(var(--fg))] transition-colors">
             О сервисе
           </Link>

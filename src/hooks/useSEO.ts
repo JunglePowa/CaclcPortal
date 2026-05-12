@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ROUTE_MODES, MODE_TITLES, MODE_DESCRIPTIONS } from '@/utils/modeRoutes'
+import { CALCULATOR_CATEGORIES } from '@/lib/calculatorCatalog'
 
 interface SEOData {
   title: string
@@ -151,6 +152,26 @@ const SEO_MAP: Record<string, SEOData> = {
     canonical: `${BASE_URL}/404`,
     robots: 'noindex, follow',
   },
+}
+
+for (const category of CALCULATOR_CATEGORIES) {
+  SEO_MAP[category.path] = {
+    title: `${category.title} — Калк Портал`,
+    description: category.description,
+    canonical: `${BASE_URL}${category.path}`,
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: category.title,
+      description: category.description,
+      url: `${BASE_URL}${category.path}`,
+      mainEntity: category.items.map((item) => ({
+        '@type': 'WebApplication',
+        name: item.label,
+        url: `${BASE_URL}${item.href}`,
+      })),
+    },
+  }
 }
 
 function setMeta(name: string, content: string) {
