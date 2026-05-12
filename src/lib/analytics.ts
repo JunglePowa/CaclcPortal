@@ -48,7 +48,7 @@ function initGoogleAnalytics(id: string): void {
     window.dataLayer!.push(arguments)
   }
   window.gtag('js', new Date())
-  window.gtag('config', id, { anonymize_ip: true, send_page_view: true })
+  window.gtag('config', id, { anonymize_ip: true, send_page_view: false })
 }
 
 export function initAnalytics(): void {
@@ -74,6 +74,8 @@ export function trackPageview(path: string): void {
     }
   }
 }
+
+export const hasAnalytics = Boolean(YM_ID || GA_ID)
 
 export function trackEvent(name: string, params?: Record<string, unknown>): void {
   if (YM_ID) {

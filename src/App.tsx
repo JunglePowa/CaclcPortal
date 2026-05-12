@@ -1,8 +1,8 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense, useEffect, useRef } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useSEO } from '@/hooks/useSEO'
 import HomePage from '@/pages/HomePage'
-import { initAnalytics, trackPageview } from '@/lib/analytics'
+import { hasAnalytics, initAnalytics, trackPageview } from '@/lib/analytics'
 
 const InvesticiiPage = lazy(() => import('@/pages/InvesticiiPage'))
 const VkladPage = lazy(() => import('@/pages/VkladPage'))
@@ -27,14 +27,27 @@ const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 export default function App() {
   useSEO()
   const location = useLocation()
+  const didTrackInitialPageview = useRef(false)
 
   useEffect(() => {
     initAnalytics()
+    if (hasAnalytics) {
+      trackPageview(location.pathname + location.search)
+      didTrackInitialPageview.current = true
+    }
+    // Initial hit is sent after analytics has been initialized.
+    // Route changes are tracked by the effect below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
+    if (!hasAnalytics) return
+    if (didTrackInitialPageview.current) {
+      didTrackInitialPageview.current = false
+      return
+    }
     trackPageview(location.pathname + location.search)
-  }, [location.pathname, location.search])
+  }, [location.key])
 
   return (
     <Suspense fallback={null}>

@@ -14,7 +14,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <TrendingUp size={16} className="text-emerald-400" />
               </div>
               <div>
-                <h1 className="text-sm font-semibold leading-none">КалкПортал</h1>
+                <h1 className="text-sm font-semibold leading-none">Калк Портал</h1>
                 <p className="text-xs text-[hsl(var(--fg-muted))]">Онлайн калькуляторы</p>
               </div>
             </Link>

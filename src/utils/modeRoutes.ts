@@ -19,12 +19,12 @@ export const ROUTE_MODES: Record<string, CalculatorMode> = {
 }
 
 export const MODE_TITLES: Record<CalculatorMode, string> = {
-  accumulation: 'Инвестиции — КалкПортал',
-  goal: 'Нужный взнос — КалкПортал',
-  duration: 'Срок накопления — КалкПортал',
-  rate: 'Нужная ставка — КалкПортал',
-  capital: 'Нужный капитал — КалкПортал',
-  comparison: 'Сравнение сценариев — КалкПортал',
+  accumulation: 'Инвестиции — Калк Портал',
+  goal: 'Нужный взнос — Калк Портал',
+  duration: 'Срок накопления — Калк Портал',
+  rate: 'Нужная ставка — Калк Портал',
+  capital: 'Нужный капитал — Калк Портал',
+  comparison: 'Сравнение сценариев — Калк Портал',
 }
 
 export const MODE_DESCRIPTIONS: Record<CalculatorMode, string> = {

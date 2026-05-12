@@ -9,6 +9,21 @@ const isEnabled = (): boolean => {
   return (import.meta.env.VITE_RSYA_ENABLED as string | undefined) === 'true'
 }
 
+let scriptRequested = false
+
+function loadYandexRtbScript(): void {
+  if (typeof document === 'undefined') return
+  if (scriptRequested || document.querySelector('script[data-yandex-rtb="true"]')) return
+  scriptRequested = true
+  window.yaContextCb = window.yaContextCb || ([] as unknown as Window['yaContextCb'])
+
+  const script = document.createElement('script')
+  script.async = true
+  script.src = 'https://yandex.ru/ads/system/context.js'
+  script.dataset.yandexRtb = 'true'
+  document.head.appendChild(script)
+}
+
 /**
  * Универсальный рекламный блок РСЯ (Яндекс.Директ).
  *
@@ -44,6 +59,7 @@ export function AdBlock({ blockId, className }: AdBlockProps) {
       // Очередь callback-ов РСЯ. Скрипт push'нет её, когда загрузится.
       window.yaContextCb = window.yaContextCb || ([] as unknown as Window['yaContextCb'])
       window.yaContextCb!.push(doRender)
+      loadYandexRtbScript()
     }
 
     return () => {
