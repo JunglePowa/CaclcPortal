@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateTransport } from '@/calculators/transport'
-import { saveToHistory } from '@/utils/history'
 import { EmbedButton } from '@/components/EmbedButton'
+import { useHistorySync } from '@/hooks/useHistorySync'
+import { ResultRow, InfoCard, Divider, Select, labelCls, inputCls } from '@/components/ui'
 
-const inputCls = 'w-full rounded-lg border border-[hsl(var(--border))] px-3 py-2.5 text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 transition tabular'
-const labelCls = 'block text-xs font-medium mb-1 text-[hsl(var(--fg-muted))] uppercase tracking-wide'
-const selectCls = `${inputCls} cursor-pointer`
+const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 
 const LUXURY_OPTIONS = [
   { label: 'Нет (1×)', value: 1.0 },
@@ -22,26 +21,28 @@ const REGION_OPTIONS = [
   { label: 'Другой регион (базовый)', value: 1.0 },
 ]
 
+const MONTHS_OPTIONS = Array.from({ length: 12 }, (_, i) => i + 1).map(m => ({
+  value: m,
+  label: `${m} ${m === 1 ? 'месяц' : m < 5 ? 'месяца' : 'месяцев'}`,
+}))
+
 export default function TransportPage() {
   const [horsePower, setHorsePower] = useState(150)
   const [monthsOwned, setMonthsOwned] = useState(12)
   const [regionRate, setRegionRate] = useState(1.0)
   const [luxuryCoeff, setLuxuryCoeff] = useState(1.0)
 
-  useEffect(() => {
-    document.title = 'Калькулятор транспортного налога — КалкПортал'
-  }, [])
-
   const result = calculateTransport({ horsePower, monthsOwned, regionRate, luxuryCoeff })
 
-  useEffect(() => {
-    saveToHistory({
-      calculatorLabel: 'Транспортный налог',
-      calculatorUrl: '/transportnyj-nalog',
-      summary: `${horsePower} л.с., налог ${Math.round(result.actualTax).toLocaleString('ru-RU')} ₽`,
-    })
-  }, [result])
+  useHistorySync({
+    calculatorLabel: 'Транспортный налог',
+    calculatorUrl: '/transportnyj-nalog',
+    summary: `${horsePower} л.с., налог ${Math.round(result.actualTax).toLocaleString('ru-RU')} ₽`,
+    triggerKey: `${horsePower}|${result.actualTax}`,
+    delayMs: 0,
+  })
 
+  // REGION_OPTIONS use numeric values that can collide; use labels for keying.
   return (
     <AppLayout>
       <div className="max-w-lg mx-auto py-8 px-4">
@@ -76,22 +77,19 @@ export default function TransportPage() {
         </div>
 
         <div className="mb-4">
-          <label className={labelCls}>Месяцев владения</label>
-          <select
-            className={selectCls}
+          <Select
+            label="Месяцев владения"
             value={monthsOwned}
-            onChange={e => setMonthsOwned(parseInt(e.target.value))}
-          >
-            {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
-              <option key={m} value={m}>{m} {m === 1 ? 'месяц' : m < 5 ? 'месяца' : 'месяцев'}</option>
-            ))}
-          </select>
+            onChange={setMonthsOwned}
+            options={MONTHS_OPTIONS}
+            numeric
+          />
         </div>
 
         <div className="mb-4">
           <label className={labelCls}>Регион</label>
           <select
-            className={selectCls}
+            className={`${inputCls} cursor-pointer`}
             value={regionRate}
             onChange={e => setRegionRate(parseFloat(e.target.value))}
           >
@@ -107,7 +105,7 @@ export default function TransportPage() {
         <div className="mb-6">
           <label className={labelCls}>Повышающий коэффициент</label>
           <select
-            className={selectCls}
+            className={`${inputCls} cursor-pointer`}
             value={luxuryCoeff}
             onChange={e => setLuxuryCoeff(parseFloat(e.target.value))}
           >
@@ -117,28 +115,13 @@ export default function TransportPage() {
           </select>
         </div>
 
-        <div className="glass rounded-2xl p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-[hsl(var(--fg-muted))]">Ставка</span>
-            <span className="text-lg font-bold tabular text-[hsl(var(--fg))]">
-              {result.baseRate} ₽/л.с.
-            </span>
-          </div>
-          <div className="border-t border-[hsl(var(--border))]" />
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-[hsl(var(--fg-muted))]">Налог за год</span>
-            <span className="text-lg font-bold tabular text-[hsl(var(--fg))]">
-              {Math.round(result.annualTax).toLocaleString('ru-RU')} ₽
-            </span>
-          </div>
-          <div className="border-t border-[hsl(var(--border))]" />
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-[hsl(var(--fg-muted))]">Налог к уплате</span>
-            <span className="text-2xl font-bold tabular text-emerald-400">
-              {Math.round(result.actualTax).toLocaleString('ru-RU')} ₽
-            </span>
-          </div>
-        </div>
+        <InfoCard spacing="space-y-4">
+          <ResultRow label="Ставка" value={`${result.baseRate} ₽/л.с.`} size="lg" />
+          <Divider />
+          <ResultRow label="Налог за год" value={fmt(result.annualTax)} size="lg" />
+          <Divider />
+          <ResultRow label="Налог к уплате" value={fmt(result.actualTax)} color="emerald" size="2xl" />
+        </InfoCard>
 
         <p className="text-xs text-[hsl(var(--fg-muted))] mt-4 text-center">
           Транспортный налог уплачивается до 1 декабря следующего года

@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateImt } from '@/calculators/imt'
 import type { ImtResult } from '@/calculators/imt'
-import { saveToHistory } from '@/utils/history'
 import { EmbedButton } from '@/components/EmbedButton'
-
-const inputCls = 'w-full rounded-lg border border-[hsl(var(--border))] px-3 py-2.5 text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 transition tabular'
-const labelCls = 'block text-xs font-medium mb-1 text-[hsl(var(--fg-muted))] uppercase tracking-wide'
+import { useHistorySync } from '@/hooks/useHistorySync'
+import { NumberInput, InfoCard, labelCls } from '@/components/ui'
 
 const categoryColorMap: Record<ImtResult['categoryColor'], string> = {
   blue: 'text-blue-400',
@@ -56,19 +54,15 @@ export default function ImtPage() {
   const [age, setAge] = useState(30)
   const [sex, setSex] = useState<'male' | 'female'>('male')
 
-  useEffect(() => {
-    document.title = 'Калькулятор ИМТ — КалкПортал'
-  }, [])
-
   const result = calculateImt({ weight, height, age, sex })
 
-  useEffect(() => {
-    saveToHistory({
-      calculatorLabel: 'ИМТ',
-      calculatorUrl: '/imt',
-      summary: `ИМТ ${result.bmi.toFixed(1)} — ${result.category}`,
-    })
-  }, [result])
+  useHistorySync({
+    calculatorLabel: 'ИМТ',
+    calculatorUrl: '/imt',
+    summary: `ИМТ ${result.bmi.toFixed(1)} — ${result.category}`,
+    triggerKey: `${result.bmi}|${result.category}`,
+    delayMs: 0,
+  })
 
   return (
     <AppLayout>
@@ -82,40 +76,12 @@ export default function ImtPage() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 mb-4">
-          <div>
-            <label className={labelCls}>Вес, кг</label>
-            <input
-              type="number"
-              className={inputCls}
-              value={weight}
-              min={1}
-              max={300}
-              onChange={e => setWeight(parseFloat(e.target.value) || 1)}
-            />
-          </div>
-          <div>
-            <label className={labelCls}>Рост, см</label>
-            <input
-              type="number"
-              className={inputCls}
-              value={height}
-              min={50}
-              max={250}
-              onChange={e => setHeight(parseFloat(e.target.value) || 50)}
-            />
-          </div>
+          <NumberInput label="Вес, кг" value={weight} onChange={setWeight} min={1} max={300} fallback={1} />
+          <NumberInput label="Рост, см" value={height} onChange={setHeight} min={50} max={250} fallback={50} />
         </div>
 
         <div className="mb-4">
-          <label className={labelCls}>Возраст</label>
-          <input
-            type="number"
-            className={inputCls}
-            value={age}
-            min={1}
-            max={120}
-            onChange={e => setAge(parseInt(e.target.value) || 1)}
-          />
+          <NumberInput label="Возраст" value={age} onChange={setAge} min={1} max={120} integer fallback={1} />
         </div>
 
         <div className="mb-6">
@@ -137,7 +103,7 @@ export default function ImtPage() {
           </div>
         </div>
 
-        <div className="glass rounded-2xl p-6">
+        <InfoCard spacing="">
           {/* BMI value */}
           <div className="text-center mb-4">
             <div className={`text-5xl font-bold tabular mb-1 ${categoryColorMap[result.categoryColor]}`}>
@@ -168,10 +134,10 @@ export default function ImtPage() {
               </span>
             </div>
           </div>
-        </div>
+        </InfoCard>
 
         {/* Category table */}
-        <div className="glass rounded-2xl p-4 mt-4">
+        <InfoCard padding="p-4" className="mt-4" spacing="">
           <p className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))] mb-3">Категории ИМТ</p>
           <div className="space-y-2">
             {[
@@ -186,7 +152,7 @@ export default function ImtPage() {
               </div>
             ))}
           </div>
-        </div>
+        </InfoCard>
       </div>
     </AppLayout>
   )

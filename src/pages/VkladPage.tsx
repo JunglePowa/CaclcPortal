@@ -1,13 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useVkladStore } from '@/stores/vkladStore'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
-import { saveToHistory } from '@/utils/history'
 import { EmbedButton } from '@/components/EmbedButton'
+import { useHistorySync } from '@/hooks/useHistorySync'
+import {
+  NumberInput,
+  SliderInput,
+  Select,
+  cardCls,
+  cardLabelCls,
+  cardValueCls,
+} from '@/components/ui'
 
-const TERM_OPTIONS = [3, 6, 12, 18, 24, 36, 60]
+const TERM_OPTIONS = [3, 6, 12, 18, 24, 36, 60].map(m => ({ value: m, label: `${m} мес.` }))
 const CAP_OPTIONS = [
   { value: 365, label: 'Ежедневно' },
   { value: 12, label: 'Ежемесячно' },
@@ -18,45 +26,37 @@ const TAX_OPTIONS = [
   { value: 0, label: 'Нет' },
   { value: 13, label: '13%' },
 ]
-
-const inputCls = 'w-full rounded-lg border border-[hsl(var(--border))] px-3 py-2 text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 transition tabular'
-const selectCls = `${inputCls} cursor-pointer`
-const labelCls = 'block text-xs font-medium mb-1 text-[hsl(var(--fg-muted))] uppercase tracking-wide'
-const cardCls = 'rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))]/80 backdrop-blur-sm p-5 space-y-1'
-const cardLabelCls = 'text-xs text-[hsl(var(--fg-muted))] uppercase tracking-wide'
-const cardValueCls = 'text-lg xl:text-2xl font-bold text-[hsl(var(--fg))] break-all tabular'
+const CURRENCY_OPTIONS = CURRENCIES.map(c => ({ value: c.value, label: `${c.symbol} ${c.value}` }))
 
 export default function VkladPage() {
   const { params, result, setParams } = useVkladStore()
 
-  const [rateInput, setRateInput] = useState(params.annualRate)
-
-  useEffect(() => {
-    document.title = 'Калькулятор вклада — КалкПортал'
-  }, [])
-
-  useEffect(() => {
-    saveToHistory({
-      calculatorLabel: 'Вклад',
-      calculatorUrl: '/vklad',
-      summary: `${Math.round(result.finalAmount).toLocaleString('ru-RU')} ₽ за ${params.termMonths} мес`,
-    })
-  }, [result])
+  useHistorySync({
+    calculatorLabel: 'Вклад',
+    calculatorUrl: '/vklad',
+    summary: `${Math.round(result.finalAmount).toLocaleString('ru-RU')} ₽ за ${params.termMonths} мес`,
+    triggerKey: `${result.finalAmount}|${params.termMonths}`,
+  })
 
   const { initialAmount, monthlyReplenishment, annualRate, termMonths, taxRate } = params
 
   const totalInvested = initialAmount + result.totalReplenishments
 
-  const chartData = result.schedule.map(row => ({
-    month: row.month,
-    Баланс: Math.round(row.balance),
-    Вложено: Math.round(initialAmount + monthlyReplenishment * row.month),
-  }))
-
-  const showAllRows = termMonths <= 12
-  const tableRows = result.schedule.filter(
-    row => showAllRows || row.month % 3 === 0 || row.month === 1
+  const chartData = useMemo(
+    () => result.schedule.map(row => ({
+      month: row.month,
+      Баланс: Math.round(row.balance),
+      Вложено: Math.round(initialAmount + monthlyReplenishment * row.month),
+    })),
+    [result.schedule, initialAmount, monthlyReplenishment]
   )
+
+  const tableRows = useMemo(() => {
+    const showAllRows = termMonths <= 12
+    return result.schedule.filter(
+      row => showAllRows || row.month % 3 === 0 || row.month === 1
+    )
+  }, [result.schedule, termMonths])
 
   const sidebar = (
     <>
@@ -65,117 +65,70 @@ export default function VkladPage() {
         <EmbedButton path="/vklad" title="Калькулятор вклада" />
       </div>
       <div className="space-y-4">
-        <div>
-          <label className={labelCls}>Начальная сумма</label>
-          <input
-            type="number"
-            className={inputCls}
-            value={initialAmount}
-            onChange={e => setParams({ initialAmount: parseFloat(e.target.value) || 0 })}
-            aria-label="Начальная сумма"
-          />
-        </div>
+        <NumberInput
+          label="Начальная сумма"
+          value={initialAmount}
+          onChange={v => setParams({ initialAmount: v })}
+          compact
+        />
 
-        <div>
-          <label className={labelCls}>Ежемесячное пополнение</label>
-          <input
-            type="number"
-            className={inputCls}
-            value={monthlyReplenishment}
-            onChange={e => setParams({ monthlyReplenishment: parseFloat(e.target.value) || 0 })}
-            aria-label="Ежемесячное пополнение"
-          />
-        </div>
+        <NumberInput
+          label="Ежемесячное пополнение"
+          value={monthlyReplenishment}
+          onChange={v => setParams({ monthlyReplenishment: v })}
+          compact
+        />
 
-        <div>
-          <label className={labelCls}>Ставка, %</label>
-          <div className="flex items-center gap-2">
-            <input
-              type="range"
-              min={0}
-              max={30}
-              step={0.1}
-              value={rateInput}
-              onChange={e => {
-                const v = parseFloat(e.target.value)
-                setRateInput(v)
-                setParams({ annualRate: v })
-              }}
-              className="flex-1 accent-emerald-500"
-              aria-label="Ставка слайдер"
-            />
-            <input
-              type="number"
-              min={0}
-              max={100}
-              step={0.1}
-              value={rateInput}
-              onChange={e => {
-                const v = parseFloat(e.target.value) || 0
-                setRateInput(v)
-                setParams({ annualRate: v })
-              }}
-              className="w-20 flex-shrink-0 rounded-lg border border-[hsl(var(--border))] px-3 py-2 text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 transition tabular"
-              aria-label="Ставка число"
-            />
-          </div>
-        </div>
+        <SliderInput
+          label="Ставка, %"
+          value={annualRate}
+          onChange={v => setParams({ annualRate: v })}
+          min={0}
+          max={30}
+          step={0.1}
+          numberMax={100}
+          ariaLabelSlider="Ставка слайдер"
+          ariaLabelNumber="Ставка число"
+        />
 
-        <div>
-          <label className={labelCls}>Срок</label>
-          <select
-            className={selectCls}
-            value={termMonths}
-            onChange={e => setParams({ termMonths: parseInt(e.target.value) })}
-            aria-label="Срок"
-          >
-            {TERM_OPTIONS.map(m => (
-              <option key={m} value={m}>{m} мес.</option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="Срок"
+          value={termMonths}
+          onChange={v => setParams({ termMonths: v })}
+          options={TERM_OPTIONS}
+          numeric
+          compact
+          ariaLabel="Срок"
+        />
 
-        <div>
-          <label className={labelCls}>Капитализация</label>
-          <select
-            className={selectCls}
-            value={params.capitalizationPerYear}
-            onChange={e => setParams({ capitalizationPerYear: parseInt(e.target.value) })}
-            aria-label="Капитализация"
-          >
-            {CAP_OPTIONS.map(o => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="Капитализация"
+          value={params.capitalizationPerYear}
+          onChange={v => setParams({ capitalizationPerYear: v })}
+          options={CAP_OPTIONS}
+          numeric
+          compact
+          ariaLabel="Капитализация"
+        />
 
-        <div>
-          <label className={labelCls}>Налог</label>
-          <select
-            className={selectCls}
-            value={taxRate}
-            onChange={e => setParams({ taxRate: parseInt(e.target.value) })}
-            aria-label="Налог"
-          >
-            {TAX_OPTIONS.map(o => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="Налог"
+          value={taxRate}
+          onChange={v => setParams({ taxRate: v })}
+          options={TAX_OPTIONS}
+          numeric
+          compact
+          ariaLabel="Налог"
+        />
 
-        <div>
-          <label className={labelCls}>Валюта</label>
-          <select
-            className={selectCls}
-            value={params.currency}
-            onChange={e => setParams({ currency: e.target.value })}
-            aria-label="Валюта"
-          >
-            {CURRENCIES.map(c => (
-              <option key={c.value} value={c.value}>{c.symbol} {c.value}</option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="Валюта"
+          value={params.currency}
+          onChange={v => setParams({ currency: v })}
+          options={CURRENCY_OPTIONS}
+          compact
+          ariaLabel="Валюта"
+        />
       </div>
     </>
   )

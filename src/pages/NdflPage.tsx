@@ -1,39 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateNdfl } from '@/calculators/ndfl'
 import type { NdflDirection, NdflRate } from '@/calculators/ndfl'
-import { saveToHistory } from '@/utils/history'
 import { EmbedButton } from '@/components/EmbedButton'
+import { useHistorySync } from '@/hooks/useHistorySync'
+import { NumberInput, ResultRow, InfoCard, Divider, selectCls } from '@/components/ui'
 
-const inputCls = 'w-full rounded-lg border border-[hsl(var(--border))] px-3 py-2.5 text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 transition tabular'
-const labelCls = 'block text-xs font-medium mb-1 text-[hsl(var(--fg-muted))] uppercase tracking-wide'
-const selectCls = `${inputCls} cursor-pointer`
+const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 
-function ResultRow({ label, value, highlight, accent, negative, dimmed }: {
-  label: string
-  value: number
-  highlight?: boolean
-  accent?: boolean
-  negative?: boolean
-  dimmed?: boolean
-}) {
-  const color = highlight
-    ? 'text-emerald-400'
-    : accent
-    ? 'text-amber-400'
-    : negative
-    ? 'text-red-400'
-    : 'text-[hsl(var(--fg))]'
-
-  return (
-    <div className={`flex items-center justify-between ${dimmed ? 'opacity-60' : ''}`}>
-      <span className="text-sm text-[hsl(var(--fg-muted))]">{label}</span>
-      <span className={`text-base font-bold tabular ${color}`}>
-        {Math.round(value).toLocaleString('ru-RU')} ₽
-      </span>
-    </div>
-  )
-}
+const CHILDREN_OPTIONS = [
+  { value: 1, label: '1 ребёнок (вычет 1 400 ₽)' },
+  { value: 2, label: '2 детей (вычет 2 800 ₽)' },
+  { value: 3, label: '3 и более (вычет 5 800 ₽)' },
+]
 
 export default function NdflPage() {
   const [direction, setDirection] = useState<NdflDirection>('gross_to_net')
@@ -42,20 +21,16 @@ export default function NdflPage() {
   const [hasChildren, setHasChildren] = useState(false)
   const [childrenCount, setChildrenCount] = useState(1)
 
-  useEffect(() => {
-    document.title = 'Калькулятор НДФЛ — КалкПортал'
-  }, [])
-
   const result = calculateNdfl({ amount, rate, direction, hasChildren, childrenCount })
   const taxBase = Math.max(0, result.grossIncome - result.deduction)
 
-  useEffect(() => {
-    saveToHistory({
-      calculatorLabel: 'НДФЛ',
-      calculatorUrl: '/ndfl',
-      summary: `НДФЛ ${rate}%: ${Math.round(result.taxAmount).toLocaleString('ru-RU')} ₽, на руки ${Math.round(result.netIncome).toLocaleString('ru-RU')} ₽`,
-    })
-  }, [result])
+  useHistorySync({
+    calculatorLabel: 'НДФЛ',
+    calculatorUrl: '/ndfl',
+    summary: `НДФЛ ${rate}%: ${Math.round(result.taxAmount).toLocaleString('ru-RU')} ₽, на руки ${Math.round(result.netIncome).toLocaleString('ru-RU')} ₽`,
+    triggerKey: `${result.taxAmount}|${result.netIncome}`,
+    delayMs: 0,
+  })
 
   return (
     <AppLayout>
@@ -90,22 +65,20 @@ export default function NdflPage() {
 
         {/* Amount */}
         <div className="mb-4">
-          <label className={labelCls}>
-            {direction === 'gross_to_net' ? 'Зарплата до вычета, ₽' : 'Сумма на руки, ₽'}
-          </label>
-          <input
-            type="number"
-            className={inputCls}
+          <NumberInput
+            label={direction === 'gross_to_net' ? 'Зарплата до вычета, ₽' : 'Сумма на руки, ₽'}
             value={amount}
+            onChange={setAmount}
             min={0}
-            onChange={e => setAmount(parseFloat(e.target.value) || 0)}
-            aria-label="Сумма"
+            ariaLabel="Сумма"
           />
         </div>
 
         {/* Rate */}
         <div className="mb-4">
-          <label className={labelCls}>Ставка НДФЛ</label>
+          <label className="block text-xs font-medium mb-1 text-[hsl(var(--fg-muted))] uppercase tracking-wide">
+            Ставка НДФЛ
+          </label>
           <div className="flex gap-2">
             {([13, 15, 30] as NdflRate[]).map(r => (
               <button
@@ -141,41 +114,38 @@ export default function NdflPage() {
               onChange={e => setChildrenCount(parseInt(e.target.value))}
               aria-label="Количество детей"
             >
-              <option value={1}>1 ребёнок (вычет 1 400 ₽)</option>
-              <option value={2}>2 детей (вычет 2 800 ₽)</option>
-              <option value={3}>3 и более (вычет 5 800 ₽)</option>
+              {CHILDREN_OPTIONS.map(o => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
             </select>
           )}
         </div>
 
         {/* Results */}
-        <div className="glass rounded-2xl p-6 space-y-3">
-          <ResultRow label="Доход до налога" value={result.grossIncome} />
+        <InfoCard>
+          <ResultRow label="Доход до налога" value={fmt(result.grossIncome)} />
           {hasChildren && result.deduction > 0 && (
             <>
-              <div className="border-t border-[hsl(var(--border))]" />
-              <ResultRow label="Стандартный вычет" value={result.deduction} dimmed />
-              <div className="border-t border-[hsl(var(--border))]" />
-              <ResultRow label="Налоговая база" value={taxBase} dimmed />
+              <Divider />
+              <ResultRow label="Стандартный вычет" value={fmt(result.deduction)} dimmed />
+              <Divider />
+              <ResultRow label="Налоговая база" value={fmt(taxBase)} dimmed />
             </>
           )}
-          <div className="border-t border-[hsl(var(--border))]" />
-          <ResultRow label={`НДФЛ ${rate}%`} value={result.taxAmount} accent />
-          <div className="border-t border-[hsl(var(--border))]" />
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-[hsl(var(--fg-muted))]">На руки</span>
-            <span className="text-2xl font-bold tabular text-emerald-400">
-              {Math.round(result.netIncome).toLocaleString('ru-RU')} ₽
-            </span>
-          </div>
-          <div className="border-t border-[hsl(var(--border))]" />
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-[hsl(var(--fg-muted))]">Эффективная ставка</span>
-            <span className="text-sm font-medium tabular text-[hsl(var(--fg-muted))]">
-              {result.effectiveRate.toFixed(1)}%
-            </span>
-          </div>
-        </div>
+          <Divider />
+          <ResultRow label={`НДФЛ ${rate}%`} value={fmt(result.taxAmount)} color="amber" />
+          <Divider />
+          <ResultRow label="На руки" value={fmt(result.netIncome)} color="emerald" size="2xl" />
+          <Divider />
+          <ResultRow
+            label="Эффективная ставка"
+            value={`${result.effectiveRate.toFixed(1)}%`}
+            color="muted"
+            size="sm"
+            bold={false}
+            medium
+          />
+        </InfoCard>
       </div>
     </AppLayout>
   )

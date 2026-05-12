@@ -1,40 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateZarplata } from '@/calculators/zarplata'
 import type { ZarplataDirection } from '@/calculators/zarplata'
-import { saveToHistory } from '@/utils/history'
 import { EmbedButton } from '@/components/EmbedButton'
+import { useHistorySync } from '@/hooks/useHistorySync'
+import { NumberInput, ResultRow, InfoCard, Divider, selectCls } from '@/components/ui'
 
-const inputCls = 'w-full rounded-lg border border-[hsl(var(--border))] px-3 py-2.5 text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 transition tabular'
-const labelCls = 'block text-xs font-medium mb-1 text-[hsl(var(--fg-muted))] uppercase tracking-wide'
-const selectCls = `${inputCls} cursor-pointer`
-
-function ResultRow({ label, value, highlight, accent, negative, dimmed, large }: {
-  label: string
-  value: number
-  highlight?: boolean
-  accent?: boolean
-  negative?: boolean
-  dimmed?: boolean
-  large?: boolean
-}) {
-  const color = highlight
-    ? 'text-emerald-400'
-    : accent
-    ? 'text-amber-400'
-    : negative
-    ? 'text-red-400'
-    : 'text-[hsl(var(--fg))]'
-
-  return (
-    <div className={`flex items-center justify-between ${dimmed ? 'opacity-60' : ''}`}>
-      <span className="text-sm text-[hsl(var(--fg-muted))]">{label}</span>
-      <span className={`font-bold tabular ${large ? 'text-2xl' : 'text-base'} ${color}`}>
-        {Math.round(value).toLocaleString('ru-RU')} ₽
-      </span>
-    </div>
-  )
-}
+const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 
 export default function ZarplataPage() {
   const [direction, setDirection] = useState<ZarplataDirection>('gross_to_net')
@@ -43,19 +15,14 @@ export default function ZarplataPage() {
   const [childrenCount, setChildrenCount] = useState(1)
   const [smallBusiness, setSmallBusiness] = useState(false)
 
-  useEffect(() => {
-    document.title = 'Калькулятор зарплаты — КалкПортал'
-  }, [])
-
   const result = calculateZarplata({ amount, direction, hasChildren, childrenCount, smallBusiness })
 
-  useEffect(() => {
-    saveToHistory({
-      calculatorLabel: 'Зарплата',
-      calculatorUrl: '/zarplata',
-      summary: `На руки ${Math.round(result.netSalary).toLocaleString('ru-RU')} ₽, работодатель ${Math.round(result.totalEmployerCost).toLocaleString('ru-RU')} ₽`,
-    })
-  }, [result])
+  useHistorySync({
+    calculatorLabel: 'Зарплата',
+    calculatorUrl: '/zarplata',
+    summary: `На руки ${Math.round(result.netSalary).toLocaleString('ru-RU')} ₽, работодатель ${Math.round(result.totalEmployerCost).toLocaleString('ru-RU')} ₽`,
+    triggerKey: `${result.netSalary}|${result.totalEmployerCost}`,
+  })
 
   return (
     <AppLayout>
@@ -90,16 +57,12 @@ export default function ZarplataPage() {
 
         {/* Amount */}
         <div className="mb-4">
-          <label className={labelCls}>
-            {direction === 'gross_to_net' ? 'Оклад (гросс), ₽' : 'Сумма на руки, ₽'}
-          </label>
-          <input
-            type="number"
-            className={inputCls}
+          <NumberInput
+            label={direction === 'gross_to_net' ? 'Оклад (гросс), ₽' : 'Сумма на руки, ₽'}
             value={amount}
+            onChange={setAmount}
             min={0}
-            onChange={e => setAmount(parseFloat(e.target.value) || 0)}
-            aria-label="Сумма"
+            ariaLabel="Сумма"
           />
         </div>
 
@@ -143,44 +106,36 @@ export default function ZarplataPage() {
         </div>
 
         {/* Block 1: Employee */}
-        <div className="glass rounded-2xl p-6 space-y-3 mb-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))] mb-2">Для сотрудника</p>
-          <ResultRow label="Оклад (гросс)" value={result.grossSalary} />
+        <InfoCard title="Для сотрудника" className="mb-4">
+          <ResultRow label="Оклад (гросс)" value={fmt(result.grossSalary)} />
           {hasChildren && result.deduction > 0 && (
             <>
-              <div className="border-t border-[hsl(var(--border))]" />
-              <ResultRow label="Стандартный вычет" value={result.deduction} dimmed />
+              <Divider />
+              <ResultRow label="Стандартный вычет" value={fmt(result.deduction)} dimmed />
             </>
           )}
-          <div className="border-t border-[hsl(var(--border))]" />
-          <ResultRow label="НДФЛ 13%" value={result.ndfl} negative />
-          <div className="border-t border-[hsl(var(--border))]" />
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-[hsl(var(--fg-muted))]">На руки</span>
-            <span className="text-2xl font-bold tabular text-emerald-400">
-              {Math.round(result.netSalary).toLocaleString('ru-RU')} ₽
-            </span>
-          </div>
-        </div>
+          <Divider />
+          <ResultRow label="НДФЛ 13%" value={fmt(result.ndfl)} color="red" />
+          <Divider />
+          <ResultRow label="На руки" value={fmt(result.netSalary)} color="emerald" size="2xl" />
+        </InfoCard>
 
         {/* Block 2: Employer */}
-        <div className="glass rounded-2xl p-6 space-y-3">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))] mb-2">Для работодателя</p>
-          <ResultRow label="Оклад" value={result.grossSalary} />
-          <div className="border-t border-[hsl(var(--border))]" />
-          <ResultRow label="+ ОПС 22%" value={result.pensionFund} dimmed />
-          <ResultRow label="+ ОМС 5.1%" value={result.medicalFund} dimmed />
-          <ResultRow label="+ ОСС 2.9%" value={result.socialFund} dimmed />
-          <div className="border-t border-[hsl(var(--border))] border-dashed" />
-          <ResultRow label="Итого расходов" value={result.totalEmployerCost} accent large />
-          <div className="border-t border-[hsl(var(--border))]" />
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-[hsl(var(--fg-muted))]">Налоговая нагрузка</span>
-            <span className="text-base font-bold tabular text-[hsl(var(--fg-muted))]">
-              {result.taxBurden.toFixed(1)}%
-            </span>
-          </div>
-        </div>
+        <InfoCard title="Для работодателя">
+          <ResultRow label="Оклад" value={fmt(result.grossSalary)} />
+          <Divider />
+          <ResultRow label="+ ОПС 22%" value={fmt(result.pensionFund)} dimmed />
+          <ResultRow label="+ ОМС 5.1%" value={fmt(result.medicalFund)} dimmed />
+          <ResultRow label="+ ОСС 2.9%" value={fmt(result.socialFund)} dimmed />
+          <Divider dashed />
+          <ResultRow label="Итого расходов" value={fmt(result.totalEmployerCost)} color="amber" size="2xl" />
+          <Divider />
+          <ResultRow
+            label="Налоговая нагрузка"
+            value={`${result.taxBurden.toFixed(1)}%`}
+            color="muted"
+          />
+        </InfoCard>
       </div>
     </AppLayout>
   )

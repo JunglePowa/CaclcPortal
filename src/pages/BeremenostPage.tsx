@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateBeremennost } from '@/calculators/beremennost'
-import { saveToHistory } from '@/utils/history'
 import { EmbedButton } from '@/components/EmbedButton'
-
-const inputCls = 'w-full rounded-lg border border-[hsl(var(--border))] px-3 py-2.5 text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 transition tabular'
-const labelCls = 'block text-xs font-medium mb-1 text-[hsl(var(--fg-muted))] uppercase tracking-wide'
+import { useHistorySync } from '@/hooks/useHistorySync'
+import { NumberInput, ResultRow, InfoCard, Divider, labelCls, inputCls } from '@/components/ui'
 
 const today = new Date().toISOString().split('T')[0]
 
@@ -13,20 +11,15 @@ export default function BeremenostPage() {
   const [lastPeriodDate, setLastPeriodDate] = useState('')
   const [cycleLength, setCycleLength] = useState(28)
 
-  useEffect(() => {
-    document.title = 'Калькулятор беременности — КалкПортал'
-  }, [])
-
   const result = calculateBeremennost({ lastPeriodDate, cycleLength })
 
-  useEffect(() => {
-    if (!result) return
-    saveToHistory({
-      calculatorLabel: 'Беременность',
-      calculatorUrl: '/beremennost',
-      summary: `${result.currentWeek} нед, ПДР ${result.dueDate}`,
-    })
-  }, [result])
+  useHistorySync({
+    calculatorLabel: 'Беременность',
+    calculatorUrl: '/beremennost',
+    summary: result ? `${result.currentWeek} нед, ПДР ${result.dueDate}` : '',
+    triggerKey: result ? `${result.currentWeek}|${result.dueDate}` : 'empty',
+    delayMs: 0,
+  })
 
   const progress = result
     ? Math.min(100, ((result.currentWeek * 7 + result.currentDay) / 280) * 100)
@@ -55,48 +48,33 @@ export default function BeremenostPage() {
         </div>
 
         <div className="mb-6">
-          <label className={labelCls}>Длина цикла, дней</label>
-          <input
-            type="number"
-            className={inputCls}
+          <NumberInput
+            label="Длина цикла, дней"
             value={cycleLength}
+            onChange={setCycleLength}
             min={21}
             max={45}
-            onChange={e => setCycleLength(parseInt(e.target.value) || 28)}
+            integer
+            fallback={28}
           />
         </div>
 
         {result ? (
           <>
             {/* Main block */}
-            <div className="glass rounded-2xl p-6 space-y-4 mb-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-[hsl(var(--fg-muted))]">Срок</span>
-                <span className="text-2xl font-bold tabular text-emerald-400">
-                  {result.currentWeek} нед. {result.currentDay} дн.
-                </span>
-              </div>
-              <div className="border-t border-[hsl(var(--border))]" />
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-[hsl(var(--fg-muted))]">Триместр</span>
-                <span className="text-lg font-bold text-[hsl(var(--fg))]">
-                  {result.trimester}-й
-                </span>
-              </div>
-              <div className="border-t border-[hsl(var(--border))]" />
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-[hsl(var(--fg-muted))]">ПДР</span>
-                <span className="text-lg font-bold tabular text-rose-400">
-                  {result.dueDate}
-                </span>
-              </div>
-              <div className="border-t border-[hsl(var(--border))]" />
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-[hsl(var(--fg-muted))]">Осталось</span>
-                <span className="text-lg font-bold tabular text-[hsl(var(--fg))]">
-                  {result.daysLeft} дней
-                </span>
-              </div>
+            <InfoCard className="mb-4" spacing="space-y-4">
+              <ResultRow
+                label="Срок"
+                value={`${result.currentWeek} нед. ${result.currentDay} дн.`}
+                color="emerald"
+                size="2xl"
+              />
+              <Divider />
+              <ResultRow label="Триместр" value={`${result.trimester}-й`} size="lg" />
+              <Divider />
+              <ResultRow label="ПДР" value={result.dueDate} color="rose" size="lg" />
+              <Divider />
+              <ResultRow label="Осталось" value={`${result.daysLeft} дней`} size="lg" />
 
               {/* Progress bar */}
               <div className="pt-2">
@@ -114,33 +92,33 @@ export default function BeremenostPage() {
                   <span>Роды</span>
                 </div>
               </div>
-            </div>
+            </InfoCard>
 
             {/* Key dates */}
-            <div className="glass rounded-2xl p-6 space-y-3 mb-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))] mb-2">Ключевые даты</p>
+            <InfoCard title="Ключевые даты" className="mb-4">
               {[
                 { label: 'Зачатие', value: result.conceptionDate },
                 { label: 'Конец 1-го триместра', value: result.firstTrimesterEnd },
                 { label: 'Конец 2-го триместра', value: result.secondTrimesterEnd },
               ].map(row => (
-                <div key={row.label} className="flex items-center justify-between">
-                  <span className="text-sm text-[hsl(var(--fg-muted))]">{row.label}</span>
-                  <span className="text-sm font-semibold tabular text-[hsl(var(--fg))]">{row.value}</span>
-                </div>
+                <ResultRow key={row.label} label={row.label} value={row.value} size="sm" weight="semibold" />
               ))}
-            </div>
+            </InfoCard>
 
             {/* Screenings */}
-            <div className="glass rounded-2xl p-6 space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))] mb-2">Скрининги</p>
+            <InfoCard title="Скрининги">
               {result.screenings.map(s => (
-                <div key={s.week} className="flex items-center justify-between">
-                  <span className="text-sm text-[hsl(var(--fg-muted))]">{s.label}</span>
-                  <span className="text-sm font-semibold tabular text-rose-400">неделя {s.week}</span>
-                </div>
+                <ResultRow
+                  key={s.week}
+                  label={s.label}
+                  value={`неделя ${s.week}`}
+                  color="rose"
+                  size="sm"
+                  bold={false}
+                  medium
+                />
               ))}
-            </div>
+            </InfoCard>
           </>
         ) : (
           <div className="glass rounded-2xl p-8 text-center text-[hsl(var(--fg-muted))] text-sm">

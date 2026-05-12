@@ -100,15 +100,18 @@ export default function InvesticiiPage() {
   const { mode, setParams, setMode, setTargetAmount, breakdown, params } = useCalcStore()
   const location = useLocation()
 
+  const finalTotal = breakdown[breakdown.length - 1]?.total
   useEffect(() => {
-    const final = breakdown[breakdown.length - 1]
-    if (!final) return
-    saveToHistory({
-      calculatorLabel: 'Инвестиции',
-      calculatorUrl: '/investicii',
-      summary: `${Math.round(final.total).toLocaleString('ru-RU')} ₽ за ${params.years} лет`,
-    })
-  }, [breakdown])
+    if (finalTotal == null) return
+    const t = setTimeout(() => {
+      saveToHistory({
+        calculatorLabel: 'Инвестиции',
+        calculatorUrl: '/investicii',
+        summary: `${Math.round(finalTotal).toLocaleString('ru-RU')} ₽ за ${params.years} лет`,
+      })
+    }, 1500)
+    return () => clearTimeout(t)
+  }, [finalTotal, params.years])
 
   useEffect(() => {
     if (location.search) {

@@ -1,14 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useKreditStore } from '@/stores/kreditStore'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
 import type { PaymentType } from '@/calculators/kredit'
-import { saveToHistory } from '@/utils/history'
 import { EmbedButton } from '@/components/EmbedButton'
+import { useHistorySync } from '@/hooks/useHistorySync'
+import {
+  NumberInput,
+  SliderInput,
+  Select,
+  cardCls,
+  cardLabelCls,
+  cardValueCls,
+} from '@/components/ui'
 
-const TERM_OPTIONS = [6, 12, 18, 24, 36, 48, 60, 84, 120, 180, 240]
+const TERM_OPTIONS_RAW = [6, 12, 18, 24, 36, 48, 60, 84, 120, 180, 240]
 
 function monthsLabel(m: number): string {
   const years = m / 12
@@ -16,35 +24,31 @@ function monthsLabel(m: number): string {
   return `${m} мес.`
 }
 
-const inputCls = 'w-full rounded-lg border border-[hsl(var(--border))] px-3 py-2 text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 transition tabular'
-const selectCls = `${inputCls} cursor-pointer`
-const labelCls = 'block text-xs font-medium mb-1 text-[hsl(var(--fg-muted))] uppercase tracking-wide'
-const cardCls = 'rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))]/80 backdrop-blur-sm p-5 space-y-1'
-const cardLabelCls = 'text-xs text-[hsl(var(--fg-muted))] uppercase tracking-wide'
-const cardValueCls = 'text-lg xl:text-2xl font-bold text-[hsl(var(--fg))] break-all tabular'
+const TERM_OPTIONS = TERM_OPTIONS_RAW.map(m => ({ value: m, label: monthsLabel(m) }))
+const PAYMENT_TYPE_OPTIONS: { value: PaymentType; label: string }[] = [
+  { value: 'annuity', label: 'Аннуитетный' },
+  { value: 'differential', label: 'Дифференциальный' },
+]
+const CURRENCY_OPTIONS = CURRENCIES.map(c => ({ value: c.value, label: `${c.symbol} ${c.value}` }))
 
 export default function KreditPage() {
   const { params, result, setParams } = useKreditStore()
-  const [rateInput, setRateInput] = useState(params.annualRate)
 
-  useEffect(() => {
-    document.title = 'Кредитный калькулятор — КалкПортал'
-  }, [])
-
-  useEffect(() => {
-    saveToHistory({
-      calculatorLabel: 'Кредит',
-      calculatorUrl: '/kredit',
-      summary: `${Math.round(result.monthlyPayment).toLocaleString('ru-RU')} ₽/мес, переплата ${Math.round(result.totalInterest).toLocaleString('ru-RU')} ₽`,
-    })
-  }, [result])
+  useHistorySync({
+    calculatorLabel: 'Кредит',
+    calculatorUrl: '/kredit',
+    summary: `${Math.round(result.monthlyPayment).toLocaleString('ru-RU')} ₽/мес, переплата ${Math.round(result.totalInterest).toLocaleString('ru-RU')} ₽`,
+    triggerKey: `${result.monthlyPayment}|${result.totalInterest}`,
+  })
 
   const { loanAmount, annualRate, termMonths, paymentType } = params
 
-  const step = termMonths > 60 ? 12 : termMonths > 24 ? 6 : 1
-  const chartData = result.schedule
-    .filter(r => r.month % step === 0 || r.month === 1)
-    .map(r => ({ month: r.month, 'Долг': Math.round(r.principal), 'Проценты': Math.round(r.interest) }))
+  const chartData = useMemo(() => {
+    const step = termMonths > 60 ? 12 : termMonths > 24 ? 6 : 1
+    return result.schedule
+      .filter(r => r.month % step === 0 || r.month === 1)
+      .map(r => ({ month: r.month, 'Долг': Math.round(r.principal), 'Проценты': Math.round(r.interest) }))
+  }, [result.schedule, termMonths])
 
   const sidebar = (
     <>
@@ -53,91 +57,53 @@ export default function KreditPage() {
         <EmbedButton path="/kredit" title="Кредитный калькулятор" />
       </div>
       <div className="space-y-4">
-        <div>
-          <label className={labelCls}>Сумма кредита</label>
-          <input
-            type="number"
-            className={inputCls}
-            value={loanAmount}
-            onChange={e => setParams({ loanAmount: parseFloat(e.target.value) || 0 })}
-            aria-label="Сумма кредита"
-          />
-        </div>
+        <NumberInput
+          label="Сумма кредита"
+          value={loanAmount}
+          onChange={v => setParams({ loanAmount: v })}
+          compact
+          ariaLabel="Сумма кредита"
+        />
 
-        <div>
-          <label className={labelCls}>Процентная ставка, %</label>
-          <div className="flex items-center gap-2">
-            <input
-              type="range"
-              min={0}
-              max={50}
-              step={0.1}
-              value={rateInput}
-              onChange={e => {
-                const v = parseFloat(e.target.value)
-                setRateInput(v)
-                setParams({ annualRate: v })
-              }}
-              className="flex-1 accent-emerald-500"
-              aria-label="Ставка слайдер"
-            />
-            <input
-              type="number"
-              min={0}
-              max={100}
-              step={0.1}
-              value={rateInput}
-              onChange={e => {
-                const v = parseFloat(e.target.value) || 0
-                setRateInput(v)
-                setParams({ annualRate: v })
-              }}
-              className="w-20 flex-shrink-0 rounded-lg border border-[hsl(var(--border))] px-3 py-2 text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 transition tabular"
-              aria-label="Ставка число"
-            />
-          </div>
-        </div>
+        <SliderInput
+          label="Процентная ставка, %"
+          value={annualRate}
+          onChange={v => setParams({ annualRate: v })}
+          min={0}
+          max={50}
+          step={0.1}
+          numberMax={100}
+          ariaLabelSlider="Ставка слайдер"
+          ariaLabelNumber="Ставка число"
+        />
 
-        <div>
-          <label className={labelCls}>Срок</label>
-          <select
-            className={selectCls}
-            value={termMonths}
-            onChange={e => setParams({ termMonths: parseInt(e.target.value) })}
-            aria-label="Срок кредита"
-          >
-            {TERM_OPTIONS.map(m => (
-              <option key={m} value={m}>{monthsLabel(m)}</option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="Срок"
+          value={termMonths}
+          onChange={v => setParams({ termMonths: v })}
+          options={TERM_OPTIONS}
+          numeric
+          compact
+          ariaLabel="Срок кредита"
+        />
 
-        <div>
-          <label className={labelCls}>Тип платежа</label>
-          <select
-            className={selectCls}
-            value={paymentType}
-            onChange={e => setParams({ paymentType: e.target.value as PaymentType })}
-            aria-label="Тип платежа"
-          >
-            <option value="annuity">Аннуитетный</option>
-            <option value="differential">Дифференциальный</option>
-          </select>
-        </div>
+        <Select
+          label="Тип платежа"
+          value={paymentType}
+          onChange={v => setParams({ paymentType: v })}
+          options={PAYMENT_TYPE_OPTIONS}
+          compact
+          ariaLabel="Тип платежа"
+        />
 
-        <div>
-          <label className={labelCls}>Валюта</label>
-          <select
-            className={selectCls}
-            value={params.currency}
-            onChange={e => setParams({ currency: e.target.value })}
-            aria-label="Валюта"
-          >
-            {CURRENCIES.map(c => (
-              <option key={c.value} value={c.value}>{c.symbol} {c.value}</option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="Валюта"
+          value={params.currency}
+          onChange={v => setParams({ currency: v })}
+          options={CURRENCY_OPTIONS}
+          compact
+          ariaLabel="Валюта"
+        />
       </div>
     </>
   )

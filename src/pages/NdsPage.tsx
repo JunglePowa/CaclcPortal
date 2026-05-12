@@ -1,22 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateNds } from '@/calculators/nds'
 import type { NdsOperation, NdsRate } from '@/calculators/nds'
-import { saveToHistory } from '@/utils/history'
 import { EmbedButton } from '@/components/EmbedButton'
+import { useHistorySync } from '@/hooks/useHistorySync'
+import { NumberInput, ResultRow, InfoCard, Divider } from '@/components/ui'
 
-const inputCls = 'w-full rounded-lg border border-[hsl(var(--border))] px-3 py-2.5 text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 transition tabular'
-
-function ResultRow({ label, value, highlight, accent }: { label: string; value: number; highlight?: boolean; accent?: boolean }) {
-  return (
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-[hsl(var(--fg-muted))]">{label}</span>
-      <span className={`text-lg font-bold tabular ${highlight ? 'text-emerald-400' : accent ? 'text-amber-400' : 'text-[hsl(var(--fg))]'}`}>
-        {Math.round(value).toLocaleString('ru-RU')} ₽
-      </span>
-    </div>
-  )
-}
+const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 
 export default function NdsPage() {
   const [operation, setOperation] = useState<NdsOperation>('charge')
@@ -24,19 +14,14 @@ export default function NdsPage() {
   const [rate, setRate] = useState<NdsRate>(20)
   const [copied, setCopied] = useState(false)
 
-  useEffect(() => {
-    document.title = 'Калькулятор НДС — КалкПортал'
-  }, [])
-
   const result = calculateNds({ amount, rate, operation })
 
-  useEffect(() => {
-    saveToHistory({
-      calculatorLabel: 'НДС',
-      calculatorUrl: '/nds',
-      summary: `НДС ${rate}%: ${Math.round(result.ndsAmount).toLocaleString('ru-RU')} ₽`,
-    })
-  }, [result])
+  useHistorySync({
+    calculatorLabel: 'НДС',
+    calculatorUrl: '/nds',
+    summary: `НДС ${rate}%: ${Math.round(result.ndsAmount).toLocaleString('ru-RU')} ₽`,
+    triggerKey: `${result.ndsAmount}|${rate}`,
+  })
 
   function handleCopy() {
     const text = [
@@ -82,16 +67,12 @@ export default function NdsPage() {
 
         {/* Amount */}
         <div className="mb-4">
-          <label className="block text-xs font-medium mb-1 text-[hsl(var(--fg-muted))] uppercase tracking-wide">
-            {operation === 'charge' ? 'Сумма без НДС, ₽' : 'Сумма с НДС, ₽'}
-          </label>
-          <input
-            type="number"
-            className={inputCls}
+          <NumberInput
+            label={operation === 'charge' ? 'Сумма без НДС, ₽' : 'Сумма с НДС, ₽'}
             value={amount}
+            onChange={setAmount}
             min={0}
-            onChange={e => setAmount(parseFloat(e.target.value) || 0)}
-            aria-label="Сумма"
+            ariaLabel="Сумма"
           />
         </div>
 
@@ -118,13 +99,23 @@ export default function NdsPage() {
         </div>
 
         {/* Results */}
-        <div className="glass rounded-2xl p-6 space-y-4 mt-6">
-          <ResultRow label="Сумма без НДС" value={result.amountWithoutNds} highlight={operation === 'extract'} />
-          <div className="border-t border-[hsl(var(--border))]" />
-          <ResultRow label={`НДС ${rate}%`} value={result.ndsAmount} accent />
-          <div className="border-t border-[hsl(var(--border))]" />
-          <ResultRow label="Сумма с НДС" value={result.amountWithNds} highlight={operation === 'charge'} />
-        </div>
+        <InfoCard className="mt-6" spacing="space-y-4">
+          <ResultRow
+            label="Сумма без НДС"
+            value={fmt(result.amountWithoutNds)}
+            size="lg"
+            color={operation === 'extract' ? 'emerald' : 'default'}
+          />
+          <Divider />
+          <ResultRow label={`НДС ${rate}%`} value={fmt(result.ndsAmount)} size="lg" color="amber" />
+          <Divider />
+          <ResultRow
+            label="Сумма с НДС"
+            value={fmt(result.amountWithNds)}
+            size="lg"
+            color={operation === 'charge' ? 'emerald' : 'default'}
+          />
+        </InfoCard>
 
         {/* Copy button */}
         <button
