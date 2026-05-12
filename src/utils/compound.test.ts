@@ -5,6 +5,8 @@ import {
   calculateCompound,
   calculateRequiredContribution,
   calculateRequiredYears,
+  calculateRequiredRate,
+  calculateRequiredInitialAmount,
 } from './compound'
 
 // ─── effectiveAnnualRate ───────────────────────────────────────────────────
@@ -225,5 +227,106 @@ describe('calculateRequiredYears', () => {
     const lowContrib = calculateRequiredYears({ ...params, monthlyContribution: 200 })
     const highContrib = calculateRequiredYears({ ...params, monthlyContribution: 1000 })
     expect(highContrib).toBeLessThan(lowContrib)
+  })
+})
+
+// ─── Дополнительные тесты для багфиксов этапа 1 ─────────────────────────────
+
+describe('calculateRequiredYears: точное достижение target', () => {
+  it('не округляет вверх когда target достигается ровно за N лет', () => {
+    const base = {
+      initialAmount: 100000,
+      monthlyContribution: 500,
+      annualRate: 8,
+      compoundingPerYear: 12 as const,
+    }
+    const rows = calculateCompound({ ...base, years: 10 })
+    const exactTarget = rows[9].total
+    const years = calculateRequiredYears({ ...base, targetAmount: exactTarget })
+    expect(years).toBe(10)
+  })
+})
+
+describe('calculateRequiredContribution: учёт contributionGrowthRate', () => {
+  it('при росте взноса требуется меньший начальный взнос', () => {
+    const params = {
+      initialAmount: 50000,
+      annualRate: 10,
+      compoundingPerYear: 12 as const,
+      years: 15,
+      targetAmount: 800000,
+    }
+    const flat = calculateRequiredContribution({ ...params, contributionGrowthRate: 0 })
+    const growing = calculateRequiredContribution({ ...params, contributionGrowthRate: 5 })
+    expect(growing).toBeLessThan(flat)
+  })
+
+  it('plug-back с ростом взноса достигает target', () => {
+    const params = {
+      initialAmount: 50000,
+      annualRate: 10,
+      compoundingPerYear: 12 as const,
+      years: 15,
+      targetAmount: 800000,
+      contributionGrowthRate: 5,
+    }
+    const monthly = calculateRequiredContribution(params)
+    const rows = calculateCompound({ ...params, monthlyContribution: monthly })
+    const final = rows[rows.length - 1].total
+    expect(Math.abs(final - 800000) / 800000).toBeLessThan(0.01)
+  })
+})
+
+describe('reverse-расчёты учитывают inflationRate', () => {
+  it('calculateRequiredContribution: с инфляцией требуется больший взнос', () => {
+    const params = {
+      initialAmount: 50000,
+      annualRate: 10,
+      compoundingPerYear: 12 as const,
+      years: 15,
+      targetAmount: 600000,
+    }
+    const noInf = calculateRequiredContribution(params)
+    const withInf = calculateRequiredContribution({ ...params, inflationRate: 5 })
+    expect(withInf).toBeGreaterThan(noInf)
+  })
+
+  it('calculateRequiredYears: с инфляцией нужно больше лет', () => {
+    const params = {
+      initialAmount: 50000,
+      monthlyContribution: 1000,
+      annualRate: 10,
+      compoundingPerYear: 12 as const,
+      targetAmount: 500000,
+    }
+    const noInf = calculateRequiredYears(params)
+    const withInf = calculateRequiredYears({ ...params, inflationRate: 5 })
+    expect(withInf).toBeGreaterThan(noInf)
+  })
+
+  it('calculateRequiredRate: с инфляцией нужна более высокая ставка', () => {
+    const params = {
+      initialAmount: 50000,
+      monthlyContribution: 1000,
+      compoundingPerYear: 12 as const,
+      years: 15,
+      targetAmount: 500000,
+    }
+    const noInf = calculateRequiredRate(params)
+    const withInf = calculateRequiredRate({ ...params, inflationRate: 5 })
+    expect(withInf).toBeGreaterThan(noInf)
+  })
+
+  it('calculateRequiredInitialAmount: с инфляцией нужен больший начальный капитал', () => {
+    const params = {
+      monthlyContribution: 1000,
+      annualRate: 8,
+      compoundingPerYear: 12 as const,
+      years: 15,
+      targetAmount: 500000,
+    }
+    const noInf = calculateRequiredInitialAmount(params)
+    const withInf = calculateRequiredInitialAmount({ ...params, inflationRate: 5 })
+    expect(withInf).toBeGreaterThan(noInf)
   })
 })

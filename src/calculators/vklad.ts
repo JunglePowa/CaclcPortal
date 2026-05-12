@@ -29,12 +29,13 @@ export function calculateVklad(params: VkladParams): VkladResult {
   const { initialAmount, monthlyReplenishment, annualRate, termMonths, taxRate } = params
 
   const monthlyRate = annualRate / 100 / 12
-  const taxMultiplier = 1 - taxRate / 100
 
   let balance = initialAmount
   let grossInterest = 0
   const schedule: VkladMonthRow[] = []
 
+  // Накапливаем gross-баланс и gross-проценты помесячно.
+  // Налог удерживаем один раз в конце с накопленных процентов — без двойного учёта.
   for (let month = 1; month <= termMonths; month++) {
     const replenishment = month === 1 ? 0 : monthlyReplenishment
     balance += replenishment
@@ -47,16 +48,16 @@ export function calculateVklad(params: VkladParams): VkladResult {
   }
 
   const taxPaid = grossInterest * (taxRate / 100)
-  const netInterest = grossInterest * taxMultiplier
+  const netInterest = grossInterest - taxPaid
   const totalReplenishments = monthlyReplenishment * (termMonths - 1)
 
-  const effectiveRate = Math.pow(1 + annualRate / 100 / 12, 12) - 1
+  const effectiveRate = Math.pow(1 + monthlyRate, 12) - 1
 
-  const grossFinal = balance
-  const netFinal = grossFinal - taxPaid
+  // finalAmount = initialAmount + totalReplenishments + netInterest (по инварианту)
+  const finalAmount = initialAmount + totalReplenishments + netInterest
 
   return {
-    finalAmount: netFinal,
+    finalAmount,
     totalReplenishments,
     grossInterest,
     taxPaid,

@@ -6,10 +6,11 @@ export interface BeremenostParams {
 export interface BeremenostResult {
   dueDate: string          // предполагаемая дата родов
   conceptionDate: string   // предполагаемая дата зачатия
-  currentWeek: number      // текущая неделя беременности
-  currentDay: number       // день текущей недели (1-7)
+  currentWeek: number      // текущая неделя беременности (0 если ещё не наступила)
+  currentDay: number       // день текущей недели (1-7, либо 0 если беременность ещё не наступила)
   trimester: 1 | 2 | 3
   daysLeft: number         // дней до ПДР
+  notYetPregnant?: boolean // true, если LMP в будущем
   // Ключевые даты
   firstTrimesterEnd: string   // конец 1-го триместра (13 нед)
   secondTrimesterEnd: string  // конец 2-го триместра (26 нед)
@@ -33,8 +34,9 @@ export function calculateBeremennost(params: BeremenostParams): BeremenostResult
 
   const today = new Date()
   const daysSinceLmp = Math.floor((today.getTime() - lmpDate.getTime()) / (1000 * 60 * 60 * 24))
-  const currentWeek = Math.floor(daysSinceLmp / 7)
-  const currentDay = daysSinceLmp % 7
+  const notYetPregnant = daysSinceLmp < 0
+  const currentWeek = notYetPregnant ? 0 : Math.floor(daysSinceLmp / 7)
+  const currentDay = notYetPregnant ? 0 : (daysSinceLmp % 7) + 1
 
   const trimester: 1 | 2 | 3 = currentWeek < 13 ? 1 : currentWeek < 27 ? 2 : 3
   const daysLeft = Math.max(0, Math.floor((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)))
@@ -55,6 +57,7 @@ export function calculateBeremennost(params: BeremenostParams): BeremenostResult
     currentDay,
     trimester,
     daysLeft,
+    notYetPregnant,
     firstTrimesterEnd,
     secondTrimesterEnd,
     screenings: [

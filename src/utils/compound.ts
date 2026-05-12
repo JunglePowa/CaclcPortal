@@ -40,6 +40,9 @@ export function calculateCompound(params: CalcParams): YearlyBreakdown[] {
   const rn = annualRate / 100 / n
   const taxMultiplier = 1 - taxRate / 100
 
+  // monthlyContribution здесь — это взнос за один период выбранной частоты
+  // (т.е. за месяц при 'monthly', за квартал при 'quarterly', за год при 'yearly').
+  // Имя оставлено для обратной совместимости со схемой формы.
   const freqMultiplier = contributionFrequency === 'monthly' ? 12
     : contributionFrequency === 'quarterly' ? 4 : 1
   const baseAnnualContrib = monthlyContribution * freqMultiplier
@@ -80,109 +83,110 @@ export function calculateCompound(params: CalcParams): YearlyBreakdown[] {
 }
 
 /**
- * Goal mode: calculates required monthly contribution to reach a target amount.
- * Solved analytically from the compound formula.
- * monthlyContribution = PMT_period * n / 12
- * PMT_period = (target - P*(1+rn)^nt - interest_tax_adj) / (grossPMT_factor)
- * Uses binary search to handle tax correctly.
+ * Бинарный поиск месячного взноса для достижения targetAmount.
+ * Учитывает все параметры (taxRate, contributionFrequency, contributionGrowthRate, inflationRate)
+ * через полный вызов calculateCompound на каждой итерации.
+ *
+ * Если задана inflationRate > 0 — targetAmount трактуется как сумма в сегодняшних деньгах,
+ * сравниваем с реальной (дефлированной) стоимостью итогового баланса.
  */
 export function calculateRequiredContribution(params: GoalParams): number {
-  const { initialAmount, annualRate, compoundingPerYear, years, targetAmount, taxRate = 0, inflationRate } = params
+  const { initialAmount, targetAmount, years, inflationRate } = params
 
   if (targetAmount <= initialAmount) return 0
 
-  const n = compoundingPerYear
-  const rn = annualRate / 100 / n
-  const nt = n * years
-  const growthFactor = rn > 0 ? Math.pow(1 + rn, nt) : 1
-  const taxMultiplier = 1 - taxRate / 100
-
-  const principalFV = initialAmount * growthFactor
-
-  // Without tax: PMT = (target - principalFV) * rn / (growthFactor - 1)
-  // Then monthly = PMT * n / 12
-  // With tax we need to adjust for the fact that interest is taxed:
-  // net_total = contributed + gross_interest * taxMultiplier
-  // contributed = P + monthly * 12 * years
-  // gross_interest = (principalFV + contribFV) - contributed
-  // Rearranging for PMT_period:
-  // target = P + monthly*12*years + (principalFV + contribFV - P - monthly*12*years) * taxMultiplier
-  // target = P*(1-taxMultiplier) + principalFV*taxMultiplier + monthly*12*years*(1-taxMultiplier) + contribFV*taxMultiplier
-  // contribFV = PMT_period * (growthFactor-1)/rn
-  // monthly = PMT_period * n / 12
-  // monthly * 12 * years = PMT_period * n * years = PMT_period * nt
-
-  if (rn === 0) {
-    // 0% rate: total = contributed, no interest
-    const needed = targetAmount - initialAmount
-    return needed / (12 * years)
+  const useReal = !!(inflationRate && inflationRate > 0)
+  const finalValue = (rows: YearlyBreakdown[]) => {
+    const last = rows[rows.length - 1]
+    if (!last) return 0
+    return useReal && last.realValue !== undefined ? last.realValue : last.total
   }
 
-  // target = P*(1-tm) + principalFV*tm + PMT*(nt*(1-tm) + (gf-1)/rn*tm)
-  // PMT = (target - P*(1-tm) - principalFV*tm) / (nt*(1-tm) + (gf-1)/rn*tm)
-  const tm = taxMultiplier
-  const numerator = targetAmount - initialAmount * (1 - tm) - principalFV * tm
-  const denominator = nt * (1 - tm) + ((growthFactor - 1) / rn) * tm
+  const { targetAmount: _t, ...calcRest } = params
+  void _t
+  const check = (monthly: number) => {
+    const rows = calculateCompound({ ...calcRest, monthlyContribution: monthly })
+    return finalValue(rows)
+  }
 
-  if (denominator <= 0) return 0
+  // Верхняя граница: targetAmount/12 на год, на годы — щедро
+  let high = Math.max(targetAmount / 12, 1)
+  // Если даже high недостаточно — расширяем (на случай высокой инфляции / коротких сроков)
+  let guard = 0
+  while (check(high) < targetAmount && guard < 30) {
+    high *= 2
+    guard++
+  }
+  if (check(high) < targetAmount) return Infinity
 
-  const pmtPeriod = numerator / denominator
-  const monthly = pmtPeriod * n / 12
-
-  return Math.max(0, monthly)
+  let low = 0
+  // 25 итераций бинарного поиска: точность high/2^25, что для типичных high ≈ targetAmount/12
+  // на порядки меньше требуемого 0.01 ₽ (всё равно ранний выход по этому условию).
+  for (let i = 0; i < 25; i++) {
+    const mid = (low + high) / 2
+    if (check(mid) < targetAmount) low = mid
+    else high = mid
+    if (high - low < 0.01) break
+  }
+  return Math.max(0, (low + high) / 2)
 }
 
 /**
  * Duration mode: calculates how many years to reach target amount.
  * Uses binary search since no closed-form solution with tax.
  */
+/**
+ * Возвращает минимальное целое число лет, при котором итоговый баланс ≥ targetAmount.
+ * При inflationRate > 0 сравниваем с реальной стоимостью (target — в сегодняшних деньгах).
+ */
 export function calculateRequiredYears(params: DurationParams): number {
-  const { targetAmount, initialAmount, monthlyContribution, annualRate, compoundingPerYear, taxRate = 0, inflationRate } = params
+  const { targetAmount, initialAmount, monthlyContribution, annualRate, inflationRate } = params
 
   if (targetAmount <= initialAmount) return 0
   if (annualRate === 0 && monthlyContribution === 0) return Infinity
 
-  // Binary search: find t such that calculateCompound(t).total >= target
-  let low = 0
-  let high = 100 // max 100 years
-
-  // Check if 100 years is enough
-  const maxResult = calculateCompound({ ...params, years: 100 })
-  const maxTotal = maxResult[maxResult.length - 1]?.total ?? 0
-  if (maxTotal < targetAmount) return Infinity
-
-  for (let i = 0; i < 60; i++) {
-    const mid = Math.floor((low + high) / 2)
-    if (mid === low) break
-
-    const result = calculateCompound({ ...params, years: mid })
-    const total = result[result.length - 1]?.total ?? 0
-
-    if (total < targetAmount) {
-      low = mid
-    } else {
-      high = mid
-    }
+  const useReal = !!(inflationRate && inflationRate > 0)
+  const { targetAmount: _t, ...calcRest } = params
+  void _t
+  const finalAt = (years: number) => {
+    if (years <= 0) return initialAmount
+    const rows = calculateCompound({ ...calcRest, years })
+    const last = rows[rows.length - 1]
+    if (!last) return 0
+    return useReal && last.realValue !== undefined ? last.realValue : last.total
   }
 
-  // Fine-tune with fractional years using the formula
-  // Return ceiling in whole years
-  return high
+  if (finalAt(100) < targetAmount) return Infinity
+
+  // Линейный поиск минимального N (целые годы), при котором finalAt(N) >= target.
+  // Бинарный поиск по целым может пропустить точное равенство; для max 100 итераций — достаточно дёшево.
+  for (let n = 1; n <= 100; n++) {
+    if (finalAt(n) >= targetAmount) return n
+  }
+  return Infinity
 }
 
+/**
+ * targetAmount при inflationRate > 0 трактуется как сумма в сегодняшних деньгах:
+ * сравниваем с realValue (дефлированной итоговой суммой).
+ */
 export function calculateRequiredRate(params: RateParams): number {
-  const { targetAmount, ...rest } = params
+  const { targetAmount, inflationRate, ...rest } = params
   if (targetAmount <= rest.initialAmount) return 0
 
+  const useReal = !!(inflationRate && inflationRate > 0)
   const check = (rate: number) => {
-    const res = calculateCompound({ ...(rest as any), annualRate: rate })
-    return res[res.length - 1]?.total ?? 0
+    const res = calculateCompound({ ...rest, inflationRate, annualRate: rate })
+    const last = res[res.length - 1]
+    if (!last) return 0
+    return useReal && last.realValue !== undefined ? last.realValue : last.total
   }
 
   if (check(100) < targetAmount) return Infinity
 
   let low = 0, high = 100
-  for (let i = 0; i < 80; i++) {
+  // 25 итераций: 100/2^25 ≈ 3e-6 — более чем достаточно для процентной ставки.
+  for (let i = 0; i < 25; i++) {
     const mid = (low + high) / 2
     if (check(mid) < targetAmount) low = mid
     else high = mid
@@ -192,17 +196,29 @@ export function calculateRequiredRate(params: RateParams): number {
 }
 
 export function calculateRequiredInitialAmount(params: CapitalParams): number {
-  const { targetAmount, ...rest } = params
+  const { targetAmount, inflationRate, ...rest } = params
 
+  const useReal = !!(inflationRate && inflationRate > 0)
   const check = (initial: number) => {
-    const res = calculateCompound({ ...(rest as any), initialAmount: initial })
-    return res[res.length - 1]?.total ?? 0
+    const res = calculateCompound({ ...rest, inflationRate, initialAmount: initial })
+    const last = res[res.length - 1]
+    if (!last) return 0
+    return useReal && last.realValue !== undefined ? last.realValue : last.total
   }
 
   if (check(0) >= targetAmount) return 0
 
   let low = 0, high = targetAmount
-  for (let i = 0; i < 80; i++) {
+  // Расширим high при необходимости (высокая инфляция)
+  let guard = 0
+  while (check(high) < targetAmount && guard < 30) {
+    high *= 2
+    guard++
+  }
+  if (check(high) < targetAmount) return Infinity
+
+  // 25 итераций: high/2^25 — для targetAmount до 1e10 это <1 ₽, ранний выход всё равно сработает.
+  for (let i = 0; i < 25; i++) {
     const mid = (low + high) / 2
     if (check(mid) < targetAmount) low = mid
     else high = mid
