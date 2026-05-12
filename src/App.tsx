@@ -1,33 +1,37 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { useSEO } from '@/hooks/useSEO'
 import HomePage from '@/pages/HomePage'
-import InvesticiiPage from '@/pages/InvesticiiPage'
-import VkladPage from '@/pages/VkladPage'
-import KreditPage from '@/pages/KreditPage'
-import NdsPage from '@/pages/NdsPage'
-import NdflPage from '@/pages/NdflPage'
-import ZarplataPage from '@/pages/ZarplataPage'
-import RashodPage from '@/pages/RashodPage'
-import TransportPage from '@/pages/TransportPage'
-import ImtPage from '@/pages/ImtPage'
-import BeremenostPage from '@/pages/BeremenostPage'
+
+const InvesticiiPage = lazy(() => import('@/pages/InvesticiiPage'))
+const VkladPage = lazy(() => import('@/pages/VkladPage'))
+const KreditPage = lazy(() => import('@/pages/KreditPage'))
+const NdsPage = lazy(() => import('@/pages/NdsPage'))
+const NdflPage = lazy(() => import('@/pages/NdflPage'))
+const ZarplataPage = lazy(() => import('@/pages/ZarplataPage'))
+const RashodPage = lazy(() => import('@/pages/RashodPage'))
+const TransportPage = lazy(() => import('@/pages/TransportPage'))
+const ImtPage = lazy(() => import('@/pages/ImtPage'))
+const BeremenostPage = lazy(() => import('@/pages/BeremenostPage'))
 
 export default function App() {
   useSEO()
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/investicii" element={<InvesticiiPage />} />
-      <Route path="/investicii/:mode" element={<InvesticiiPage />} />
-      <Route path="/vklad" element={<VkladPage />} />
-      <Route path="/kredit" element={<KreditPage />} />
-      <Route path="/nds" element={<NdsPage />} />
-      <Route path="/ndfl" element={<NdflPage />} />
-      <Route path="/zarplata" element={<ZarplataPage />} />
-      <Route path="/rashod-topliva" element={<RashodPage />} />
-      <Route path="/transportnyj-nalog" element={<TransportPage />} />
-      <Route path="/imt" element={<ImtPage />} />
-      <Route path="/beremennost" element={<BeremenostPage />} />
-    </Routes>
+    <Suspense fallback={null}>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/investicii" element={<InvesticiiPage />} />
+        <Route path="/investicii/:mode" element={<InvesticiiPage />} />
+        <Route path="/vklad" element={<VkladPage />} />
+        <Route path="/kredit" element={<KreditPage />} />
+        <Route path="/nds" element={<NdsPage />} />
+        <Route path="/ndfl" element={<NdflPage />} />
+        <Route path="/zarplata" element={<ZarplataPage />} />
+        <Route path="/rashod-topliva" element={<RashodPage />} />
+        <Route path="/transportnyj-nalog" element={<TransportPage />} />
+        <Route path="/imt" element={<ImtPage />} />
+        <Route path="/beremennost" element={<BeremenostPage />} />
+      </Routes>
+    </Suspense>
   )
 }

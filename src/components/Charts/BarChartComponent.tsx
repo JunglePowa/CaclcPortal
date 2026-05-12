@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Legend
@@ -12,22 +13,24 @@ function formatM(v: number) {
 
 export function BarChartComponent() {
   const { breakdown } = useCalcStore()
-  const step = breakdown.length > 20 ? Math.ceil(breakdown.length / 20) : 1
-  const filtered = breakdown.filter((_, i) => i % step === step - 1 || i === breakdown.length - 1)
 
-  const data = filtered.map((b, i) => {
-    const prev = i === 0 ? null : filtered[i - 1]
-    const growthPct = prev && prev.total > 0
-      ? ((b.total - prev.total) / prev.total * 100).toFixed(1) + '%'
-      : null
-    return {
-      year: b.year,
-      Начало: Math.round(b.principal),
-      Довложения: Math.round(b.contributions),
-      Проценты: Math.round(b.interest),
-      _growthPct: growthPct,
-    }
-  })
+  const data = useMemo(() => {
+    const step = breakdown.length > 20 ? Math.ceil(breakdown.length / 20) : 1
+    const filtered = breakdown.filter((_, i) => i % step === step - 1 || i === breakdown.length - 1)
+    return filtered.map((b, i) => {
+      const prev = i === 0 ? null : filtered[i - 1]
+      const growthPct = prev && prev.total > 0
+        ? ((b.total - prev.total) / prev.total * 100).toFixed(1) + '%'
+        : null
+      return {
+        year: b.year,
+        Начало: Math.round(b.principal),
+        Довложения: Math.round(b.contributions),
+        Проценты: Math.round(b.interest),
+        _growthPct: growthPct,
+      }
+    })
+  }, [breakdown])
 
   return (
     <ResponsiveContainer width="100%" height={280}>

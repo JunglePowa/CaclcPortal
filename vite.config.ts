@@ -10,6 +10,16 @@ export default defineConfig({
   },
   build: {
     sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'charts': ['recharts'],
+          'motion': ['framer-motion'],
+          'forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+        },
+      },
+    },
   },
   test: {
     globals: true,

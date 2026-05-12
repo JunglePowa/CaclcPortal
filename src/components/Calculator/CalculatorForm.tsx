@@ -5,7 +5,6 @@ import { z } from 'zod'
 import { useCalcStore } from '@/stores/calcStore'
 import type { CalcParams, ContributionFrequency, Currency } from '@/types'
 import { CURRENCIES, getCurrencySymbol } from '@/utils/formatCurrency'
-import { motion } from 'framer-motion'
 
 const schema = z.object({
   initialAmount: z.number().min(0).max(1e10),
@@ -76,7 +75,7 @@ export function CalculatorForm() {
     : `Взнос в год, ${symbol}`
 
   return (
-    <motion.div layout className="space-y-5">
+    <div className="space-y-5">
       <div className="grid grid-cols-1 gap-4">
 
         {/* Target Amount — shown only in solve modes */}
@@ -270,6 +269,6 @@ export function CalculatorForm() {
         />
       </div>
 
-    </motion.div>
+    </div>
   )
 }

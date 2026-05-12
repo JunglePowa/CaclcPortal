@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Legend, Line, LineChart, ComposedChart
@@ -14,12 +15,15 @@ export function AreaChartComponent() {
   const { breakdown, params } = useCalcStore()
   const showReal = (params.inflationRate ?? 0) > 0
 
-  const data = breakdown.map(b => ({
-    year: b.year,
-    Вложено: Math.round(b.principal + b.contributions),
-    Доход: Math.round(b.interest),
-    ...(showReal && b.realValue != null ? { Реальные: Math.round(b.realValue) } : {}),
-  }))
+  const data = useMemo(
+    () => breakdown.map(b => ({
+      year: b.year,
+      Вложено: Math.round(b.principal + b.contributions),
+      Доход: Math.round(b.interest),
+      ...(showReal && b.realValue != null ? { Реальные: Math.round(b.realValue) } : {}),
+    })),
+    [breakdown, showReal]
+  )
 
   return (
     <ResponsiveContainer width="100%" height={280}>
