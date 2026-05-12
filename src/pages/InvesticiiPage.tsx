@@ -16,6 +16,8 @@ import { YearlyTable } from '@/components/Results/YearlyTable'
 import { ExportButtons } from '@/components/Results/ExportButtons'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { parseShareUrl } from '@/utils/shareUrl'
 import { ROUTE_MODES } from '@/utils/modeRoutes'
 
@@ -149,6 +151,7 @@ export default function InvesticiiPage() {
   const content = (
     <>
       <ResultCard />
+      <AdBlock blockId={AD_SLOTS.result} />
       <AnimatePresence mode="wait">
         {mode === 'comparison' ? (
           <motion.div
@@ -203,6 +206,7 @@ export default function InvesticiiPage() {
         </div>
         <YearlyTable />
       </div>
+      <AdBlock blockId={AD_SLOTS.footer} />
     </>
   )
 

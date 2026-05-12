@@ -3,14 +3,14 @@ import { calculateNdfl, type NdflParams } from './ndfl'
 
 const base: NdflParams = {
   amount: 100000,
-  rate: 13,
+  rate: 'progressive',
   direction: 'gross_to_net',
   hasChildren: false,
   childrenCount: 0,
 }
 
 describe('calculateNdfl', () => {
-  it('gross→net по ставке 13%: 100000 → 87000', () => {
+  it('gross→net по прогрессивной шкале: 100000 → 87000', () => {
     const r = calculateNdfl(base)
     expect(r.netIncome).toBeCloseTo(87000, 2)
     expect(r.taxAmount).toBeCloseTo(13000, 2)
@@ -36,10 +36,20 @@ describe('calculateNdfl', () => {
     expect(back.grossIncome).toBeCloseTo(base.amount, 2)
   })
 
-  it('ставка 15% облагает больше', () => {
-    const r13 = calculateNdfl(base)
+  it('плоская ставка 15% облагает больше, чем 13%', () => {
+    const r13 = calculateNdfl({ ...base, rate: 13 })
     const r15 = calculateNdfl({ ...base, rate: 15 })
     expect(r15.taxAmount).toBeGreaterThan(r13.taxAmount)
+  })
+
+  it('прогрессивная шкала применяет повышенную ставку только к превышению', () => {
+    const r = calculateNdfl({ ...base, amount: 3_000_000 })
+    expect(r.taxAmount).toBeCloseTo(2_400_000 * 0.13 + 600_000 * 0.15, 2)
+  })
+
+  it('детские вычеты соответствуют правилам 2025+', () => {
+    const r = calculateNdfl({ ...base, hasChildren: true, childrenCount: 3 })
+    expect(r.deduction).toBe(10_200)
   })
 
   it('эффективная ставка ниже номинальной при наличии вычета', () => {

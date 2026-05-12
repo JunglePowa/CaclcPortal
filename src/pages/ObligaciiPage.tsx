@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateObligacii } from '@/calculators/obligacii'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import {
@@ -144,6 +146,8 @@ export default function ObligaciiPage() {
         </div>
       </div>
 
+      <AdBlock blockId={AD_SLOTS.result} />
+
       <InfoCard title="Детализация" spacing="space-y-3">
         <ResultRow label="Цена покупки (за облигацию)" value={fmt(result.buyPrice)} />
         <ResultRow label="Цена продажи / погашения" value={fmt(result.sellPrice)} />
@@ -164,6 +168,8 @@ export default function ObligaciiPage() {
         YTM (yield to maturity) — внутренняя норма доходности с учётом всех купонов и разницы цен.
         Для ОФЗ с 2021 г. купоны облагаются НДФЛ 13%.
       </p>
+
+      <AdBlock blockId={AD_SLOTS.footer} />
     </>
   )
 

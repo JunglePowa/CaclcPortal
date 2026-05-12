@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { TrendingUp, CreditCard, Receipt, Car, Heart, Search, Clock, X } from 'lucide-react'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { getHistory, clearHistory, formatRelativeTime } from '@/utils/history'
 import type { HistoryEntry } from '@/utils/history'
 
@@ -200,6 +202,8 @@ export default function HomePage() {
           </div>
         )}
 
+        <AdBlock blockId={AD_SLOTS.home} className="my-2" />
+
         {/* Search results or full catalog */}
         {isSearching ? (
           filteredCategories.length === 0 ? (
@@ -235,6 +239,8 @@ export default function HomePage() {
             )
           })
         )}
+
+        <AdBlock blockId={AD_SLOTS.homeBottom} className="mt-4" />
       </div>
     </AppLayout>
   )

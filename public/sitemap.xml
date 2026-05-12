@@ -76,6 +76,26 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://kalkportal.ru/about</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://kalkportal.ru/contacts</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://kalkportal.ru/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://kalkportal.ru/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://kalkportal.ru/investicii/vznoj</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

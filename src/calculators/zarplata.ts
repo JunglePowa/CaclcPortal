@@ -11,7 +11,7 @@ export interface ZarplataParams {
 
 export interface ZarplataResult {
   grossSalary: number       // гросс (оклад по договору)
-  ndfl: number              // НДФЛ 13%
+  ndfl: number              // НДФЛ по прогрессивной шкале
   netSalary: number         // на руки
   deduction: number         // стандартный вычет
   // Расходы работодателя
@@ -25,17 +25,23 @@ export interface ZarplataResult {
 
 function childDeductionMonthly(count: number): number {
   if (count <= 0) return 0
-  if (count === 1) return 1400
-  if (count === 2) return 2800
-  return 5800
+  return 1400 + (count >= 2 ? 2800 : 0) + Math.max(0, count - 2) * 6000
 }
 
-const DEDUCTION_INCOME_LIMIT = 350000  // лимит накопленного дохода для детского вычета (ст. 218 НК РФ)
-const MROT_2024 = 19242                // МРОТ 2024 — порог для пониженных взносов МСП
+const DEDUCTION_INCOME_LIMIT = 450000  // лимит накопленного дохода для детского вычета с 2025 г.
+const MROT_2026 = 27093                // МРОТ 2026 — порог для пониженных взносов МСП
 
-// Считаем годовой детский вычет с учётом помесячной отсечки по 350к.
+const PROGRESSIVE_BRACKETS = [
+  { upTo: 2_400_000, rate: 0.13 },
+  { upTo: 5_000_000, rate: 0.15 },
+  { upTo: 20_000_000, rate: 0.18 },
+  { upTo: 50_000_000, rate: 0.20 },
+  { upTo: Infinity, rate: 0.22 },
+] as const
+
+// Считаем годовой детский вычет с учётом помесячной отсечки по 450к.
 // Вычет применяется в каждом месяце, пока накопленный с начала года доход
-// (включая текущий месяц) не превысил 350 000 руб.
+// (включая текущий месяц) не превысил 450 000 руб.
 function annualChildDeductionWithLimit(monthlyGross: number, monthlyDeduction: number): number {
   if (monthlyDeduction <= 0 || monthlyGross <= 0) return 0
   let cumulative = 0
@@ -48,38 +54,73 @@ function annualChildDeductionWithLimit(monthlyGross: number, monthlyDeduction: n
   return totalDeduction
 }
 
+function calculateProgressiveTax(taxBase: number): number {
+  let remaining = Math.max(0, taxBase)
+  let previousLimit = 0
+  let tax = 0
+
+  for (const bracket of PROGRESSIVE_BRACKETS) {
+    const taxableInBracket = Math.min(remaining, bracket.upTo - previousLimit)
+    if (taxableInBracket <= 0) break
+    tax += taxableInBracket * bracket.rate
+    remaining -= taxableInBracket
+    previousLimit = bracket.upTo
+  }
+
+  return tax
+}
+
+function monthlyNetFromGross(grossSalary: number, monthlyDeduction: number): {
+  annualDeduction: number
+  ndfl: number
+  netSalary: number
+} {
+  const annualGross = grossSalary * 12
+  const annualDeduction = annualChildDeductionWithLimit(grossSalary, monthlyDeduction)
+  const annualTaxBase = Math.max(0, annualGross - annualDeduction)
+  const annualNdfl = calculateProgressiveTax(annualTaxBase)
+  const ndfl = annualNdfl / 12
+  return { annualDeduction, ndfl, netSalary: grossSalary - ndfl }
+}
+
 export function calculateZarplata(params: ZarplataParams): ZarplataResult {
   const { amount, direction, hasChildren, childrenCount, smallBusiness } = params
-  const ndflRate = 0.13
   const monthlyDeduction = hasChildren ? childDeductionMonthly(childrenCount) : 0
 
-  // Сначала находим месячный gross — для net→gross используем приближённую формулу
-  // (без поправки на отсечку 350к, поскольку отсечка зависит от gross).
   let grossSalary: number
   if (direction === 'gross_to_net') {
     grossSalary = amount
   } else {
-    grossSalary = (amount - monthlyDeduction * ndflRate) / (1 - ndflRate)
+    let low = amount
+    let high = Math.max(amount * 2, monthlyDeduction + 1)
+
+    for (let i = 0; i < 80; i++) {
+      if (monthlyNetFromGross(high, monthlyDeduction).netSalary >= amount) break
+      high *= 2
+    }
+
+    for (let i = 0; i < 80; i++) {
+      const mid = (low + high) / 2
+      if (monthlyNetFromGross(mid, monthlyDeduction).netSalary >= amount) high = mid
+      else low = mid
+    }
+
+    grossSalary = high
   }
 
-  // Годовой вычет с учётом лимита 350к. Усреднённо распределяем обратно на месяц,
-  // чтобы вернуть месячные показатели.
-  const annualDeduction = annualChildDeductionWithLimit(grossSalary, monthlyDeduction)
+  // Годовой вычет усредняем обратно на месяц, чтобы вернуть месячные показатели.
+  const { annualDeduction, ndfl, netSalary } = monthlyNetFromGross(grossSalary, monthlyDeduction)
   const effectiveMonthlyDeduction = annualDeduction / 12
 
-  const taxBase = Math.max(0, grossSalary - effectiveMonthlyDeduction)
-  const ndfl = taxBase * ndflRate
-  const netSalary = grossSalary - ndfl
-
   // Страховые взносы. Для не-МСП — единая ставка 22+5.1+2.9 = 30%.
-  // Для МСП с 2024 г.: 30% до МРОТ + 15% свыше МРОТ (на всю часть оклада).
+  // Для МСП: 30% до МРОТ + 15% свыше МРОТ.
   let pensionFund: number
   let medicalFund: number
   let socialFund: number
 
-  if (smallBusiness && grossSalary > MROT_2024) {
-    const upToMrot = MROT_2024
-    const aboveMrot = grossSalary - MROT_2024
+  if (smallBusiness && grossSalary > MROT_2026) {
+    const upToMrot = MROT_2026
+    const aboveMrot = grossSalary - MROT_2026
     pensionFund = upToMrot * 0.22 + aboveMrot * 0.10
     medicalFund = upToMrot * 0.051 + aboveMrot * 0.05
     socialFund = upToMrot * 0.029 + aboveMrot * 0.0

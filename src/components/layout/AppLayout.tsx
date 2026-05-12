@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 import { TrendingUp } from 'lucide-react'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { Footer } from '@/components/layout/Footer'
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mesh-bg min-h-screen">
+    <div className="mesh-bg min-h-screen flex flex-col">
       <header className="sticky top-0 z-50 border-b border-[hsl(var(--border))] glass">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 sm:px-6">
           <div className="flex items-center gap-4">
@@ -27,7 +28,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           <ThemeToggle />
         </div>
       </header>
-      {children}
+      <div className="flex-1 flex flex-col">{children}</div>
+      <Footer />
     </div>
   )
 }

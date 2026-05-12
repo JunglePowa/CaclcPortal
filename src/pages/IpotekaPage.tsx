@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateIpoteka, type EarlyPayment, type EarlyPaymentType } from '@/calculators/ipoteka'
 import type { PaymentType } from '@/calculators/kredit'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
@@ -200,6 +202,8 @@ export default function IpotekaPage() {
         </div>
       </div>
 
+      <AdBlock blockId={AD_SLOTS.result} />
+
       {hasEarly && result.earlySavings > 0 && (
         <InfoCard title="Эффект досрочного погашения" spacing="space-y-3">
           <ResultRow
@@ -244,6 +248,8 @@ export default function IpotekaPage() {
         <ResultRow label="Ставка" value={`${annualRate} % годовых`} weight="medium" />
         <ResultRow label="Срок" value={`${termMonths} мес.`} weight="medium" />
       </InfoCard>
+
+      <AdBlock blockId={AD_SLOTS.footer} />
     </>
   )
 

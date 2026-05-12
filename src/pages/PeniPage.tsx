@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { calculatePeni } from '@/calculators/peni'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { NumberInput, ResultRow, InfoCard, Divider, DateInput } from '@/components/ui'
@@ -12,7 +14,7 @@ function todayISO(): string {
 
 export default function PeniPage() {
   const [debt, setDebt] = useState(100000)
-  const [startDate, setStartDate] = useState('2024-01-01')
+  const [startDate, setStartDate] = useState('2026-01-01')
   const [endDate, setEndDate] = useState(todayISO())
   const [keyRate, setKeyRate] = useState(16)
   const [isIndividual, setIsIndividual] = useState(true)
@@ -102,9 +104,13 @@ export default function PeniPage() {
           <ResultRow label="Итого пени" value={fmt(result.total)} size="2xl" color="emerald" />
         </InfoCard>
 
+        <AdBlock blockId={AD_SLOTS.result} className="mt-4" />
+
         <p className="text-xs text-[hsl(var(--fg-muted))] mt-4 text-center">
-          Для физлиц всегда 1/300 ставки ЦБ. Для юрлиц с 31-го дня — 1/150.
+          Для физлиц всегда 1/300 ставки ЦБ. Для юрлиц учитываются особые правила 2022–2026 годов.
         </p>
+
+        <AdBlock blockId={AD_SLOTS.footer} className="mt-6" />
       </div>
     </AppLayout>
   )

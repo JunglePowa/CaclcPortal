@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateImt } from '@/calculators/imt'
 import type { ImtResult } from '@/calculators/imt'
 import { useHistorySync } from '@/hooks/useHistorySync'
@@ -134,6 +136,8 @@ export default function ImtPage() {
           </div>
         </InfoCard>
 
+        <AdBlock blockId={AD_SLOTS.result} className="mt-4" />
+
         {/* Category table */}
         <InfoCard padding="p-4" className="mt-4" spacing="">
           <p className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))] mb-3">Категории ИМТ</p>
@@ -151,6 +155,8 @@ export default function ImtPage() {
             ))}
           </div>
         </InfoCard>
+
+        <AdBlock blockId={AD_SLOTS.footer} className="mt-6" />
       </div>
     </AppLayout>
   )

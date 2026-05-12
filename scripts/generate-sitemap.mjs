@@ -50,6 +50,10 @@ const STATIC_ROUTES = [
   { path: '/ipoteka', changefreq: 'monthly', priority: '0.9' },
   { path: '/kredit-dosrochnoe', changefreq: 'monthly', priority: '0.8' },
   { path: '/peni', changefreq: 'monthly', priority: '0.7' },
+  { path: '/about', changefreq: 'yearly', priority: '0.3' },
+  { path: '/contacts', changefreq: 'yearly', priority: '0.3' },
+  { path: '/privacy', changefreq: 'yearly', priority: '0.3' },
+  { path: '/terms', changefreq: 'yearly', priority: '0.3' },
 ]
 
 const subRoutes = INVESTICII_SUBROUTES.map((path) => ({

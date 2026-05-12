@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateNds } from '@/calculators/nds'
 import type { NdsOperation, NdsRate } from '@/calculators/nds'
 import { useHistorySync } from '@/hooks/useHistorySync'
@@ -10,7 +12,7 @@ const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 export default function NdsPage() {
   const [operation, setOperation] = useState<NdsOperation>('charge')
   const [amount, setAmount] = useState<number>(100000)
-  const [rate, setRate] = useState<NdsRate>(20)
+  const [rate, setRate] = useState<NdsRate>(22)
   const [copied, setCopied] = useState(false)
 
   const result = calculateNds({ amount, rate, operation })
@@ -80,7 +82,7 @@ export default function NdsPage() {
             Ставка НДС
           </label>
           <div className="flex gap-2">
-            {([20, 10, 0] as NdsRate[]).map(r => (
+            {([22, 20, 10, 0] as NdsRate[]).map(r => (
               <button
                 key={r}
                 onClick={() => setRate(r)}
@@ -115,6 +117,8 @@ export default function NdsPage() {
           />
         </InfoCard>
 
+        <AdBlock blockId={AD_SLOTS.result} className="mt-4" />
+
         {/* Copy button */}
         <button
           onClick={handleCopy}
@@ -122,6 +126,8 @@ export default function NdsPage() {
         >
           {copied ? 'Скопировано!' : 'Скопировать'}
         </button>
+
+        <AdBlock blockId={AD_SLOTS.footer} className="mt-6" />
       </div>
     </AppLayout>
   )

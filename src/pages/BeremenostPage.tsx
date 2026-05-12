@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateBeremennost } from '@/calculators/beremennost'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { NumberInput, ResultRow, InfoCard, Divider, DateInput } from '@/components/ui'
@@ -90,6 +92,8 @@ export default function BeremenostPage() {
               </div>
             </InfoCard>
 
+            <AdBlock blockId={AD_SLOTS.result} className="mb-4" />
+
             {/* Key dates */}
             <InfoCard title="Ключевые даты" className="mb-4">
               {[
@@ -121,6 +125,8 @@ export default function BeremenostPage() {
             Укажите дату последней менструации для расчёта
           </div>
         )}
+
+        <AdBlock blockId={AD_SLOTS.footer} className="mt-6" />
       </div>
     </AppLayout>
   )

@@ -23,11 +23,11 @@ describe('calculateZarplata', () => {
     expect(withKids.netSalary).toBeGreaterThan(noKids.netSalary)
   })
 
-  it('лимит 350к: при высокой зп вычет применяется не все 12 мес', () => {
-    // 100к/мес → 350к на 4-м месяце → вычет за 3 мес (до 300к включительно)
+  it('лимит 450к: при высокой зп вычет применяется не все 12 мес', () => {
+    // 100к/мес → 450к на 5-м месяце → вычет за 4 мес (до 400к включительно)
     const r = calculateZarplata({ ...base, hasChildren: true, childrenCount: 1 })
-    // месячный вычет (усреднённо) = 1400 * 3 / 12 = 350
-    expect(r.deduction).toBeCloseTo(1400 * 3 / 12, 2)
+    // месячный вычет (усреднённо) = 1400 * 4 / 12
+    expect(r.deduction).toBeCloseTo(1400 * 4 / 12, 2)
   })
 
   it('низкая зп: вычет работает все 12 мес', () => {
@@ -55,11 +55,27 @@ describe('calculateZarplata', () => {
   })
 
   it('МСП при gross ≤ МРОТ: страховые те же, что у не-МСП', () => {
-    const small = { ...base, amount: 15000 }
+    const small = { ...base, amount: 25000 }
     const regular = calculateZarplata({ ...small, smallBusiness: false })
     const msp = calculateZarplata({ ...small, smallBusiness: true })
     const regularIns = regular.pensionFund + regular.medicalFund + regular.socialFund
     const mspIns = msp.pensionFund + msp.medicalFund + msp.socialFund
     expect(mspIns).toBeCloseTo(regularIns, 2)
+  })
+
+  it('детские вычеты соответствуют правилам 2025+', () => {
+    const r = calculateZarplata({
+      ...base,
+      amount: 20000,
+      hasChildren: true,
+      childrenCount: 3,
+    })
+    expect(r.deduction).toBeCloseTo(10_200, 2)
+  })
+
+  it('прогрессивная шкала повышает НДФЛ для высоких зарплат', () => {
+    const r = calculateZarplata({ ...base, amount: 300000 })
+    const flat13Monthly = 300000 * 0.13
+    expect(r.ndfl).toBeGreaterThan(flat13Monthly)
   })
 })

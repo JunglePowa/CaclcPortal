@@ -25,6 +25,11 @@
     <meta name="twitter:description" content="Бесплатные онлайн калькуляторы: инвестиции, вклады, кредиты, налоги, авто и здоровье." />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Yandex RTB context (РСЯ). Скрипт грузится всегда, но рендер блоков
+         выполняется только если VITE_RSYA_ENABLED=true (см. src/components/AdBlock.tsx). -->
+    <script>window.yaContextCb = window.yaContextCb || []</script>
+    <script src="https://yandex.ru/ads/system/context.js" async></script>
   </head>
   <body>
     <div id="root"></div>

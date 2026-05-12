@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateTransport } from '@/calculators/transport'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { ResultRow, InfoCard, Divider, Select, labelCls, inputCls } from '@/components/ui'
@@ -121,9 +123,13 @@ export default function TransportPage() {
           <ResultRow label="Налог к уплате" value={fmt(result.actualTax)} color="emerald" size="2xl" />
         </InfoCard>
 
+        <AdBlock blockId={AD_SLOTS.result} className="mt-4" />
+
         <p className="text-xs text-[hsl(var(--fg-muted))] mt-4 text-center">
           Транспортный налог уплачивается до 1 декабря следующего года
         </p>
+
+        <AdBlock blockId={AD_SLOTS.footer} className="mt-6" />
       </div>
     </AppLayout>
   )

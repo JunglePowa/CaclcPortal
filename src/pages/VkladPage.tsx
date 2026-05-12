@@ -4,6 +4,8 @@ import { useVkladStore } from '@/stores/vkladStore'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import {
   NumberInput,
@@ -174,6 +176,8 @@ export default function VkladPage() {
         </div>
       </div>
 
+      <AdBlock blockId={AD_SLOTS.result} />
+
       <div className="glass rounded-2xl p-5">
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))]">
           Рост вклада
@@ -217,6 +221,8 @@ export default function VkladPage() {
           </table>
         </div>
       </div>
+
+      <AdBlock blockId={AD_SLOTS.footer} />
     </>
   )
 

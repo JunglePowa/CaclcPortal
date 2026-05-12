@@ -1,5 +1,5 @@
 export type NdsOperation = 'charge' | 'extract'  // начислить / выделить
-export type NdsRate = 20 | 10 | 0
+export type NdsRate = 22 | 20 | 10 | 0
 
 export interface NdsParams {
   amount: number

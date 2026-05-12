@@ -1,7 +1,7 @@
 // Расчёт пени по налогам и страховым взносам по ст. 75 НК РФ
-// Правила (с 2023 г., после моратория):
+// Правила:
 // - Физлица: всегда 1/300 ключевой ставки ЦБ за каждый день просрочки.
-// - Организации: первые 30 дней — 1/300, с 31-го дня — 1/150 ключевой ставки ЦБ.
+// - Организации: учитываем особые периоды 09.03.2022–31.12.2024 и 2025–2026.
 // Параметр `keyRate` — ключевая ставка ЦБ в процентах годовых (одна на весь период для простоты).
 
 export interface PeniParams {
@@ -42,6 +42,32 @@ function daysBetween(startISO: string, endISO: string): number {
   return Math.max(0, diff)
 }
 
+function addDays(startISO: string, days: number): Date {
+  const d = new Date(startISO + 'T00:00:00Z')
+  d.setUTCDate(d.getUTCDate() + days)
+  return d
+}
+
+function inRange(date: Date, fromISO: string, toISO: string): boolean {
+  const time = date.getTime()
+  return time >= new Date(fromISO + 'T00:00:00Z').getTime() && time <= new Date(toISO + 'T00:00:00Z').getTime()
+}
+
+function organizationFraction(dayIndex: number, date: Date): number {
+  if (inRange(date, '2022-03-09', '2024-12-31')) return 1 / 300
+  if (inRange(date, '2025-01-01', '2026-12-31')) {
+    if (dayIndex <= 30) return 1 / 300
+    if (dayIndex <= 90) return 1 / 150
+    return 1 / 300
+  }
+  return dayIndex <= 30 ? 1 / 300 : 1 / 150
+}
+
+function labelForFraction(fraction: number, startDay: number, endDay: number): string {
+  const range = startDay === endDay ? `${startDay} день` : `${startDay}–${endDay} день`
+  return `${range} (1/${Math.round(1 / fraction)} ставки ЦБ)`
+}
+
 export function calculatePeni(params: PeniParams): PeniResult {
   const { debt, startDate, endDate, keyRate, isIndividual } = params
   const days = daysBetween(startDate, endDate)
@@ -68,33 +94,51 @@ export function calculatePeni(params: PeniParams): PeniResult {
     }
   }
 
-  // Юрлицо
-  const firstPeriod = Math.min(days, 30)
-  const secondPeriod = Math.max(0, days - 30)
+  const breakdown: PeniBreakdownRow[] = []
+  let currentFraction: number | null = null
+  let currentStart = 1
+  let currentDays = 0
 
-  const amount1 = (debt * ratePerDay * firstPeriod) / 300
-  const amount2 = (debt * ratePerDay * secondPeriod) / 150
-
-  const breakdown: PeniBreakdownRow[] = [
-    {
-      label: `1–${firstPeriod} день (1/300 ставки ЦБ)`,
-      days: firstPeriod,
-      fraction: 1 / 300,
-      amount: amount1,
-    },
-  ]
-  if (secondPeriod > 0) {
+  for (let day = 1; day <= days; day++) {
+    const date = addDays(startDate, day)
+    const fraction = organizationFraction(day, date)
+    if (currentFraction === null) {
+      currentFraction = fraction
+      currentStart = day
+      currentDays = 1
+      continue
+    }
+    if (fraction === currentFraction) {
+      currentDays += 1
+      continue
+    }
+    const currentEnd = currentStart + currentDays - 1
     breakdown.push({
-      label: `с 31-го дня (${secondPeriod} дн., 1/150 ставки ЦБ)`,
-      days: secondPeriod,
-      fraction: 1 / 150,
-      amount: amount2,
+      label: labelForFraction(currentFraction, currentStart, currentEnd),
+      days: currentDays,
+      fraction: currentFraction,
+      amount: debt * ratePerDay * currentDays * currentFraction,
+    })
+    currentFraction = fraction
+    currentStart = day
+    currentDays = 1
+  }
+
+  if (currentFraction !== null) {
+    const currentEnd = currentStart + currentDays - 1
+    breakdown.push({
+      label: labelForFraction(currentFraction, currentStart, currentEnd),
+      days: currentDays,
+      fraction: currentFraction,
+      amount: debt * ratePerDay * currentDays * currentFraction,
     })
   }
 
+  const total = breakdown.reduce((sum, row) => sum + row.amount, 0)
+
   return {
     days,
-    total: amount1 + amount2,
+    total,
     breakdown,
   }
 }

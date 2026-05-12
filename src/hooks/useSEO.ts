@@ -6,6 +6,7 @@ interface SEOData {
   title: string
   description: string
   canonical: string
+  robots?: string
   jsonLd?: object
 }
 
@@ -60,13 +61,13 @@ const SEO_MAP: Record<string, SEOData> = {
   },
   '/nds': {
     title: 'Калькулятор НДС — КалкПортал',
-    description: 'Начислите или выделите НДС онлайн. Ставки 20%, 10%, 0%.',
+    description: 'Начислите или выделите НДС онлайн. Ставки 22%, 20%, 10%, 0%.',
     canonical: `${BASE_URL}/nds`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор НДС', url: `${BASE_URL}/nds`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/ndfl': {
     title: 'Калькулятор НДФЛ — КалкПортал',
-    description: 'Рассчитайте НДФЛ онлайн. Ставки 13%, 15%, 30%. Учёт стандартных вычетов на детей.',
+    description: 'Рассчитайте НДФЛ онлайн по прогрессивной шкале 13–22%, с учётом стандартных вычетов на детей.',
     canonical: `${BASE_URL}/ndfl`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор НДФЛ', url: `${BASE_URL}/ndfl`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
@@ -124,6 +125,32 @@ const SEO_MAP: Record<string, SEOData> = {
     canonical: `${BASE_URL}/peni`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор пеней', url: `${BASE_URL}/peni`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
+  '/privacy': {
+    title: 'Политика конфиденциальности — КалкПортал',
+    description: 'Какие данные собирает сервис КалкПортал и как они используются.',
+    canonical: `${BASE_URL}/privacy`,
+  },
+  '/terms': {
+    title: 'Пользовательское соглашение — КалкПортал',
+    description: 'Условия использования сервиса КалкПортал, отказ от ответственности и права на контент.',
+    canonical: `${BASE_URL}/terms`,
+  },
+  '/about': {
+    title: 'О сервисе — КалкПортал',
+    description: 'КалкПортал — бесплатный сервис онлайн-калькуляторов: финансы, кредиты, налоги, авто, здоровье.',
+    canonical: `${BASE_URL}/about`,
+  },
+  '/contacts': {
+    title: 'Контакты — КалкПортал',
+    description: 'Связаться с администрацией сервиса КалкПортал по электронной почте.',
+    canonical: `${BASE_URL}/contacts`,
+  },
+  '/404': {
+    title: 'Страница не найдена — КалкПортал',
+    description: 'Запрошенная страница не найдена. Перейдите в каталог онлайн калькуляторов КалкПортал.',
+    canonical: `${BASE_URL}/404`,
+    robots: 'noindex, follow',
+  },
 }
 
 function setMeta(name: string, content: string) {
@@ -162,10 +189,10 @@ function resolveSEO(pathname: string): SEOData {
       jsonLd: base.jsonLd,
     }
   }
-  // Базовый путь (первый сегмент)
-  const segments = pathname.split('/').filter(Boolean)
-  const basePath = segments.length > 0 ? '/' + segments[0] : '/'
-  return SEO_MAP[basePath] ?? SEO_MAP['/']
+  return SEO_MAP[pathname] ?? {
+    ...SEO_MAP['/404'],
+    canonical: `${BASE_URL}${pathname}`,
+  }
 }
 
 export function useSEO() {
@@ -176,7 +203,7 @@ export function useSEO() {
 
     document.title = seo.title
     setMeta('description', seo.description)
-    setMeta('robots', 'index, follow')
+    setMeta('robots', seo.robots ?? 'index, follow')
     setOG('og:title', seo.title)
     setOG('og:description', seo.description)
     setOG('og:url', seo.canonical)

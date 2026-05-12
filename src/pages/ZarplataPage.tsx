@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateZarplata } from '@/calculators/zarplata'
 import type { ZarplataDirection } from '@/calculators/zarplata'
 import { useHistorySync } from '@/hooks/useHistorySync'
@@ -83,8 +85,8 @@ export default function ZarplataPage() {
               aria-label="Количество детей"
             >
               <option value={1}>1 ребёнок (вычет 1 400 ₽)</option>
-              <option value={2}>2 детей (вычет 2 800 ₽)</option>
-              <option value={3}>3 и более (вычет 5 800 ₽)</option>
+              <option value={2}>2 детей (вычет 4 200 ₽)</option>
+              <option value={3}>3 детей (вычет 10 200 ₽)</option>
             </select>
           )}
         </div>
@@ -113,10 +115,12 @@ export default function ZarplataPage() {
             </>
           )}
           <Divider />
-          <ResultRow label="НДФЛ 13%" value={fmt(result.ndfl)} color="red" />
+          <ResultRow label="НДФЛ по шкале" value={fmt(result.ndfl)} color="red" />
           <Divider />
           <ResultRow label="На руки" value={fmt(result.netSalary)} color="emerald" size="2xl" />
         </InfoCard>
+
+        <AdBlock blockId={AD_SLOTS.result} className="mb-4" />
 
         {/* Block 2: Employer */}
         <InfoCard title="Для работодателя">
@@ -134,6 +138,8 @@ export default function ZarplataPage() {
             color="muted"
           />
         </InfoCard>
+
+        <AdBlock blockId={AD_SLOTS.footer} className="mt-6" />
       </div>
     </AppLayout>
   )

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateRashod } from '@/calculators/rashod'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { NumberInput, ResultRow, InfoCard, Divider } from '@/components/ui'
@@ -79,6 +81,9 @@ export default function RashodPage() {
           <Divider />
           <ResultRow label="На км" value={`${result.costPerKm.toFixed(2)} ₽/км`} size="lg" />
         </InfoCard>
+
+        <AdBlock blockId={AD_SLOTS.result} className="mt-4" />
+        <AdBlock blockId={AD_SLOTS.footer} className="mt-6" />
       </div>
     </AppLayout>
   )

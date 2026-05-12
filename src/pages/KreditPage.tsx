@@ -4,6 +4,8 @@ import { useKreditStore } from '@/stores/kreditStore'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import type { PaymentType } from '@/calculators/kredit'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import {
@@ -145,6 +147,8 @@ export default function KreditPage() {
         </div>
       </div>
 
+      <AdBlock blockId={AD_SLOTS.result} />
+
       <div className="glass rounded-2xl p-5">
         <div className="flex justify-between text-xs text-[hsl(var(--fg-muted))] mb-2">
           <span>Основной долг {((loanAmount / result.totalPayment) * 100).toFixed(0)}%</span>
@@ -203,6 +207,8 @@ export default function KreditPage() {
           </table>
         </div>
       </div>
+
+      <AdBlock blockId={AD_SLOTS.footer} />
     </>
   )
 

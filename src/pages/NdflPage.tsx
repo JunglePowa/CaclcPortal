@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateNdfl } from '@/calculators/ndfl'
 import type { NdflDirection, NdflRate } from '@/calculators/ndfl'
 import { useHistorySync } from '@/hooks/useHistorySync'
@@ -9,14 +11,14 @@ const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 
 const CHILDREN_OPTIONS = [
   { value: 1, label: '1 ребёнок (вычет 1 400 ₽)' },
-  { value: 2, label: '2 детей (вычет 2 800 ₽)' },
-  { value: 3, label: '3 и более (вычет 5 800 ₽)' },
+  { value: 2, label: '2 детей (вычет 4 200 ₽)' },
+  { value: 3, label: '3 детей (вычет 10 200 ₽)' },
 ]
 
 export default function NdflPage() {
   const [direction, setDirection] = useState<NdflDirection>('gross_to_net')
   const [amount, setAmount] = useState<number>(100000)
-  const [rate, setRate] = useState<NdflRate>(13)
+  const [rate, setRate] = useState<NdflRate>('progressive')
   const [hasChildren, setHasChildren] = useState(false)
   const [childrenCount, setChildrenCount] = useState(1)
 
@@ -26,7 +28,7 @@ export default function NdflPage() {
   useHistorySync({
     calculatorLabel: 'НДФЛ',
     calculatorUrl: '/ndfl',
-    summary: `НДФЛ ${rate}%: ${Math.round(result.taxAmount).toLocaleString('ru-RU')} ₽, на руки ${Math.round(result.netIncome).toLocaleString('ru-RU')} ₽`,
+    summary: `НДФЛ: ${Math.round(result.taxAmount).toLocaleString('ru-RU')} ₽, на руки ${Math.round(result.netIncome).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${result.taxAmount}|${result.netIncome}`,
     delayMs: 0,
   })
@@ -77,8 +79,16 @@ export default function NdflPage() {
           <label className="block text-xs font-medium mb-1 text-[hsl(var(--fg-muted))] uppercase tracking-wide">
             Ставка НДФЛ
           </label>
-          <div className="flex gap-2">
-            {([13, 15, 30] as NdflRate[]).map(r => (
+          <div className="grid grid-cols-3 gap-2">
+            {([
+              ['progressive', '13-22%'],
+              [13, '13%'],
+              [15, '15%'],
+              [18, '18%'],
+              [20, '20%'],
+              [22, '22%'],
+              [30, '30%'],
+            ] as [NdflRate, string][]).map(([r, label]) => (
               <button
                 key={r}
                 onClick={() => setRate(r)}
@@ -88,7 +98,7 @@ export default function NdflPage() {
                     : 'border-[hsl(var(--border))] text-[hsl(var(--fg-muted))] hover:border-[hsl(var(--fg-muted))]'
                 }`}
               >
-                {r}%
+                {label}
               </button>
             ))}
           </div>
@@ -131,7 +141,7 @@ export default function NdflPage() {
             </>
           )}
           <Divider />
-          <ResultRow label={`НДФЛ ${rate}%`} value={fmt(result.taxAmount)} color="amber" />
+          <ResultRow label={rate === 'progressive' ? 'НДФЛ по шкале' : `НДФЛ ${rate}%`} value={fmt(result.taxAmount)} color="amber" />
           <Divider />
           <ResultRow label="На руки" value={fmt(result.netIncome)} color="emerald" size="2xl" />
           <Divider />
@@ -144,6 +154,9 @@ export default function NdflPage() {
             medium
           />
         </InfoCard>
+
+        <AdBlock blockId={AD_SLOTS.result} className="mt-4" />
+        <AdBlock blockId={AD_SLOTS.footer} className="mt-6" />
       </div>
     </AppLayout>
   )

@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
+import { AdBlock } from '@/components/AdBlock'
+import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateDosrochnoe, type EarlyType } from '@/calculators/kreditDosrochnoe'
 import { formatMoney } from '@/utils/formatCurrency'
 import { useHistorySync } from '@/hooks/useHistorySync'
@@ -145,6 +147,8 @@ export default function KreditDosrochnoePage() {
         </div>
       </div>
 
+      <AdBlock blockId={AD_SLOTS.result} />
+
       <InfoCard title="Сравнение сценариев" spacing="space-y-3">
         <ResultRow
           label="Без досрочки — итого выплат"
@@ -197,6 +201,8 @@ export default function KreditDosrochnoePage() {
         «Сократить срок» обычно даёт большую экономию, т.к. проценты начисляются меньшее время.
         «Уменьшить платёж» снижает финансовую нагрузку при сохранении срока.
       </p>
+
+      <AdBlock blockId={AD_SLOTS.footer} />
     </>
   )
 
