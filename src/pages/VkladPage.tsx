@@ -198,27 +198,36 @@ export default function VkladPage() {
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))]">
           График начислений
         </h2>
-        <div className="max-h-64 overflow-auto">
-          <table className="w-full text-sm">
-            <thead className="sticky top-0 bg-[hsl(var(--bg-card))]">
-              <tr className="text-xs text-[hsl(var(--fg-muted))] uppercase tracking-wide">
-                <th className="text-left py-2 pr-4">Месяц</th>
-                <th className="text-right py-2 pr-4">Пополнение</th>
-                <th className="text-right py-2 pr-4">Проценты</th>
-                <th className="text-right py-2">Баланс</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[hsl(var(--border))]">
-              {tableRows.map(row => (
-                <tr key={row.month} className="hover:bg-[hsl(var(--bg-card))]/40 transition-colors">
-                  <td className="py-2 pr-4 tabular">{row.month}</td>
-                  <td className="py-2 pr-4 text-right tabular">{formatMoney(row.replenishment, params.currency)}</td>
-                  <td className="py-2 pr-4 text-right tabular text-emerald-400">{formatMoney(row.interest, params.currency)}</td>
-                  <td className="py-2 text-right tabular font-medium">{formatMoney(row.balance, params.currency)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="max-h-72 space-y-2 overflow-y-auto pr-1">
+          {tableRows.map(row => (
+            <div
+              key={row.month}
+              className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))]/45 px-4 py-3"
+            >
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <span className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))]">
+                  Месяц {row.month}
+                </span>
+                <span className="tabular text-base font-semibold text-[hsl(var(--fg))]">
+                  {formatMoney(row.balance, params.currency)}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p className="mb-0.5 text-[11px] uppercase tracking-wide text-[hsl(var(--fg-muted))]">
+                    Пополнение
+                  </p>
+                  <p className="tabular">{formatMoney(row.replenishment, params.currency)}</p>
+                </div>
+                <div className="text-right">
+                  <p className="mb-0.5 text-[11px] uppercase tracking-wide text-[hsl(var(--fg-muted))]">
+                    Проценты
+                  </p>
+                  <p className="tabular text-emerald-400">{formatMoney(row.interest, params.currency)}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

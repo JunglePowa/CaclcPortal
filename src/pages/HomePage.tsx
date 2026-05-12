@@ -14,9 +14,18 @@ interface CategoryItem {
   ready: boolean
 }
 
+const POPULAR_CALCULATORS = [
+  { label: 'Вклад', href: '/vklad' },
+  { label: 'Кредит', href: '/kredit' },
+  { label: 'НДС', href: '/nds' },
+  { label: 'Зарплата', href: '/zarplata' },
+  { label: 'Ипотека', href: '/ipoteka' },
+]
+
 const CATEGORIES = [
   {
     id: 'finance',
+    href: '/finansy',
     label: 'Финансы',
     icon: TrendingUp,
     color: 'emerald',
@@ -28,6 +37,7 @@ const CATEGORIES = [
   },
   {
     id: 'credit',
+    href: '/kredity',
     label: 'Кредиты',
     icon: CreditCard,
     color: 'blue',
@@ -39,6 +49,7 @@ const CATEGORIES = [
   },
   {
     id: 'tax',
+    href: '/nalogi',
     label: 'Налоги',
     icon: Receipt,
     color: 'amber',
@@ -51,6 +62,7 @@ const CATEGORIES = [
   },
   {
     id: 'auto',
+    href: '/avto',
     label: 'Авто',
     icon: Car,
     color: 'violet',
@@ -61,6 +73,7 @@ const CATEGORIES = [
   },
   {
     id: 'health',
+    href: '/zdorove',
     label: 'Здоровье',
     icon: Heart,
     color: 'rose',
@@ -93,7 +106,7 @@ function CalcCard({ item, color }: { item: CategoryItem; color: string }) {
   const c = color as ColorKey
   if (!item.ready) {
     return (
-      <div className={`rounded-xl border p-4 opacity-50 cursor-not-allowed ${colorMap[c]}`}>
+      <div className={`rounded-lg border p-4 opacity-50 cursor-not-allowed ${colorMap[c]}`}>
         <div className="flex items-start justify-between gap-2">
           <div>
             <p className="text-sm font-medium">{item.label}</p>
@@ -108,8 +121,11 @@ function CalcCard({ item, color }: { item: CategoryItem; color: string }) {
   }
 
   return (
-    <Link to={item.href} className={`rounded-xl border p-4 transition-all ${colorMap[c]} block`}>
-      <p className="text-sm font-medium">{item.label}</p>
+    <Link to={item.href} className={`group block rounded-lg border p-4 transition-all ${colorMap[c]}`}>
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-sm font-medium">{item.label}</p>
+        <span className="text-[hsl(var(--fg-muted))] transition-transform group-hover:translate-x-0.5">→</span>
+      </div>
       <p className="text-xs text-[hsl(var(--fg-muted))] mt-0.5">{item.desc}</p>
     </Link>
   )
@@ -137,34 +153,53 @@ export default function HomePage() {
 
   return (
     <AppLayout>
-      {/* Hero */}
-      <div className="text-center py-10 px-4">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Онлайн калькуляторы</h1>
-        <p className="text-[hsl(var(--fg-muted))] text-sm mb-6">
-          Финансы, кредиты, налоги, авто и здоровье
-        </p>
-        <div className="relative max-w-md mx-auto">
-          <Search
-            size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-[hsl(var(--fg-muted))]"
-          />
-          <input
-            type="text"
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            placeholder="Найти калькулятор..."
-            className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))]/60 pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          />
-          {query && (
-            <button
-              onClick={() => setQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[hsl(var(--fg-muted))] hover:text-[hsl(var(--fg))]"
-            >
-              <X size={14} />
-            </button>
-          )}
+      <section className="border-b border-[hsl(var(--border))] bg-[hsl(var(--bg-card))]/20">
+        <div className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 lg:px-8">
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
+            <div>
+              <h1 className="text-2xl font-bold sm:text-3xl">Онлайн калькуляторы</h1>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[hsl(var(--fg-muted))]">
+                Быстрые расчёты для финансов, кредитов, налогов, авто и здоровья с понятными формулами и без лишних шагов.
+              </p>
+            </div>
+            <div className="relative">
+              <Search
+                size={15}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[hsl(var(--fg-muted))]"
+              />
+              <input
+                type="text"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder="Найти калькулятор..."
+                className="w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))]/70 py-3 pl-10 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+              {query && (
+                <button
+                  onClick={() => setQuery('')}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[hsl(var(--fg-muted))] transition-colors hover:text-[hsl(var(--fg))]"
+                  aria-label="Очистить поиск"
+                >
+                  <X size={15} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-5 flex flex-wrap items-center gap-2">
+            <span className="text-xs font-medium uppercase tracking-wide text-[hsl(var(--fg-muted))]">Популярное</span>
+            {POPULAR_CALCULATORS.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))]/50 px-3 py-2 text-xs font-medium transition-colors hover:border-emerald-500/50 hover:bg-emerald-500/5"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* Catalog */}
       <div className="mx-auto max-w-[1440px] px-4 pb-12 sm:px-6 lg:px-8 space-y-8">
@@ -223,19 +258,27 @@ export default function HomePage() {
           CATEGORIES.map((cat) => {
             const Icon = cat.icon
             return (
-              <div key={cat.id}>
-                <div className="flex items-center gap-2 mb-3">
-                  <Icon size={16} className={iconColorMap[cat.color as ColorKey]} />
-                  <h2 className="text-sm font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))]">
-                    {cat.label}
-                  </h2>
+              <section key={cat.id} aria-labelledby={`category-${cat.id}`}>
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <Link to={cat.href} className="group flex items-center gap-2">
+                    <Icon size={16} className={iconColorMap[cat.color as ColorKey]} />
+                    <h2 id={`category-${cat.id}`} className="text-sm font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))] transition-colors group-hover:text-[hsl(var(--fg))]">
+                      {cat.label}
+                    </h2>
+                  </Link>
+                  <Link
+                    to={cat.href}
+                    className="text-xs font-medium text-[hsl(var(--fg-muted))] transition-colors hover:text-[hsl(var(--fg))]"
+                  >
+                    Раздел
+                  </Link>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                   {cat.items.map((item) => (
                     <CalcCard key={item.href} item={item} color={cat.color} />
                   ))}
                 </div>
-              </div>
+              </section>
             )
           })
         )}
