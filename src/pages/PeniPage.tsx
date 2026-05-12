@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculatePeni } from '@/calculators/peni'
 import { useHistorySync } from '@/hooks/useHistorySync'
-import { NumberInput, ResultRow, InfoCard, Divider, labelCls, inputCls } from '@/components/ui'
+import { NumberInput, ResultRow, InfoCard, Divider, DateInput } from '@/components/ui'
 
 const fmt = (v: number) => `${v.toLocaleString('ru-RU', { maximumFractionDigits: 2 })} ₽`
 
@@ -64,25 +64,17 @@ export default function PeniPage() {
             ariaLabel="Сумма недоимки"
           />
 
-          <div>
-            <label className={labelCls}>Дата возникновения долга</label>
-            <input
-              type="date"
-              className={inputCls}
-              value={startDate}
-              onChange={e => setStartDate(e.target.value)}
-            />
-          </div>
+          <DateInput
+            label="Дата возникновения долга"
+            value={startDate}
+            onChange={setStartDate}
+          />
 
-          <div>
-            <label className={labelCls}>Дата уплаты</label>
-            <input
-              type="date"
-              className={inputCls}
-              value={endDate}
-              onChange={e => setEndDate(e.target.value)}
-            />
-          </div>
+          <DateInput
+            label="Дата уплаты"
+            value={endDate}
+            onChange={setEndDate}
+          />
 
           <NumberInput
             label="Ключевая ставка ЦБ, %"

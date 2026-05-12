@@ -23,7 +23,8 @@
       "Read(//c/claude_calc/public//**)",
       "Read(//c/claude_calc/**)",
       "Bash(mkdir -p /c/claude_calc/scripts)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(node -e \"console.log\\(require\\('react-day-picker/package.json'\\).version, require\\('date-fns/package.json'\\).version\\)\")"
     ]
   }
 }

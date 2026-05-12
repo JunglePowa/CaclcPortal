@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateBeremennost } from '@/calculators/beremennost'
 import { useHistorySync } from '@/hooks/useHistorySync'
-import { NumberInput, ResultRow, InfoCard, Divider, labelCls, inputCls } from '@/components/ui'
+import { NumberInput, ResultRow, InfoCard, Divider, DateInput } from '@/components/ui'
 
 const today = new Date().toISOString().split('T')[0]
 
@@ -35,13 +35,11 @@ export default function BeremenostPage() {
         </div>
 
         <div className="mb-4">
-          <label className={labelCls}>Дата последней менструации</label>
-          <input
-            type="date"
-            className={inputCls}
+          <DateInput
+            label="Дата последней менструации"
             value={lastPeriodDate}
+            onChange={setLastPeriodDate}
             max={today}
-            onChange={e => setLastPeriodDate(e.target.value)}
           />
         </div>
 
