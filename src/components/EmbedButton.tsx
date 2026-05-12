@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Code2, X, Check, Copy } from 'lucide-react'
 
 interface EmbedButtonProps {
@@ -9,9 +9,13 @@ interface EmbedButtonProps {
 export function EmbedButton({ path, title }: EmbedButtonProps) {
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null)
+  const dialogRef = useRef<HTMLDivElement | null>(null)
+  const titleId = useId()
 
   const origin = typeof window !== 'undefined' ? window.location.origin : ''
-  const embedCode = `<iframe src="${origin}${path}" title="${title}" width="100%" height="700" frameborder="0" style="border-radius:12px;border:1px solid #e5e7eb"></iframe>`
+  const embedCode = `<iframe src="${origin}${path}" title="${title}" width="100%" height="700" style="border:0;border-radius:12px;border:1px solid #e5e7eb"></iframe>`
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(embedCode)
@@ -19,9 +23,51 @@ export function EmbedButton({ path, title }: EmbedButtonProps) {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const close = () => setOpen(false)
+
+  // Открытие: фокус на close-кнопку. Закрытие: возврат фокуса на триггер.
+  useEffect(() => {
+    if (!open) return
+    const previouslyFocused = document.activeElement as HTMLElement | null
+    closeBtnRef.current?.focus()
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation()
+        close()
+        return
+      }
+      if (e.key === 'Tab' && dialogRef.current) {
+        // Простой focus trap внутри диалога
+        const focusables = dialogRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        )
+        if (focusables.length === 0) return
+        const first = focusables[0]
+        const last = focusables[focusables.length - 1]
+        const active = document.activeElement as HTMLElement | null
+        if (e.shiftKey && active === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && active === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      // Возвращаем фокус на триггер (или предыдущий элемент)
+      if (triggerRef.current) triggerRef.current.focus()
+      else previouslyFocused?.focus?.()
+    }
+  }, [open])
+
   return (
     <>
       <button
+        ref={triggerRef}
         onClick={() => setOpen(true)}
         className="flex items-center gap-1.5 rounded-lg border border-[hsl(var(--border))] px-3 py-1.5 text-xs font-medium text-[hsl(var(--fg-muted))] hover:text-[hsl(var(--fg))] hover:border-emerald-500/40 transition-colors"
       >
@@ -32,16 +78,22 @@ export function EmbedButton({ path, title }: EmbedButtonProps) {
       {open && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-          onClick={() => setOpen(false)}
+          onClick={close}
         >
           <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
             className="glass rounded-2xl p-6 max-w-lg w-full space-y-4"
             onClick={e => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">Встроить калькулятор</h3>
+              <h3 id={titleId} className="text-sm font-semibold">Встроить калькулятор</h3>
               <button
-                onClick={() => setOpen(false)}
+                ref={closeBtnRef}
+                onClick={close}
+                aria-label="Закрыть диалог"
                 className="text-[hsl(var(--fg-muted))] hover:text-[hsl(var(--fg))]"
               >
                 <X size={16} />

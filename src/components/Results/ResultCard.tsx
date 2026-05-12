@@ -1,15 +1,19 @@
 import { useEffect } from 'react'
-import { motion, useSpring, useTransform } from 'framer-motion'
+import { motion, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 import { useCalcStore } from '@/stores/calcStore'
 import { effectiveAnnualRate } from '@/utils/compound'
 import { getCurrencySymbol, formatMoney } from '@/utils/formatCurrency'
 
 function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
+  const reduced = useReducedMotion()
   const spring = useSpring(value, { stiffness: 100, damping: 20 })
   const display = useTransform(spring, (v) =>
     `${Math.round(v).toLocaleString('ru-RU')}${suffix}`
   )
   useEffect(() => { spring.set(value) }, [value, spring])
+  if (reduced) {
+    return <span className="tabular">{`${Math.round(value).toLocaleString('ru-RU')}${suffix}`}</span>
+  }
   return <motion.span className="tabular">{display}</motion.span>
 }
 
