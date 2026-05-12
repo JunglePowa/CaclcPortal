@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kalkportal.ru/sitemap.xml
+Sitemap: https://calcportal.online/sitemap.xml

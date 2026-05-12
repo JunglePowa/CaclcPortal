@@ -11,13 +11,13 @@ interface SEOData {
 }
 
 const BASE_URL: string =
-  (import.meta.env.VITE_BASE_URL as string | undefined) ?? 'https://kalkportal.ru'
+  (import.meta.env.VITE_BASE_URL as string | undefined) ?? 'https://calcportal.online'
 
 // Данные для каждого маршрута
 const SEO_MAP: Record<string, SEOData> = {
   '/': {
-    title: 'Калк Портал — Онлайн калькуляторы',
-    description: 'Бесплатные онлайн калькуляторы: инвестиции, вклады, кредиты, НДС, НДФЛ, зарплата, ИМТ и другие.',
+    title: 'Калк Портал — онлайн калькуляторы для финансов, налогов и кредитов',
+    description: 'Бесплатные онлайн калькуляторы: НДС 22%, НДФЛ 2026, зарплата, кредит, ипотека, вклад, инвестиции, ИМТ, транспортный налог и пени.',
     canonical: `${BASE_URL}/`,
     jsonLd: {
       '@context': 'https://schema.org',
@@ -33,8 +33,8 @@ const SEO_MAP: Record<string, SEOData> = {
     },
   },
   '/investicii': {
-    title: 'Калькулятор инвестиций — Калк Портал',
-    description: 'Рассчитайте итоговую сумму накоплений с учётом сложного процента, налога и инфляции. 6 режимов расчёта.',
+    title: 'Калькулятор инвестиций онлайн — сложный процент и накопления',
+    description: 'Рассчитайте будущую стоимость капитала, регулярные пополнения, сложный процент, налог и инфляцию. 6 режимов инвестиционного расчёта.',
     canonical: `${BASE_URL}/investicii`,
     jsonLd: {
       '@context': 'https://schema.org',
@@ -48,79 +48,79 @@ const SEO_MAP: Record<string, SEOData> = {
     },
   },
   '/vklad': {
-    title: 'Калькулятор вклада — Калк Портал',
-    description: 'Рассчитайте доходность вклада с капитализацией, пополнениями и учётом налога.',
+    title: 'Калькулятор вклада онлайн — доходность, капитализация, налог',
+    description: 'Рассчитайте сумму вклада, проценты, пополнения, капитализацию и чистый доход после налога за выбранный срок.',
     canonical: `${BASE_URL}/vklad`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор вклада', url: `${BASE_URL}/vklad`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/kredit': {
-    title: 'Кредитный калькулятор — Калк Портал',
-    description: 'Рассчитайте ежемесячный платёж и переплату по кредиту. Аннуитетный и дифференциальный платёж.',
+    title: 'Кредитный калькулятор онлайн — платёж, переплата, график',
+    description: 'Рассчитайте ежемесячный платёж, переплату и график погашения кредита для аннуитетной или дифференцированной схемы.',
     canonical: `${BASE_URL}/kredit`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Кредитный калькулятор', url: `${BASE_URL}/kredit`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/nds': {
-    title: 'Калькулятор НДС — Калк Портал',
-    description: 'Начислите или выделите НДС онлайн. Ставки 22%, 20%, 10%, 0%.',
+    title: 'Калькулятор НДС 22% онлайн — начислить и выделить НДС',
+    description: 'Онлайн калькулятор НДС: начислите налог сверху или выделите НДС из суммы по ставкам 22%, 20%, 10% и 0%.',
     canonical: `${BASE_URL}/nds`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор НДС', url: `${BASE_URL}/nds`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/ndfl': {
-    title: 'Калькулятор НДФЛ — Калк Портал',
-    description: 'Рассчитайте НДФЛ онлайн по прогрессивной шкале 13–22%, с учётом стандартных вычетов на детей.',
+    title: 'Калькулятор НДФЛ 2026 онлайн — прогрессивная шкала 13–22%',
+    description: 'Рассчитайте НДФЛ с дохода или сумму до налога по прогрессивной шкале 13–22%, с учётом стандартных вычетов на детей.',
     canonical: `${BASE_URL}/ndfl`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор НДФЛ', url: `${BASE_URL}/ndfl`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/zarplata': {
-    title: 'Калькулятор зарплаты — Калк Портал',
-    description: 'Рассчитайте зарплату на руки и расходы работодателя. НДФЛ и страховые взносы.',
+    title: 'Калькулятор зарплаты онлайн — гросс, нетто, НДФЛ и взносы',
+    description: 'Переведите зарплату из гросс в нетто и обратно, рассчитайте НДФЛ, страховые взносы и полную стоимость сотрудника для работодателя.',
     canonical: `${BASE_URL}/zarplata`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор зарплаты', url: `${BASE_URL}/zarplata`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/rashod-topliva': {
-    title: 'Калькулятор расхода топлива — Калк Портал',
+    title: 'Калькулятор расхода топлива онлайн — литры на 100 км и стоимость поездки',
     description: 'Рассчитайте расход топлива на 100 км и стоимость поездки онлайн.',
     canonical: `${BASE_URL}/rashod-topliva`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор расхода топлива', url: `${BASE_URL}/rashod-topliva`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/transportnyj-nalog': {
-    title: 'Калькулятор транспортного налога — Калк Портал',
+    title: 'Калькулятор транспортного налога онлайн — налог по лошадиным силам',
     description: 'Рассчитайте транспортный налог по мощности двигателя и сроку владения.',
     canonical: `${BASE_URL}/transportnyj-nalog`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор транспортного налога', url: `${BASE_URL}/transportnyj-nalog`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/imt': {
-    title: 'Калькулятор ИМТ — Калк Портал',
+    title: 'Калькулятор ИМТ онлайн — индекс массы тела и категория веса',
     description: 'Рассчитайте индекс массы тела (ИМТ) онлайн. Норма, идеальный вес и категория.',
     canonical: `${BASE_URL}/imt`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор ИМТ', url: `${BASE_URL}/imt`, applicationCategory: 'HealthApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/beremennost': {
-    title: 'Калькулятор беременности — Калк Портал',
+    title: 'Калькулятор беременности онлайн — срок, триместр и дата родов',
     description: 'Рассчитайте срок беременности и дату родов по дате последней менструации.',
     canonical: `${BASE_URL}/beremennost`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор беременности', url: `${BASE_URL}/beremennost`, applicationCategory: 'HealthApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/obligacii': {
-    title: 'Калькулятор облигаций — Калк Портал',
+    title: 'Калькулятор облигаций онлайн — доходность, купоны, YTM',
     description: 'Рассчитайте доходность ОФЗ и корпоративных облигаций: YTM, текущая доходность, чистый доход с учётом налога.',
     canonical: `${BASE_URL}/obligacii`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор облигаций', url: `${BASE_URL}/obligacii`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/ipoteka': {
-    title: 'Ипотечный калькулятор — Калк Портал',
-    description: 'Рассчитайте ежемесячный платёж по ипотеке, переплату и экономию от досрочного погашения.',
+    title: 'Ипотечный калькулятор онлайн — платёж, переплата, досрочное погашение',
+    description: 'Рассчитайте ежемесячный платёж по ипотеке, переплату, график и экономию от досрочного погашения.',
     canonical: `${BASE_URL}/ipoteka`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Ипотечный калькулятор', url: `${BASE_URL}/ipoteka`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/kredit-dosrochnoe': {
-    title: 'Калькулятор досрочного погашения — Калк Портал',
+    title: 'Калькулятор досрочного погашения кредита — экономия и новый график',
     description: 'Рассчитайте экономию при досрочном погашении кредита: сократить срок или уменьшить платёж.',
     canonical: `${BASE_URL}/kredit-dosrochnoe`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор досрочного погашения', url: `${BASE_URL}/kredit-dosrochnoe`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/peni': {
-    title: 'Калькулятор пеней — Калк Портал',
+    title: 'Калькулятор пеней по налогам онлайн — ст. 75 НК РФ',
     description: 'Рассчитайте пени по налогам и страховым взносам по ст. 75 НК РФ. Для физлиц и юрлиц.',
     canonical: `${BASE_URL}/peni`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор пеней', url: `${BASE_URL}/peni`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },

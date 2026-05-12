@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Генерирует public/sitemap.xml из MODE_ROUTES + статических маршрутов.
-// BASE_URL читается из process.env.VITE_BASE_URL (или дефолт kalkportal.ru).
+// BASE_URL читается из process.env.VITE_BASE_URL (или дефолт calcportal.online).
 import { writeFileSync, mkdirSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -23,7 +23,8 @@ function loadDotEnv() {
 }
 loadDotEnv()
 
-const BASE_URL = (process.env.VITE_BASE_URL || 'https://kalkportal.ru').replace(/\/$/, '')
+const BASE_URL = (process.env.VITE_BASE_URL || 'https://calcportal.online').replace(/\/$/, '')
+const LASTMOD = process.env.SITEMAP_LASTMOD || new Date().toISOString().slice(0, 10)
 
 // Дублируем MODE_ROUTES здесь, чтобы не тащить TS-файлы в Node-скрипт.
 const INVESTICII_SUBROUTES = [
@@ -67,7 +68,7 @@ const allRoutes = [...STATIC_ROUTES, ...subRoutes]
 const urlEntries = allRoutes
   .map(
     ({ path, changefreq, priority }) =>
-      `  <url>\n    <loc>${BASE_URL}${path}</loc>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`,
+      `  <url>\n    <loc>${BASE_URL}${path}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`,
   )
   .join('\n')
 
