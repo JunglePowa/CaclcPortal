@@ -100,6 +100,30 @@ const SEO_MAP: Record<string, SEOData> = {
     canonical: `${BASE_URL}/beremennost`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор беременности', url: `${BASE_URL}/beremennost`, applicationCategory: 'HealthApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
+  '/obligacii': {
+    title: 'Калькулятор облигаций — КалкПортал',
+    description: 'Рассчитайте доходность ОФЗ и корпоративных облигаций: YTM, текущая доходность, чистый доход с учётом налога.',
+    canonical: `${BASE_URL}/obligacii`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор облигаций', url: `${BASE_URL}/obligacii`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/ipoteka': {
+    title: 'Ипотечный калькулятор — КалкПортал',
+    description: 'Рассчитайте ежемесячный платёж по ипотеке, переплату и экономию от досрочного погашения.',
+    canonical: `${BASE_URL}/ipoteka`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Ипотечный калькулятор', url: `${BASE_URL}/ipoteka`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/kredit-dosrochnoe': {
+    title: 'Калькулятор досрочного погашения — КалкПортал',
+    description: 'Рассчитайте экономию при досрочном погашении кредита: сократить срок или уменьшить платёж.',
+    canonical: `${BASE_URL}/kredit-dosrochnoe`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор досрочного погашения', url: `${BASE_URL}/kredit-dosrochnoe`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/peni': {
+    title: 'Калькулятор пеней — КалкПортал',
+    description: 'Рассчитайте пени по налогам и страховым взносам по ст. 75 НК РФ. Для физлиц и юрлиц.',
+    canonical: `${BASE_URL}/peni`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор пеней', url: `${BASE_URL}/peni`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
 }
 
 function setMeta(name: string, content: string) {

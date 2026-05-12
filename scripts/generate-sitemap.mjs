@@ -46,6 +46,10 @@ const STATIC_ROUTES = [
   { path: '/transportnyj-nalog', changefreq: 'monthly', priority: '0.7' },
   { path: '/imt', changefreq: 'monthly', priority: '0.7' },
   { path: '/beremennost', changefreq: 'monthly', priority: '0.7' },
+  { path: '/obligacii', changefreq: 'monthly', priority: '0.8' },
+  { path: '/ipoteka', changefreq: 'monthly', priority: '0.9' },
+  { path: '/kredit-dosrochnoe', changefreq: 'monthly', priority: '0.8' },
+  { path: '/peni', changefreq: 'monthly', priority: '0.7' },
 ]
 
 const subRoutes = INVESTICII_SUBROUTES.map((path) => ({

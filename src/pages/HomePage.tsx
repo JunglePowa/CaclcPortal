@@ -21,7 +21,7 @@ const CATEGORIES = [
     items: [
       { label: 'Инвестиции', desc: 'Сложный процент, сценарии роста', href: '/investicii', ready: true },
       { label: 'Вклад', desc: 'Депозит с капитализацией', href: '/vklad', ready: true },
-      { label: 'Облигации', desc: 'Доходность ОФЗ и корпоративных', href: '/obligacii', ready: false },
+      { label: 'Облигации', desc: 'Доходность ОФЗ и корпоративных', href: '/obligacii', ready: true },
     ],
   },
   {
@@ -31,8 +31,8 @@ const CATEGORIES = [
     color: 'blue',
     items: [
       { label: 'Кредит', desc: 'Ежемесячный платёж и переплата', href: '/kredit', ready: true },
-      { label: 'Ипотека', desc: 'Аннуитет и дифференциал', href: '/ipoteka', ready: false },
-      { label: 'Досрочное погашение', desc: 'Экономия на процентах', href: '/kredit-dosrochnoe', ready: false },
+      { label: 'Ипотека', desc: 'Аннуитет и дифференциал', href: '/ipoteka', ready: true },
+      { label: 'Досрочное погашение', desc: 'Экономия на процентах', href: '/kredit-dosrochnoe', ready: true },
     ],
   },
   {
@@ -44,7 +44,7 @@ const CATEGORIES = [
       { label: 'НДС', desc: 'Начислить и выделить НДС', href: '/nds', ready: true },
       { label: 'НДФЛ', desc: 'Налог на доходы физлиц', href: '/ndfl', ready: true },
       { label: 'Зарплата', desc: 'Гросс → нетто и наоборот', href: '/zarplata', ready: true },
-      { label: 'Пени', desc: 'По налогам и страховым взносам', href: '/peni', ready: false },
+      { label: 'Пени', desc: 'По налогам и страховым взносам', href: '/peni', ready: true },
     ],
   },
   {

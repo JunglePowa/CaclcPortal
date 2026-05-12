@@ -56,6 +56,26 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://kalkportal.ru/obligacii</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://kalkportal.ru/ipoteka</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://kalkportal.ru/kredit-dosrochnoe</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://kalkportal.ru/peni</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://kalkportal.ru/investicii/vznoj</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

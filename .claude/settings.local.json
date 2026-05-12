@@ -15,7 +15,15 @@
       "Bash(git init *)",
       "Bash(git add *)",
       "Bash(git commit *)",
-      "Bash(dir C:\\\\claude_calc\\\\*.config* C:\\\\claude_calc\\\\*.json)"
+      "Bash(dir C:\\\\claude_calc\\\\*.config* C:\\\\claude_calc\\\\*.json)",
+      "Bash(git config *)",
+      "Bash(npx vercel *)",
+      "Bash(gh auth *)",
+      "Bash(ls /c/claude_calc/src /c/claude_calc/src/pages /c/claude_calc/src/components /c/claude_calc/src/components/Calculator /c/claude_calc/src/utils)",
+      "Read(//c/claude_calc/public//**)",
+      "Read(//c/claude_calc/**)",
+      "Bash(mkdir -p /c/claude_calc/scripts)",
+      "Bash(git push *)"
     ]
   }
 }
