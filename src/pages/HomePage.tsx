@@ -202,7 +202,7 @@ export default function HomePage() {
       </section>
 
       {/* Catalog */}
-      <div className="mx-auto max-w-[1440px] px-4 pb-12 sm:px-6 lg:px-8 space-y-8">
+      <div className="mx-auto max-w-[1440px] space-y-10 px-4 pb-14 pt-8 sm:px-6 lg:px-8">
 
         {/* Recent history */}
         {history.length > 0 && !isSearching && (
@@ -246,7 +246,7 @@ export default function HomePage() {
               <p className="text-sm">Ничего не найдено по запросу «{query}»</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredCategories.flatMap(cat =>
                 cat.items.map(item => (
                   <CalcCard key={item.href} item={item} color={cat.color} />
@@ -258,22 +258,16 @@ export default function HomePage() {
           CATEGORIES.map((cat) => {
             const Icon = cat.icon
             return (
-              <section key={cat.id} aria-labelledby={`category-${cat.id}`}>
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <Link to={cat.href} className="group flex items-center gap-2">
+              <section key={cat.id} aria-labelledby={`category-${cat.id}`} className="scroll-mt-24">
+                <div className="mb-4 flex items-center">
+                  <Link to={cat.href} className="group inline-flex items-center gap-2.5">
                     <Icon size={16} className={iconColorMap[cat.color as ColorKey]} />
                     <h2 id={`category-${cat.id}`} className="text-sm font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))] transition-colors group-hover:text-[hsl(var(--fg))]">
                       {cat.label}
                     </h2>
                   </Link>
-                  <Link
-                    to={cat.href}
-                    className="text-xs font-medium text-[hsl(var(--fg-muted))] transition-colors hover:text-[hsl(var(--fg))]"
-                  >
-                    Раздел
-                  </Link>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {cat.items.map((item) => (
                     <CalcCard key={item.href} item={item} color={cat.color} />
                   ))}
