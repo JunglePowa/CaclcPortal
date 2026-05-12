@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { TrendingUp } from 'lucide-react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Footer } from '@/components/layout/Footer'
+import { SeoContent } from '@/components/SeoContent'
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -28,7 +29,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           <ThemeToggle />
         </div>
       </header>
-      <div className="flex-1 flex flex-col">{children}</div>
+      <div className="flex-1 flex flex-col">
+        {children}
+        <SeoContent />
+      </div>
       <Footer />
     </div>
   )

@@ -18,6 +18,9 @@ export function Footer() {
           <Link to="/about" className="hover:text-[hsl(var(--fg))] transition-colors">
             О сервисе
           </Link>
+          <Link to="/methodology" className="hover:text-[hsl(var(--fg))] transition-colors">
+            Методика
+          </Link>
           <Link to="/contacts" className="hover:text-[hsl(var(--fg))] transition-colors">
             Контакты
           </Link>

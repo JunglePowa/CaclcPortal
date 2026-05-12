@@ -24,6 +24,7 @@ const AboutPage = lazy(() => import('@/pages/AboutPage'))
 const ContactsPage = lazy(() => import('@/pages/ContactsPage'))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
+const MethodologyPage = lazy(() => import('@/pages/MethodologyPage'))
 
 export default function App() {
   useSEO()
@@ -77,6 +78,7 @@ export default function App() {
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contacts" element={<ContactsPage />} />
+        <Route path="/methodology" element={<MethodologyPage />} />
         <Route path="/finansy" element={<CategoryPage />} />
         <Route path="/kredity" element={<CategoryPage />} />
         <Route path="/nalogi" element={<CategoryPage />} />

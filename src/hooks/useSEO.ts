@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ROUTE_MODES, MODE_TITLES, MODE_DESCRIPTIONS } from '@/utils/modeRoutes'
 import { CALCULATOR_CATEGORIES } from '@/lib/calculatorCatalog'
+import { SEO_PAGE_CONTENT } from '@/lib/seoPageContent'
 
 interface SEOData {
   title: string
@@ -146,6 +147,11 @@ const SEO_MAP: Record<string, SEOData> = {
     description: 'Связаться с администрацией сервиса Калк Портал по электронной почте.',
     canonical: `${BASE_URL}/contacts`,
   },
+  '/methodology': {
+    title: 'Методика расчётов — Калк Портал',
+    description: 'Как устроены расчёты в онлайн калькуляторах Калк Портал, какие есть ограничения и как проверять результаты.',
+    canonical: `${BASE_URL}/methodology`,
+  },
   '/404': {
     title: 'Страница не найдена — Калк Портал',
     description: 'Запрошенная страница не найдена. Перейдите в каталог онлайн калькуляторов Калк Портал.',
@@ -202,6 +208,46 @@ function setJsonLd(data?: object) {
   el.textContent = JSON.stringify(data)
 }
 
+function buildBreadcrumb(pathname: string, content?: { category: string }): object {
+  const items = [
+    { '@type': 'ListItem', position: 1, name: 'Главная', item: `${BASE_URL}/` },
+  ]
+  if (content) {
+    items.push({ '@type': 'ListItem', position: 2, name: content.category, item: `${BASE_URL}${pathname}` })
+  }
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: items,
+  }
+}
+
+function buildFaq(faq: { question: string; answer: string }[]): object {
+  return {
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  }
+}
+
+function mergeJsonLd(pathname: string, seo: SEOData): object | undefined {
+  const content = SEO_PAGE_CONTENT[pathname]
+  const graph = [
+    seo.jsonLd,
+    content ? buildBreadcrumb(pathname, content) : undefined,
+    content ? buildFaq(content.faq) : undefined,
+  ].filter(Boolean)
+
+  if (graph.length === 0) return undefined
+  if (graph.length === 1) return graph[0] as object
+  return { '@context': 'https://schema.org', '@graph': graph }
+}
+
 function resolveSEO(pathname: string): SEOData {
   // Точное совпадение по полному пути (включая подмаршруты /investicii/*)
   const mode = ROUTE_MODES[pathname]
@@ -238,6 +284,6 @@ export function useSEO() {
     setMeta('twitter:title', seo.title)
     setMeta('twitter:description', seo.description)
     setCanonical(seo.canonical)
-    setJsonLd(seo.jsonLd)
+    setJsonLd(mergeJsonLd(location.pathname, seo))
   }, [location.pathname])
 }
