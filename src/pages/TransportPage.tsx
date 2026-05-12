@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateTransport } from '@/calculators/transport'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { ResultRow, InfoCard, Divider, Select, labelCls, inputCls } from '@/components/ui'
 
@@ -51,7 +50,6 @@ export default function TransportPage() {
             <h1 className="text-2xl font-bold mb-1">Транспортный налог</h1>
             <p className="text-sm text-[hsl(var(--fg-muted))]">Расчёт по мощности двигателя</p>
           </div>
-          <EmbedButton path="/transportnyj-nalog" title="Калькулятор транспортного налога" />
         </div>
 
         <div className="mb-4">

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateRashod } from '@/calculators/rashod'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { NumberInput, ResultRow, InfoCard, Divider } from '@/components/ui'
 
@@ -30,7 +29,6 @@ export default function RashodPage() {
             <h1 className="text-2xl font-bold mb-1">Расход топлива</h1>
             <p className="text-sm text-[hsl(var(--fg-muted))]">Рассчитайте расход и стоимость поездки</p>
           </div>
-          <EmbedButton path="/rashod-topliva" title="Калькулятор расхода топлива" />
         </div>
 
         <div className="mb-4">

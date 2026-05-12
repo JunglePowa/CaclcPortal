@@ -4,7 +4,6 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
 import { calculateDosrochnoe, type EarlyType } from '@/calculators/kreditDosrochnoe'
 import { formatMoney } from '@/utils/formatCurrency'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import {
   NumberInput,
@@ -62,7 +61,6 @@ export default function KreditDosrochnoePage() {
     <>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base font-semibold">Досрочное погашение</h2>
-        <EmbedButton path="/kredit-dosrochnoe" title="Калькулятор досрочного погашения" />
       </div>
       <div className="space-y-4">
         <NumberInput

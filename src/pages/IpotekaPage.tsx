@@ -5,7 +5,6 @@ import { CalcLayout } from '@/components/layout/CalcLayout'
 import { calculateIpoteka, type EarlyPayment, type EarlyPaymentType } from '@/calculators/ipoteka'
 import type { PaymentType } from '@/calculators/kredit'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import {
   NumberInput,
@@ -84,7 +83,6 @@ export default function IpotekaPage() {
     <>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base font-semibold">Ипотечный калькулятор</h2>
-        <EmbedButton path="/ipoteka" title="Ипотечный калькулятор" />
       </div>
       <div className="space-y-4">
         <NumberInput

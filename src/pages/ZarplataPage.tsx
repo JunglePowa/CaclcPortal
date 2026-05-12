@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateZarplata } from '@/calculators/zarplata'
 import type { ZarplataDirection } from '@/calculators/zarplata'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { NumberInput, ResultRow, InfoCard, Divider, selectCls } from '@/components/ui'
 
@@ -32,7 +31,6 @@ export default function ZarplataPage() {
             <h1 className="text-2xl font-bold mb-1">Калькулятор зарплаты</h1>
             <p className="text-sm text-[hsl(var(--fg-muted))]">Гросс и нетто с учётом налогов и взносов</p>
           </div>
-          <EmbedButton path="/zarplata" title="Калькулятор зарплаты" />
         </div>
 
         {/* Direction toggle */}

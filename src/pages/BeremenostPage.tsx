@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateBeremennost } from '@/calculators/beremennost'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { NumberInput, ResultRow, InfoCard, Divider, labelCls, inputCls } from '@/components/ui'
 
@@ -33,7 +32,6 @@ export default function BeremenostPage() {
             <h1 className="text-2xl font-bold mb-1">Калькулятор беременности</h1>
             <p className="text-sm text-[hsl(var(--fg-muted))]">Рассчитайте срок и дату родов</p>
           </div>
-          <EmbedButton path="/beremennost" title="Калькулятор беременности" />
         </div>
 
         <div className="mb-4">

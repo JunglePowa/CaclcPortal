@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
 import { calculateObligacii } from '@/calculators/obligacii'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import {
   NumberInput,
@@ -55,7 +54,6 @@ export default function ObligaciiPage() {
     <>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base font-semibold">Калькулятор облигаций</h2>
-        <EmbedButton path="/obligacii" title="Калькулятор облигаций" />
       </div>
       <div className="space-y-4">
         <NumberInput

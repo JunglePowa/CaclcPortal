@@ -5,7 +5,6 @@ import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
 import type { PaymentType } from '@/calculators/kredit'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import {
   NumberInput,
@@ -54,7 +53,6 @@ export default function KreditPage() {
     <>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base font-semibold">Кредитный калькулятор</h2>
-        <EmbedButton path="/kredit" title="Кредитный калькулятор" />
       </div>
       <div className="space-y-4">
         <NumberInput

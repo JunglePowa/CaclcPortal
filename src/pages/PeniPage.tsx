@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculatePeni } from '@/calculators/peni'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { NumberInput, ResultRow, InfoCard, Divider, labelCls, inputCls } from '@/components/ui'
 
@@ -35,7 +34,6 @@ export default function PeniPage() {
             <h1 className="text-2xl font-bold mb-1">Пени по налогам</h1>
             <p className="text-sm text-[hsl(var(--fg-muted))]">Расчёт по ст. 75 НК РФ</p>
           </div>
-          <EmbedButton path="/peni" title="Калькулятор пеней" />
         </div>
 
         <div className="flex gap-2 mb-5">

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateImt } from '@/calculators/imt'
 import type { ImtResult } from '@/calculators/imt'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { NumberInput, InfoCard, labelCls } from '@/components/ui'
 
@@ -72,7 +71,6 @@ export default function ImtPage() {
             <h1 className="text-2xl font-bold mb-1">Индекс массы тела (ИМТ)</h1>
             <p className="text-sm text-[hsl(var(--fg-muted))]">Узнайте свой ИМТ и норму веса</p>
           </div>
-          <EmbedButton path="/imt" title="Калькулятор ИМТ" />
         </div>
 
         <div className="grid grid-cols-2 gap-3 mb-4">

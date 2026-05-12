@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Share2, Check } from 'lucide-react'
 import { useCalcStore } from '@/stores/calcStore'
 import { buildShareUrl } from '@/utils/shareUrl'
-import { EmbedButton } from '@/components/EmbedButton'
 
 export function ExportButtons() {
   const { breakdown, params, mode, targetAmount } = useCalcStore()
@@ -61,7 +60,6 @@ export function ExportButtons() {
         {copied ? <Check size={12} className="text-emerald-400" /> : <Share2 size={12} />}
         {copied ? 'Скопировано!' : 'Поделиться'}
       </button>
-      <EmbedButton path="/investicii" title="Калькулятор инвестиций" />
     </div>
   )
 }

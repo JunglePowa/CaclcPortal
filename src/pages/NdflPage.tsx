@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateNdfl } from '@/calculators/ndfl'
 import type { NdflDirection, NdflRate } from '@/calculators/ndfl'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { NumberInput, ResultRow, InfoCard, Divider, selectCls } from '@/components/ui'
 
@@ -40,7 +39,6 @@ export default function NdflPage() {
             <h1 className="text-2xl font-bold mb-1">Калькулятор НДФЛ</h1>
             <p className="text-sm text-[hsl(var(--fg-muted))]">Налог на доходы физических лиц</p>
           </div>
-          <EmbedButton path="/ndfl" title="Калькулятор НДФЛ" />
         </div>
 
         {/* Direction toggle */}

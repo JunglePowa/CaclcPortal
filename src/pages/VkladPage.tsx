@@ -4,7 +4,6 @@ import { useVkladStore } from '@/stores/vkladStore'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import {
   NumberInput,
@@ -62,7 +61,6 @@ export default function VkladPage() {
     <>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base font-semibold">Калькулятор вклада</h2>
-        <EmbedButton path="/vklad" title="Калькулятор вклада" />
       </div>
       <div className="space-y-4">
         <NumberInput

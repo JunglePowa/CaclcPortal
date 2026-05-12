@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { calculateNds } from '@/calculators/nds'
 import type { NdsOperation, NdsRate } from '@/calculators/nds'
-import { EmbedButton } from '@/components/EmbedButton'
 import { useHistorySync } from '@/hooks/useHistorySync'
 import { NumberInput, ResultRow, InfoCard, Divider } from '@/components/ui'
 
@@ -45,7 +44,6 @@ export default function NdsPage() {
             <h1 className="text-2xl font-bold mb-1">Калькулятор НДС</h1>
             <p className="text-sm text-[hsl(var(--fg-muted))]">Начислить или выделить НДС</p>
           </div>
-          <EmbedButton path="/nds" title="Калькулятор НДС" />
         </div>
 
         {/* Operation toggle */}
