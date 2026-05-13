@@ -53,7 +53,7 @@ export default function PrivacyPage() {
         <p>
           Пользователь вправе запросить информацию об обработке его данных, потребовать их удаления
           или уточнения, направив обращение на адрес{' '}
-          <a className="underline" href="mailto:info@kalkportal.ru">info@kalkportal.ru</a>.
+          <a className="underline" href="mailto:calcportal@mail.ru">calcportal@mail.ru</a>.
         </p>
 
         <h2 className="text-lg font-semibold pt-2">6. Изменения Политики</h2>

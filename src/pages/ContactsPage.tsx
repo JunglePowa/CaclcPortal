@@ -14,7 +14,7 @@ export default function ContactsPage() {
         <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))]/60 p-4">
           <p className="text-xs text-[hsl(var(--fg-muted))] uppercase tracking-wide mb-1">Электронная почта</p>
           <p className="text-base">
-            <a className="underline" href="mailto:info@kalkportal.ru">info@kalkportal.ru</a>
+            <a className="underline" href="mailto:calcportal@mail.ru">calcportal@mail.ru</a>
           </p>
         </div>
 

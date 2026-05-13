@@ -30,7 +30,7 @@ export function Footer() {
           <Link to="/terms" className="hover:text-[hsl(var(--fg))] transition-colors">
             Пользовательское соглашение
           </Link>
-          <a href="mailto:info@kalkportal.ru" className="hover:text-[hsl(var(--fg))] transition-colors">
+          <a href="mailto:calcportal@mail.ru" className="hover:text-[hsl(var(--fg))] transition-colors">
             Написать нам
           </a>
         </nav>

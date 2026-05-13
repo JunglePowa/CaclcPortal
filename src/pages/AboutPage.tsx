@@ -52,7 +52,7 @@ export default function AboutPage() {
         <p>
           Сервис развивается, новые калькуляторы добавляются регулярно. Пожелания и сообщения об
           ошибках можно отправить на адрес{' '}
-          <a className="underline" href="mailto:info@kalkportal.ru">info@kalkportal.ru</a>.
+          <a className="underline" href="mailto:calcportal@mail.ru">calcportal@mail.ru</a>.
         </p>
 
         <p className="text-xs text-[hsl(var(--fg-muted))] pt-4">Дата обновления: 2026-05-12</p>
