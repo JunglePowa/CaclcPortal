@@ -19,7 +19,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 aria-hidden
               />
               <div className="min-w-0">
-                <h1 className="whitespace-nowrap text-base font-semibold leading-tight">Калк Портал</h1>
+                <p className="whitespace-nowrap text-base font-semibold leading-tight">Калк Портал</p>
                 <p className="hidden whitespace-nowrap text-xs text-[hsl(var(--fg-muted))] sm:block">
                   Онлайн калькуляторы
                 </p>
