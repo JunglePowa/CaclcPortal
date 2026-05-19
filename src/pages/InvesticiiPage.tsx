@@ -128,6 +128,13 @@ export default function InvesticiiPage() {
 
   const sidebar = (
     <>
+      <div className="mb-5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-400">Параметры расчёта</p>
+        <h1 className="mt-1 text-lg font-semibold">Калькулятор инвестиций</h1>
+        <p className="mt-1 text-xs leading-5 text-[hsl(var(--fg-muted))]">
+          Выберите режим расчёта, ставку и срок, чтобы оценить накопления и сценарии.
+        </p>
+      </div>
       <ModeSelector />
       <AnimatePresence mode="wait">
         <motion.div

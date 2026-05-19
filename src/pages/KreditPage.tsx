@@ -55,7 +55,7 @@ export default function KreditPage() {
     <>
       <div className="mb-5">
         <p className="text-xs font-semibold uppercase tracking-wide text-emerald-400">Параметры расчёта</p>
-        <h2 className="mt-1 text-lg font-semibold">Кредитный калькулятор</h2>
+        <h1 className="mt-1 text-lg font-semibold">Кредитный калькулятор</h1>
         <p className="mt-1 text-xs leading-5 text-[hsl(var(--fg-muted))]">
           Меняйте сумму, ставку и срок — результат пересчитается сразу.
         </p>

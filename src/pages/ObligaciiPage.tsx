@@ -55,7 +55,7 @@ export default function ObligaciiPage() {
   const sidebar = (
     <>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold">Калькулятор облигаций</h2>
+        <h1 className="text-base font-semibold">Калькулятор облигаций</h1>
       </div>
       <div className="space-y-4">
         <NumberInput

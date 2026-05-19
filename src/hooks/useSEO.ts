@@ -15,6 +15,43 @@ interface SEOData {
 const BASE_URL: string =
   ((import.meta.env.VITE_BASE_URL as string | undefined) ?? 'https://calcportal.online').replace(/\/$/, '')
 
+const ORGANIZATION_JSON_LD = {
+  '@type': 'Organization',
+  '@id': `${BASE_URL}/#organization`,
+  name: 'Калк Портал',
+  url: BASE_URL,
+  logo: `${BASE_URL}/favicon.svg`,
+}
+
+const WEBSITE_JSON_LD = {
+  '@type': 'WebSite',
+  '@id': `${BASE_URL}/#website`,
+  name: 'Калк Портал',
+  url: BASE_URL,
+  description: 'Бесплатные онлайн калькуляторы',
+  publisher: { '@id': `${BASE_URL}/#organization` },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${BASE_URL}/?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+}
+
+function buildWebApplicationJsonLd(pathname: string, name: string, description: string, category = 'FinanceApplication'): object {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name,
+    url: `${BASE_URL}${pathname}`,
+    description,
+    applicationCategory: category,
+    operatingSystem: 'Web',
+    isPartOf: { '@id': `${BASE_URL}/#website` },
+    publisher: { '@id': `${BASE_URL}/#organization` },
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' },
+  }
+}
+
 // Данные для каждого маршрута
 const SEO_MAP: Record<string, SEOData> = {
   '/': {
@@ -24,9 +61,11 @@ const SEO_MAP: Record<string, SEOData> = {
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
+      '@id': `${BASE_URL}/#website`,
       name: 'Калк Портал',
       url: BASE_URL,
       description: 'Бесплатные онлайн калькуляторы',
+      publisher: { '@id': `${BASE_URL}/#organization` },
       potentialAction: {
         '@type': 'SearchAction',
         target: `${BASE_URL}/?q={search_term_string}`,
@@ -238,6 +277,8 @@ function buildFaq(faq: { question: string; answer: string }[]): object {
 export function mergeJsonLd(pathname: string, seo: SEOData): object | undefined {
   const content = SEO_PAGE_CONTENT[pathname]
   const graph = [
+    ORGANIZATION_JSON_LD,
+    pathname === '/' ? undefined : WEBSITE_JSON_LD,
     seo.jsonLd,
     content ? buildBreadcrumb(pathname, content) : undefined,
     content ? buildFaq(content.faq) : undefined,
@@ -252,12 +293,11 @@ export function resolveSEO(pathname: string): SEOData {
   // Точное совпадение по полному пути (включая подмаршруты /investment/*)
   const mode = ROUTE_MODES[pathname]
   if (mode) {
-    const base = SEO_MAP['/investment']
     return {
       title: MODE_TITLES[mode],
       description: MODE_DESCRIPTIONS[mode],
       canonical: `${BASE_URL}${pathname}`,
-      jsonLd: base.jsonLd,
+      jsonLd: buildWebApplicationJsonLd(pathname, MODE_TITLES[mode].replace(' — Калк Портал', ''), MODE_DESCRIPTIONS[mode]),
     }
   }
   return SEO_MAP[pathname] ?? {
