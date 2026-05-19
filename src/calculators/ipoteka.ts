@@ -56,14 +56,14 @@ function annuityPayment(loan: number, monthlyRate: number, months: number): numb
 
 export function calculateIpoteka(params: IpotekaParams): IpotekaResult {
   const {
-    propertyPrice,
-    downPayment,
-    annualRate,
-    termMonths,
     paymentType,
     currency,
     earlyPayments = [],
   } = params
+  const propertyPrice = Number.isFinite(params.propertyPrice) ? Math.max(0, params.propertyPrice) : 0
+  const downPayment = Number.isFinite(params.downPayment) ? Math.max(0, params.downPayment) : 0
+  const annualRate = Number.isFinite(params.annualRate) ? Math.max(0, params.annualRate) : 0
+  const termMonths = Number.isFinite(params.termMonths) ? Math.max(1, Math.round(params.termMonths)) : 1
 
   const loanAmount = Math.max(0, propertyPrice - downPayment)
   const monthlyRate = annualRate / 100 / 12

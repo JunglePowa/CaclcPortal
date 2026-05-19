@@ -67,7 +67,7 @@ export default function IpotekaPage() {
 
   useHistorySync({
     calculatorLabel: 'Ипотека',
-    calculatorUrl: '/ipoteka',
+    calculatorUrl: '/mortgage',
     summary: `${Math.round(result.monthlyPayment).toLocaleString('ru-RU')} ₽/мес, переплата ${Math.round(result.totalInterest).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${result.monthlyPayment}|${result.totalInterest}|${result.actualTermMonths}`,
   })

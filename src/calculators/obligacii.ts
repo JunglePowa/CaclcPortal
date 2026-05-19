@@ -99,15 +99,13 @@ function solveYtmPerPeriod(
 }
 
 export function calculateObligacii(params: ObligaciiParams): ObligaciiResult {
-  const {
-    faceValue,
-    buyPricePercent,
-    sellPricePercent,
-    couponRate,
-    paymentsPerYear,
-    years,
-    taxRate,
-  } = params
+  const faceValue = Number.isFinite(params.faceValue) ? Math.max(0, params.faceValue) : 0
+  const buyPricePercent = Number.isFinite(params.buyPricePercent) ? Math.max(0, params.buyPricePercent) : 0
+  const sellPricePercent = Number.isFinite(params.sellPricePercent) ? Math.max(0, params.sellPricePercent) : 0
+  const couponRate = Number.isFinite(params.couponRate) ? Math.max(0, params.couponRate) : 0
+  const paymentsPerYear = Number.isFinite(params.paymentsPerYear) ? Math.max(1, Math.round(params.paymentsPerYear)) : 1
+  const years = Number.isFinite(params.years) ? Math.max(0, params.years) : 0
+  const taxRate = Number.isFinite(params.taxRate) ? Math.max(0, params.taxRate) : 0
 
   const buyPrice = (faceValue * buyPricePercent) / 100
   const sellPrice = (faceValue * sellPricePercent) / 100

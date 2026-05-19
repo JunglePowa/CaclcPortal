@@ -20,7 +20,7 @@ export default function ZarplataPage() {
 
   useHistorySync({
     calculatorLabel: 'Зарплата',
-    calculatorUrl: '/zarplata',
+    calculatorUrl: '/salary',
     summary: `На руки ${Math.round(result.netSalary).toLocaleString('ru-RU')} ₽, работодатель ${Math.round(result.totalEmployerCost).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${result.netSalary}|${result.totalEmployerCost}`,
   })

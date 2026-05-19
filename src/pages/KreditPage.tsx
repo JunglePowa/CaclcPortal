@@ -61,6 +61,7 @@ export default function KreditPage() {
           label="Сумма кредита"
           value={loanAmount}
           onChange={v => setParams({ loanAmount: v })}
+          min={0}
           compact
           ariaLabel="Сумма кредита"
         />

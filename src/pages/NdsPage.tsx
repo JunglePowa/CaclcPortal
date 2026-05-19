@@ -19,7 +19,7 @@ export default function NdsPage() {
 
   useHistorySync({
     calculatorLabel: 'НДС',
-    calculatorUrl: '/nds',
+    calculatorUrl: '/vat',
     summary: `НДС ${rate}%: ${Math.round(result.ndsAmount).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${result.ndsAmount}|${rate}`,
   })

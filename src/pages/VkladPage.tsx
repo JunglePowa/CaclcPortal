@@ -34,7 +34,7 @@ export default function VkladPage() {
 
   useHistorySync({
     calculatorLabel: 'Вклад',
-    calculatorUrl: '/vklad',
+    calculatorUrl: '/deposit',
     summary: `${Math.round(result.finalAmount).toLocaleString('ru-RU')} ₽ за ${params.termMonths} мес`,
     triggerKey: `${result.finalAmount}|${params.termMonths}`,
   })
@@ -69,6 +69,7 @@ export default function VkladPage() {
           label="Начальная сумма"
           value={initialAmount}
           onChange={v => setParams({ initialAmount: v })}
+          min={0}
           compact
         />
 
@@ -76,6 +77,7 @@ export default function VkladPage() {
           label="Ежемесячное пополнение"
           value={monthlyReplenishment}
           onChange={v => setParams({ monthlyReplenishment: v })}
+          min={0}
           compact
         />
 

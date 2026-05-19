@@ -39,7 +39,10 @@ export function SliderInput({
 }: Props) {
   const parse = (s: string): number => {
     const n = integer ? parseInt(s) : parseFloat(s)
-    return Number.isFinite(n) ? n : 0
+    let next = Number.isFinite(n) ? n : min
+    next = Math.max(numberMin ?? min, next)
+    next = Math.min(numberMax ?? max, next)
+    return integer ? Math.round(next) : next
   }
   return (
     <div>

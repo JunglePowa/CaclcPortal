@@ -124,13 +124,13 @@ function simulate(
 
 export function calculateDosrochnoe(params: DosrochnoeParams): DosrochnoeResult {
   const {
-    balance,
-    annualRate,
-    remainingMonths,
-    earlyAmount,
     earlyType,
-    earlyMonth = 1,
   } = params
+  const balance = Number.isFinite(params.balance) ? Math.max(0, params.balance) : 0
+  const annualRate = Number.isFinite(params.annualRate) ? Math.max(0, params.annualRate) : 0
+  const remainingMonths = Number.isFinite(params.remainingMonths) ? Math.max(1, Math.round(params.remainingMonths)) : 1
+  const earlyAmount = Number.isFinite(params.earlyAmount) ? Math.max(0, params.earlyAmount) : 0
+  const earlyMonth = Number.isFinite(params.earlyMonth) ? Math.max(1, Math.round(params.earlyMonth ?? 1)) : 1
 
   const monthlyRate = annualRate / 100 / 12
   const currentPayment = annuityPayment(balance, monthlyRate, remainingMonths)

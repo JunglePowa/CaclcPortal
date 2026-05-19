@@ -23,7 +23,7 @@ export default function PeniPage() {
 
   useHistorySync({
     calculatorLabel: 'Пени',
-    calculatorUrl: '/peni',
+    calculatorUrl: '/tax-penalties',
     summary: `${result.days} дн., пени ${fmt(result.total)}`,
     triggerKey: `${result.total}|${result.days}`,
   })

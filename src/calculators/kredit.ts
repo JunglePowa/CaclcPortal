@@ -24,7 +24,10 @@ export interface KreditResult {
 }
 
 export function calculateKredit(params: KreditParams): KreditResult {
-  const { loanAmount, annualRate, termMonths, paymentType } = params
+  const loanAmount = Number.isFinite(params.loanAmount) ? Math.max(0, params.loanAmount) : 0
+  const annualRate = Number.isFinite(params.annualRate) ? Math.max(0, params.annualRate) : 0
+  const termMonths = Number.isFinite(params.termMonths) ? Math.max(1, Math.round(params.termMonths)) : 1
+  const { paymentType } = params
   const monthlyRate = annualRate / 100 / 12
 
   const schedule: KreditMonthRow[] = []

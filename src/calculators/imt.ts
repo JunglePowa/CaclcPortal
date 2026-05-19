@@ -15,7 +15,18 @@ export interface ImtResult {
 }
 
 export function calculateImt(params: ImtParams): ImtResult {
-  const { weight, height } = params
+  const weight = Number.isFinite(params.weight) ? Math.max(0, params.weight) : 0
+  const height = Number.isFinite(params.height) ? Math.max(0, params.height) : 0
+  if (weight <= 0 || height <= 0) {
+    return {
+      bmi: 0,
+      category: 'Выраженный дефицит',
+      categoryColor: 'blue',
+      idealWeightMin: 0,
+      idealWeightMax: 0,
+      weightDiff: 0,
+    }
+  }
   const heightM = height / 100
   const bmi = weight / (heightM * heightM)
 

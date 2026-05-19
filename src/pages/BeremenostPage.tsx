@@ -16,7 +16,7 @@ export default function BeremenostPage() {
 
   useHistorySync({
     calculatorLabel: 'Беременность',
-    calculatorUrl: '/beremennost',
+    calculatorUrl: '/pregnancy',
     summary: result ? `${result.currentWeek} нед, ПДР ${result.dueDate}` : '',
     triggerKey: result ? `${result.currentWeek}|${result.dueDate}` : 'empty',
     delayMs: 0,

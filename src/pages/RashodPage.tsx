@@ -17,7 +17,7 @@ export default function RashodPage() {
 
   useHistorySync({
     calculatorLabel: 'Расход топлива',
-    calculatorUrl: '/rashod-topliva',
+    calculatorUrl: '/fuel-consumption',
     summary: `${result.per100km.toFixed(1)} л/100км, итого ${Math.round(result.totalCost).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${result.per100km}|${result.totalCost}`,
     delayMs: 0,

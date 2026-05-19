@@ -79,7 +79,11 @@ export function NumberInput({
 
           const parsed = integer ? parseInt(raw) : parseFloat(raw)
           if (Number.isFinite(parsed)) {
-            onChange(parsed)
+            let next = parsed
+            if (typeof min === 'number') next = Math.max(min, next)
+            if (typeof max === 'number') next = Math.min(max, next)
+            if (integer) next = Math.round(next)
+            onChange(next)
           }
         }}
         onBlur={e => {

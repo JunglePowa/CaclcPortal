@@ -24,7 +24,10 @@ export interface TransportResult {
 }
 
 export function calculateTransport(params: TransportParams): TransportResult {
-  const { horsePower, monthsOwned, regionRate, luxuryCoeff } = params
+  const horsePower = Number.isFinite(params.horsePower) ? Math.max(0, params.horsePower) : 0
+  const monthsOwned = Number.isFinite(params.monthsOwned) ? Math.min(12, Math.max(0, params.monthsOwned)) : 0
+  const regionRate = Number.isFinite(params.regionRate) ? Math.max(0, params.regionRate) : 0
+  const luxuryCoeff = Number.isFinite(params.luxuryCoeff) ? Math.max(0, params.luxuryCoeff) : 0
   const tier = BASE_RATES.find(r => horsePower <= r.maxPower) ?? BASE_RATES[BASE_RATES.length - 1]
   const baseRate = tier.rate * regionRate
   const annualTax = horsePower * baseRate * luxuryCoeff

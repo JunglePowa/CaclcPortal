@@ -47,7 +47,7 @@ export default function ObligaciiPage() {
 
   useHistorySync({
     calculatorLabel: 'Облигации',
-    calculatorUrl: '/obligacii',
+    calculatorUrl: '/bonds',
     summary: `YTM ${result.ytm.toFixed(2)}%, чистый доход ${fmt(result.netIncome)}`,
     triggerKey: `${result.ytm}|${result.netIncome}`,
   })

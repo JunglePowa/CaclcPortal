@@ -108,12 +108,12 @@ export default function InvesticiiPage() {
     const t = setTimeout(() => {
       saveToHistory({
         calculatorLabel: 'Инвестиции',
-        calculatorUrl: '/investicii',
+        calculatorUrl: location.pathname,
         summary: `${Math.round(finalTotal).toLocaleString('ru-RU')} ₽ за ${params.years} лет`,
       })
     }, 1500)
     return () => clearTimeout(t)
-  }, [finalTotal, params.years])
+  }, [finalTotal, location.pathname, params.years])
 
   useEffect(() => {
     if (location.search) {

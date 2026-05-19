@@ -26,7 +26,11 @@ export interface VkladResult {
 }
 
 export function calculateVklad(params: VkladParams): VkladResult {
-  const { initialAmount, monthlyReplenishment, annualRate, termMonths, taxRate } = params
+  const initialAmount = Number.isFinite(params.initialAmount) ? Math.max(0, params.initialAmount) : 0
+  const monthlyReplenishment = Number.isFinite(params.monthlyReplenishment) ? Math.max(0, params.monthlyReplenishment) : 0
+  const annualRate = Number.isFinite(params.annualRate) ? Math.max(0, params.annualRate) : 0
+  const termMonths = Number.isFinite(params.termMonths) ? Math.max(0, Math.round(params.termMonths)) : 0
+  const taxRate = Number.isFinite(params.taxRate) ? Math.max(0, params.taxRate) : 0
 
   const monthlyRate = annualRate / 100 / 12
 
@@ -49,7 +53,7 @@ export function calculateVklad(params: VkladParams): VkladResult {
 
   const taxPaid = grossInterest * (taxRate / 100)
   const netInterest = grossInterest - taxPaid
-  const totalReplenishments = monthlyReplenishment * (termMonths - 1)
+  const totalReplenishments = monthlyReplenishment * Math.max(0, termMonths - 1)
 
   const effectiveRate = Math.pow(1 + monthlyRate, 12) - 1
 

@@ -27,7 +27,7 @@ export default function NdflPage() {
 
   useHistorySync({
     calculatorLabel: 'НДФЛ',
-    calculatorUrl: '/ndfl',
+    calculatorUrl: '/income-tax',
     summary: `НДФЛ: ${Math.round(result.taxAmount).toLocaleString('ru-RU')} ₽, на руки ${Math.round(result.netIncome).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${result.taxAmount}|${result.netIncome}`,
     delayMs: 0,
