@@ -59,7 +59,7 @@ export default function ImtPage() {
 
   useHistorySync({
     calculatorLabel: 'ИМТ',
-    calculatorUrl: '/imt',
+    calculatorUrl: '/bmi',
     summary: `ИМТ ${result.bmi.toFixed(1)} — ${result.category}`,
     triggerKey: `${result.bmi}|${result.category}`,
     delayMs: 0,

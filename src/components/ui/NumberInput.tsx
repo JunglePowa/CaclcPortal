@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { inputCls, inputClsCompact, labelCls } from './styles'
 
 type Props = {
@@ -37,22 +38,55 @@ export function NumberInput({
 }: Props) {
   const cls = compact ? inputClsCompact : inputCls
   const fb = fallback ?? (min && min > 0 ? min : 0)
+  const [draft, setDraft] = useState(String(value))
+  const [isEditing, setIsEditing] = useState(false)
+
+  useEffect(() => {
+    if (!isEditing) {
+      setDraft(String(value))
+    }
+  }, [isEditing, value])
+
+  const normalize = (raw: string) => {
+    const parsed = integer ? parseInt(raw) : parseFloat(raw)
+    let next = Number.isFinite(parsed) ? parsed : fb
+
+    if (typeof min === 'number') next = Math.max(min, next)
+    if (typeof max === 'number') next = Math.min(max, next)
+    if (integer) next = Math.round(next)
+
+    return next
+  }
+
   return (
     <div className={className}>
       <label className={labelCls}>{label}</label>
       <input
         type="number"
         className={cls}
-        value={value}
+        value={draft}
         min={min}
         max={max}
         step={step}
         placeholder={placeholder}
         aria-label={ariaLabel ?? label}
+        onFocus={() => setIsEditing(true)}
         onChange={e => {
           const raw = e.target.value
+          setDraft(raw)
+
+          if (raw === '') return
+
           const parsed = integer ? parseInt(raw) : parseFloat(raw)
-          onChange(Number.isFinite(parsed) ? parsed : fb)
+          if (Number.isFinite(parsed)) {
+            onChange(parsed)
+          }
+        }}
+        onBlur={e => {
+          const next = normalize(e.target.value)
+          setIsEditing(false)
+          setDraft(String(next))
+          onChange(next)
         }}
       />
     </div>
