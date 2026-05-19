@@ -43,7 +43,7 @@ export default function KreditDosrochnoePage() {
 
   useHistorySync({
     calculatorLabel: 'Досрочное погашение',
-    calculatorUrl: '/kredit-dosrochnoe',
+    calculatorUrl: '/early-repayment',
     summary: `Экономия ${Math.round(result.savings).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${result.savings}|${result.newTermMonths}`,
   })

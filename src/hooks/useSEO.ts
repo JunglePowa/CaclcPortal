@@ -34,98 +34,98 @@ const SEO_MAP: Record<string, SEOData> = {
       },
     },
   },
-  '/investicii': {
+  '/investment': {
     title: 'Калькулятор инвестиций онлайн — сложный процент и накопления',
     description: 'Рассчитайте будущую стоимость капитала, регулярные пополнения, сложный процент, налог и инфляцию. 6 режимов инвестиционного расчёта.',
-    canonical: `${BASE_URL}/investicii`,
+    canonical: `${BASE_URL}/investment`,
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
       name: 'Калькулятор инвестиций',
-      url: `${BASE_URL}/investicii`,
+      url: `${BASE_URL}/investment`,
       applicationCategory: 'FinanceApplication',
       operatingSystem: 'Web',
       description: 'Калькулятор сложного процента с учётом пополнений, налога и инфляции',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' },
     },
   },
-  '/vklad': {
+  '/deposit': {
     title: 'Калькулятор вклада онлайн — доходность, капитализация, налог',
     description: 'Рассчитайте сумму вклада, проценты, пополнения, капитализацию и чистый доход после налога за выбранный срок.',
-    canonical: `${BASE_URL}/vklad`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор вклада', url: `${BASE_URL}/vklad`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/deposit`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор вклада', url: `${BASE_URL}/deposit`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/kredit': {
+  '/credit': {
     title: 'Кредитный калькулятор онлайн — платёж, переплата, график',
     description: 'Рассчитайте ежемесячный платёж, переплату и график погашения кредита для аннуитетной или дифференцированной схемы.',
-    canonical: `${BASE_URL}/kredit`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Кредитный калькулятор', url: `${BASE_URL}/kredit`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/credit`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Кредитный калькулятор', url: `${BASE_URL}/credit`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/nds': {
+  '/vat': {
     title: 'Калькулятор НДС 22% онлайн — начислить и выделить НДС',
     description: 'Онлайн калькулятор НДС: начислите налог сверху или выделите НДС из суммы по ставкам 22%, 20%, 10% и 0%.',
-    canonical: `${BASE_URL}/nds`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор НДС', url: `${BASE_URL}/nds`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/vat`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор НДС', url: `${BASE_URL}/vat`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/ndfl': {
+  '/income-tax': {
     title: 'Калькулятор НДФЛ 2026 онлайн — прогрессивная шкала 13–22%',
     description: 'Рассчитайте НДФЛ с дохода или сумму до налога по прогрессивной шкале 13–22%, с учётом стандартных вычетов на детей.',
-    canonical: `${BASE_URL}/ndfl`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор НДФЛ', url: `${BASE_URL}/ndfl`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/income-tax`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор НДФЛ', url: `${BASE_URL}/income-tax`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/zarplata': {
+  '/salary': {
     title: 'Калькулятор зарплаты онлайн — гросс, нетто, НДФЛ и взносы',
     description: 'Переведите зарплату из гросс в нетто и обратно, рассчитайте НДФЛ, страховые взносы и полную стоимость сотрудника для работодателя.',
-    canonical: `${BASE_URL}/zarplata`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор зарплаты', url: `${BASE_URL}/zarplata`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/salary`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор зарплаты', url: `${BASE_URL}/salary`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/rashod-topliva': {
+  '/fuel-consumption': {
     title: 'Калькулятор расхода топлива онлайн — литры на 100 км и стоимость поездки',
     description: 'Рассчитайте расход топлива на 100 км и стоимость поездки онлайн.',
-    canonical: `${BASE_URL}/rashod-topliva`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор расхода топлива', url: `${BASE_URL}/rashod-topliva`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/fuel-consumption`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор расхода топлива', url: `${BASE_URL}/fuel-consumption`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/transportnyj-nalog': {
+  '/transport-tax': {
     title: 'Калькулятор транспортного налога онлайн — налог по лошадиным силам',
     description: 'Рассчитайте транспортный налог по мощности двигателя и сроку владения.',
-    canonical: `${BASE_URL}/transportnyj-nalog`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор транспортного налога', url: `${BASE_URL}/transportnyj-nalog`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/transport-tax`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор транспортного налога', url: `${BASE_URL}/transport-tax`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/imt': {
+  '/bmi': {
     title: 'Калькулятор ИМТ онлайн — индекс массы тела и категория веса',
     description: 'Рассчитайте индекс массы тела (ИМТ) онлайн. Норма, идеальный вес и категория.',
-    canonical: `${BASE_URL}/imt`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор ИМТ', url: `${BASE_URL}/imt`, applicationCategory: 'HealthApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/bmi`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор ИМТ', url: `${BASE_URL}/bmi`, applicationCategory: 'HealthApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/beremennost': {
+  '/pregnancy': {
     title: 'Калькулятор беременности онлайн — срок, триместр и дата родов',
     description: 'Рассчитайте срок беременности и дату родов по дате последней менструации.',
-    canonical: `${BASE_URL}/beremennost`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор беременности', url: `${BASE_URL}/beremennost`, applicationCategory: 'HealthApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/pregnancy`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор беременности', url: `${BASE_URL}/pregnancy`, applicationCategory: 'HealthApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/obligacii': {
+  '/bonds': {
     title: 'Калькулятор облигаций онлайн — доходность, купоны, YTM',
     description: 'Рассчитайте доходность ОФЗ и корпоративных облигаций: YTM, текущая доходность, чистый доход с учётом налога.',
-    canonical: `${BASE_URL}/obligacii`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор облигаций', url: `${BASE_URL}/obligacii`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/bonds`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор облигаций', url: `${BASE_URL}/bonds`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/ipoteka': {
+  '/mortgage': {
     title: 'Ипотечный калькулятор онлайн — платёж, переплата, досрочное погашение',
     description: 'Рассчитайте ежемесячный платёж по ипотеке, переплату, график и экономию от досрочного погашения.',
-    canonical: `${BASE_URL}/ipoteka`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Ипотечный калькулятор', url: `${BASE_URL}/ipoteka`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/mortgage`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Ипотечный калькулятор', url: `${BASE_URL}/mortgage`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/kredit-dosrochnoe': {
+  '/early-repayment': {
     title: 'Калькулятор досрочного погашения кредита — экономия и новый график',
     description: 'Рассчитайте экономию при досрочном погашении кредита: сократить срок или уменьшить платёж.',
-    canonical: `${BASE_URL}/kredit-dosrochnoe`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор досрочного погашения', url: `${BASE_URL}/kredit-dosrochnoe`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/early-repayment`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор досрочного погашения', url: `${BASE_URL}/early-repayment`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
-  '/peni': {
+  '/tax-penalties': {
     title: 'Калькулятор пеней по налогам онлайн — ст. 75 НК РФ',
     description: 'Рассчитайте пени по налогам и страховым взносам по ст. 75 НК РФ. Для физлиц и юрлиц.',
-    canonical: `${BASE_URL}/peni`,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор пеней', url: `${BASE_URL}/peni`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+    canonical: `${BASE_URL}/tax-penalties`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор пеней', url: `${BASE_URL}/tax-penalties`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/privacy': {
     title: 'Политика конфиденциальности — Калк Портал',
@@ -235,7 +235,7 @@ function buildFaq(faq: { question: string; answer: string }[]): object {
   }
 }
 
-function mergeJsonLd(pathname: string, seo: SEOData): object | undefined {
+export function mergeJsonLd(pathname: string, seo: SEOData): object | undefined {
   const content = SEO_PAGE_CONTENT[pathname]
   const graph = [
     seo.jsonLd,
@@ -248,11 +248,11 @@ function mergeJsonLd(pathname: string, seo: SEOData): object | undefined {
   return { '@context': 'https://schema.org', '@graph': graph }
 }
 
-function resolveSEO(pathname: string): SEOData {
-  // Точное совпадение по полному пути (включая подмаршруты /investicii/*)
+export function resolveSEO(pathname: string): SEOData {
+  // Точное совпадение по полному пути (включая подмаршруты /investment/*)
   const mode = ROUTE_MODES[pathname]
   if (mode) {
-    const base = SEO_MAP['/investicii']
+    const base = SEO_MAP['/investment']
     return {
       title: MODE_TITLES[mode],
       description: MODE_DESCRIPTIONS[mode],

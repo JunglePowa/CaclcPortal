@@ -1,4 +1,32 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/investicii/vznoj", "destination": "/investment/contribution", "permanent": true },
+    { "source": "/investicii/srok", "destination": "/investment/term", "permanent": true },
+    { "source": "/investicii/stavka", "destination": "/investment/rate", "permanent": true },
+    { "source": "/investicii/kapital", "destination": "/investment/capital", "permanent": true },
+    { "source": "/investicii/sravnenie", "destination": "/investment/comparison", "permanent": true },
+    { "source": "/investicii", "destination": "/investment", "permanent": true },
+    { "source": "/vklad", "destination": "/deposit", "permanent": true },
+    { "source": "/kredit", "destination": "/credit", "permanent": true },
+    { "source": "/nds", "destination": "/vat", "permanent": true },
+    { "source": "/ndfl", "destination": "/income-tax", "permanent": true },
+    { "source": "/zarplata", "destination": "/salary", "permanent": true },
+    { "source": "/rashod-topliva", "destination": "/fuel-consumption", "permanent": true },
+    { "source": "/transportnyj-nalog", "destination": "/transport-tax", "permanent": true },
+    { "source": "/imt", "destination": "/bmi", "permanent": true },
+    { "source": "/beremennost", "destination": "/pregnancy", "permanent": true },
+    { "source": "/obligacii", "destination": "/bonds", "permanent": true },
+    { "source": "/ipoteka", "destination": "/mortgage", "permanent": true },
+    { "source": "/kredit-dosrochnoe", "destination": "/early-repayment", "permanent": true },
+    { "source": "/peni", "destination": "/tax-penalties", "permanent": true },
+    { "source": "/finansy", "destination": "/finance", "permanent": true },
+    { "source": "/kredity", "destination": "/loans", "permanent": true },
+    { "source": "/nalogi", "destination": "/taxes", "permanent": true },
+    { "source": "/avto", "destination": "/auto", "permanent": true },
+    { "source": "/zdorove", "destination": "/health", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
@@ -13,7 +41,7 @@
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
         { "key": "X-XSS-Protection", "value": "1; mode=block" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru https://yandex.ru https://*.yandex.net https://yastatic.net https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://*.googlesyndication.com; style-src 'self' 'unsafe-inline' https://yastatic.net; img-src 'self' data: https://mc.yandex.ru https://*.yandex.net https://yandex.ru https://yastatic.net https://www.google-analytics.com https://*.googlesyndication.com https://*.doubleclick.net; font-src 'self' data: https://yastatic.net; connect-src 'self' https://mc.yandex.ru https://*.yandex.net https://yandex.ru https://www.google-analytics.com https://*.googlesyndication.com https://pagead2.googlesyndication.com; frame-src https://yandex.ru https://*.yandex.net https://*.googlesyndication.com https://*.doubleclick.net; frame-ancestors 'self';" }
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru https://yandex.ru https://*.yandex.ru https://*.yandex.net https://yastatic.net https://*.adfox.ru https://yandexadexchange.net https://*.yandexadexchange.net https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://*.googlesyndication.com; style-src 'self' 'unsafe-inline' https://yastatic.net https://*.yandex.ru https://*.yandex.net https://*.adfox.ru; img-src 'self' data: blob: https://mc.yandex.ru https://yandex.ru https://*.yandex.ru https://*.yandex.net https://yastatic.net https://*.adfox.ru https://yandexadexchange.net https://*.yandexadexchange.net https://www.google-analytics.com https://*.googlesyndication.com https://*.doubleclick.net; font-src 'self' data: https://yastatic.net; connect-src 'self' blob: https://mc.yandex.ru https://yandex.ru https://*.yandex.ru https://*.yandex.net https://yandex.com https://*.adfox.ru https://yandexadexchange.net https://*.yandexadexchange.net https://www.google-analytics.com https://*.googlesyndication.com https://pagead2.googlesyndication.com; frame-src https://yandex.ru https://*.yandex.ru https://*.yandex.net https://yastatic.net https://*.adfox.ru https://yandexadexchange.net https://*.yandexadexchange.net https://*.googlesyndication.com https://*.doubleclick.net; frame-ancestors 'self';" }
       ]
     }
   ]

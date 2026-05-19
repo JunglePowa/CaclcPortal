@@ -20,7 +20,7 @@ export interface SeoPageContent {
 }
 
 export const SEO_PAGE_CONTENT: Record<string, SeoPageContent> = {
-  '/nds': {
+  '/vat': {
     category: 'Налоги',
     title: 'Как пользоваться калькулятором НДС',
     lead: 'Калькулятор помогает начислить НДС сверху к цене без налога или выделить НДС из уже готовой суммы. Поддерживаются ставки 22%, 20%, 10% и 0%.',
@@ -33,12 +33,12 @@ export const SEO_PAGE_CONTENT: Record<string, SeoPageContent> = {
       { question: 'Можно ли начислить НДС сверху?', answer: 'Да. Выберите режим начисления, укажите сумму без НДС и ставку, после чего калькулятор покажет налог и сумму с НДС.' },
     ],
     related: [
-      { href: '/ndfl', label: 'Калькулятор НДФЛ' },
-      { href: '/zarplata', label: 'Калькулятор зарплаты' },
-      { href: '/peni', label: 'Калькулятор пеней' },
+      { href: '/income-tax', label: 'Калькулятор НДФЛ' },
+      { href: '/salary', label: 'Калькулятор зарплаты' },
+      { href: '/tax-penalties', label: 'Калькулятор пеней' },
     ],
   },
-  '/ndfl': {
+  '/income-tax': {
     category: 'Налоги',
     title: 'Как рассчитывается НДФЛ',
     lead: 'Калькулятор считает налог на доходы физических лиц по прогрессивной шкале и учитывает стандартные детские вычеты.',
@@ -51,12 +51,12 @@ export const SEO_PAGE_CONTENT: Record<string, SeoPageContent> = {
       { question: 'Можно ли посчитать сумму до налога по сумме на руки?', answer: 'Да, режим “К зарплате” подбирает сумму до налога по указанному доходу на руки.' },
     ],
     related: [
-      { href: '/zarplata', label: 'Калькулятор зарплаты' },
-      { href: '/nds', label: 'Калькулятор НДС' },
-      { href: '/peni', label: 'Калькулятор пеней' },
+      { href: '/salary', label: 'Калькулятор зарплаты' },
+      { href: '/vat', label: 'Калькулятор НДС' },
+      { href: '/tax-penalties', label: 'Калькулятор пеней' },
     ],
   },
-  '/zarplata': {
+  '/salary': {
     category: 'Налоги',
     title: 'Гросс, нетто и расходы работодателя',
     lead: 'Калькулятор зарплаты показывает сумму на руки, НДФЛ, страховые взносы и общую стоимость сотрудника для работодателя.',
@@ -69,12 +69,12 @@ export const SEO_PAGE_CONTENT: Record<string, SeoPageContent> = {
       { question: 'Учитываются ли пониженные взносы МСП?', answer: 'Да, в форме можно включить режим МСП для расчёта пониженных взносов сверх МРОТ.' },
     ],
     related: [
-      { href: '/ndfl', label: 'Калькулятор НДФЛ' },
-      { href: '/peni', label: 'Калькулятор пеней' },
-      { href: '/nds', label: 'Калькулятор НДС' },
+      { href: '/income-tax', label: 'Калькулятор НДФЛ' },
+      { href: '/tax-penalties', label: 'Калькулятор пеней' },
+      { href: '/vat', label: 'Калькулятор НДС' },
     ],
   },
-  '/kredit': {
+  '/credit': {
     category: 'Кредиты',
     title: 'Как считается кредитный платёж',
     lead: 'Кредитный калькулятор помогает сравнить аннуитетный и дифференцированный платёж, увидеть переплату и график погашения.',
@@ -87,12 +87,12 @@ export const SEO_PAGE_CONTENT: Record<string, SeoPageContent> = {
       { question: 'Можно ли использовать расчёт для сравнения банков?', answer: 'Да, калькулятор удобен для предварительного сравнения ставок, сроков и платежей.' },
     ],
     related: [
-      { href: '/ipoteka', label: 'Ипотечный калькулятор' },
-      { href: '/kredit-dosrochnoe', label: 'Досрочное погашение' },
-      { href: '/vklad', label: 'Калькулятор вклада' },
+      { href: '/mortgage', label: 'Ипотечный калькулятор' },
+      { href: '/early-repayment', label: 'Досрочное погашение' },
+      { href: '/deposit', label: 'Калькулятор вклада' },
     ],
   },
-  '/ipoteka': {
+  '/mortgage': {
     category: 'Кредиты',
     title: 'Как рассчитать ипотеку',
     lead: 'Ипотечный калькулятор показывает платёж, переплату и эффект досрочного погашения для разных сценариев.',
@@ -105,9 +105,9 @@ export const SEO_PAGE_CONTENT: Record<string, SeoPageContent> = {
       { question: 'Что показывает переплата?', answer: 'Переплата показывает сумму процентов, которую заёмщик отдаст банку сверх основного долга.' },
     ],
     related: [
-      { href: '/kredit', label: 'Кредитный калькулятор' },
-      { href: '/kredit-dosrochnoe', label: 'Досрочное погашение' },
-      { href: '/vklad', label: 'Калькулятор вклада' },
+      { href: '/credit', label: 'Кредитный калькулятор' },
+      { href: '/early-repayment', label: 'Досрочное погашение' },
+      { href: '/deposit', label: 'Калькулятор вклада' },
     ],
   },
 }

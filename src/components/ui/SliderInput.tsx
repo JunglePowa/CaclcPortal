@@ -66,7 +66,7 @@ export function SliderInput({
           step={step}
           value={value}
           onChange={e => onChange(parse(e.target.value))}
-          className="w-20 flex-shrink-0 rounded-lg border border-[hsl(var(--border))] px-3 py-2 text-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 transition tabular"
+          className="w-20 flex-shrink-0 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--bg)/0.38)] px-3 py-2 text-sm shadow-inner shadow-black/5 transition tabular hover:border-[hsl(var(--fg-muted))]/60 focus:outline-none focus:border-emerald-500/70 focus:ring-2 focus:ring-emerald-500/25"
           aria-label={ariaLabelNumber ?? `${label} число`}
         />
       </div>

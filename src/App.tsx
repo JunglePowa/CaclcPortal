@@ -55,35 +55,35 @@ export default function App() {
     <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/investicii" element={<InvesticiiPage />} />
-        <Route path="/investicii/vznoj" element={<InvesticiiPage />} />
-        <Route path="/investicii/srok" element={<InvesticiiPage />} />
-        <Route path="/investicii/stavka" element={<InvesticiiPage />} />
-        <Route path="/investicii/kapital" element={<InvesticiiPage />} />
-        <Route path="/investicii/sravnenie" element={<InvesticiiPage />} />
-        <Route path="/vklad" element={<VkladPage />} />
-        <Route path="/kredit" element={<KreditPage />} />
-        <Route path="/nds" element={<NdsPage />} />
-        <Route path="/ndfl" element={<NdflPage />} />
-        <Route path="/zarplata" element={<ZarplataPage />} />
-        <Route path="/rashod-topliva" element={<RashodPage />} />
-        <Route path="/transportnyj-nalog" element={<TransportPage />} />
-        <Route path="/imt" element={<ImtPage />} />
-        <Route path="/beremennost" element={<BeremenostPage />} />
-        <Route path="/obligacii" element={<ObligaciiPage />} />
-        <Route path="/ipoteka" element={<IpotekaPage />} />
-        <Route path="/kredit-dosrochnoe" element={<KreditDosrochnoePage />} />
-        <Route path="/peni" element={<PeniPage />} />
+        <Route path="/investment" element={<InvesticiiPage />} />
+        <Route path="/investment/contribution" element={<InvesticiiPage />} />
+        <Route path="/investment/term" element={<InvesticiiPage />} />
+        <Route path="/investment/rate" element={<InvesticiiPage />} />
+        <Route path="/investment/capital" element={<InvesticiiPage />} />
+        <Route path="/investment/comparison" element={<InvesticiiPage />} />
+        <Route path="/deposit" element={<VkladPage />} />
+        <Route path="/credit" element={<KreditPage />} />
+        <Route path="/vat" element={<NdsPage />} />
+        <Route path="/income-tax" element={<NdflPage />} />
+        <Route path="/salary" element={<ZarplataPage />} />
+        <Route path="/fuel-consumption" element={<RashodPage />} />
+        <Route path="/transport-tax" element={<TransportPage />} />
+        <Route path="/bmi" element={<ImtPage />} />
+        <Route path="/pregnancy" element={<BeremenostPage />} />
+        <Route path="/bonds" element={<ObligaciiPage />} />
+        <Route path="/mortgage" element={<IpotekaPage />} />
+        <Route path="/early-repayment" element={<KreditDosrochnoePage />} />
+        <Route path="/tax-penalties" element={<PeniPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contacts" element={<ContactsPage />} />
         <Route path="/methodology" element={<MethodologyPage />} />
-        <Route path="/finansy" element={<CategoryPage />} />
-        <Route path="/kredity" element={<CategoryPage />} />
-        <Route path="/nalogi" element={<CategoryPage />} />
-        <Route path="/avto" element={<CategoryPage />} />
-        <Route path="/zdorove" element={<CategoryPage />} />
+        <Route path="/finance" element={<CategoryPage />} />
+        <Route path="/loans" element={<CategoryPage />} />
+        <Route path="/taxes" element={<CategoryPage />} />
+        <Route path="/auto" element={<CategoryPage />} />
+        <Route path="/health" element={<CategoryPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>

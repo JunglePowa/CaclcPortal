@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 
 const SOURCES = [
-  { href: '/nds', label: 'НДС' },
-  { href: '/ndfl', label: 'НДФЛ' },
-  { href: '/zarplata', label: 'Зарплата' },
-  { href: '/kredit', label: 'Кредиты' },
-  { href: '/ipoteka', label: 'Ипотека' },
+  { href: '/vat', label: 'НДС' },
+  { href: '/income-tax', label: 'НДФЛ' },
+  { href: '/salary', label: 'Зарплата' },
+  { href: '/credit', label: 'Кредиты' },
+  { href: '/mortgage', label: 'Ипотека' },
 ]
 
 export default function MethodologyPage() {

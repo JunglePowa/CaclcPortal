@@ -1,5 +1,6 @@
 node_modules
 dist
+dist.7z
 .env
 .env.local
 .DS_Store

@@ -5,22 +5,22 @@
 
 @layer base {
   :root {
-    --bg: 222 47% 8%;
-    --bg-card: 222 47% 12%;
+    --bg: 220 42% 7%;
+    --bg-card: 221 35% 12%;
     --fg: 210 40% 96%;
-    --fg-muted: 218 11% 55%;
-    --border: 215 28% 20%;
+    --fg-muted: 216 16% 64%;
+    --border: 216 28% 22%;
     --accent: 160 84% 39%;
     color-scheme: dark;
   }
 
   .light {
-    --bg: 210 20% 98%;
+    --bg: 168 30% 96%;
     --bg-card: 0 0% 100%;
-    --fg: 222 47% 11%;
-    --fg-muted: 215 16% 47%;
-    --border: 214 32% 88%;
-    --accent: 160 84% 35%;
+    --fg: 222 56% 8%;
+    --fg-muted: 216 28% 28%;
+    --border: 214 30% 82%;
+    --accent: 160 84% 31%;
     color-scheme: light;
   }
 
@@ -38,6 +38,10 @@
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
+  ::selection {
+    background: hsl(var(--accent) / 0.28);
+  }
+
   .tabular {
     font-variant-numeric: tabular-nums;
   }
@@ -52,18 +56,19 @@
   input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
-    height: 4px;
-    background: hsl(var(--border));
-    border-radius: 2px;
+    height: 6px;
+    background: linear-gradient(90deg, hsl(var(--accent) / 0.55), hsl(var(--border)));
+    border-radius: 999px;
     outline: none;
   }
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: hsl(var(--accent));
     cursor: pointer;
+    border: 3px solid hsl(var(--bg-card));
     box-shadow: 0 0 0 3px hsl(var(--accent) / 0.2);
     transition: box-shadow 0.15s;
   }
@@ -96,15 +101,28 @@
 .mesh-bg {
   background-color: hsl(var(--bg));
   background-image:
-    radial-gradient(at 20% 30%, hsl(160 84% 39% / 0.08) 0px, transparent 50%),
-    radial-gradient(at 80% 10%, hsl(217 91% 60% / 0.06) 0px, transparent 50%),
-    radial-gradient(at 60% 80%, hsl(272 91% 65% / 0.04) 0px, transparent 50%);
+    linear-gradient(180deg, hsl(var(--bg-card) / 0.38) 0%, transparent 260px),
+    radial-gradient(at 12% 18%, hsl(160 84% 39% / 0.12) 0px, transparent 36%),
+    radial-gradient(at 84% 0%, hsl(217 91% 60% / 0.08) 0px, transparent 34%),
+    linear-gradient(120deg, hsl(195 83% 28% / 0.08), transparent 42%);
+  background-attachment: fixed;
 }
 
 /* Glass card */
 .glass {
-  background: hsl(var(--bg-card) / 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: linear-gradient(180deg, hsl(var(--bg-card) / 0.86), hsl(var(--bg-card) / 0.68));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border: 1px solid hsl(var(--border));
+  box-shadow: 0 18px 50px hsl(220 45% 3% / 0.22);
+}
+
+.light .glass {
+  background: linear-gradient(180deg, hsl(var(--bg-card) / 0.94), hsl(var(--bg-card) / 0.86));
+  box-shadow: 0 18px 45px hsl(218 30% 44% / 0.14);
+}
+
+.light .text-emerald-300,
+.light .text-emerald-400 {
+  color: hsl(161 94% 22%);
 }

@@ -2,20 +2,20 @@ import { Link } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 
 const CALCULATORS: { href: string; label: string }[] = [
-  { href: '/investicii', label: 'Калькулятор инвестиций' },
-  { href: '/vklad', label: 'Калькулятор вклада' },
-  { href: '/kredit', label: 'Кредитный калькулятор' },
-  { href: '/ipoteka', label: 'Ипотечный калькулятор' },
-  { href: '/kredit-dosrochnoe', label: 'Досрочное погашение кредита' },
-  { href: '/obligacii', label: 'Калькулятор облигаций' },
-  { href: '/nds', label: 'Калькулятор НДС' },
-  { href: '/ndfl', label: 'Калькулятор НДФЛ' },
-  { href: '/zarplata', label: 'Калькулятор зарплаты' },
-  { href: '/peni', label: 'Калькулятор пеней' },
-  { href: '/transportnyj-nalog', label: 'Транспортный налог' },
-  { href: '/rashod-topliva', label: 'Расход топлива' },
-  { href: '/imt', label: 'Индекс массы тела (ИМТ)' },
-  { href: '/beremennost', label: 'Срок беременности' },
+  { href: '/investment', label: 'Калькулятор инвестиций' },
+  { href: '/deposit', label: 'Калькулятор вклада' },
+  { href: '/credit', label: 'Кредитный калькулятор' },
+  { href: '/mortgage', label: 'Ипотечный калькулятор' },
+  { href: '/early-repayment', label: 'Досрочное погашение кредита' },
+  { href: '/bonds', label: 'Калькулятор облигаций' },
+  { href: '/vat', label: 'Калькулятор НДС' },
+  { href: '/income-tax', label: 'Калькулятор НДФЛ' },
+  { href: '/salary', label: 'Калькулятор зарплаты' },
+  { href: '/tax-penalties', label: 'Калькулятор пеней' },
+  { href: '/transport-tax', label: 'Транспортный налог' },
+  { href: '/fuel-consumption', label: 'Расход топлива' },
+  { href: '/bmi', label: 'Индекс массы тела (ИМТ)' },
+  { href: '/pregnancy', label: 'Срок беременности' },
 ]
 
 export default function AboutPage() {

@@ -4,10 +4,16 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App'
 
-createRoot(document.getElementById('root')!).render(
+document.documentElement.classList.add('light')
+
+const app = (
   <StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </StrictMode>,
+  </StrictMode>
 )
+
+const root = document.getElementById('root')!
+root.textContent = ''
+createRoot(root).render(app)

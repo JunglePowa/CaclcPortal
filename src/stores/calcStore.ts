@@ -53,7 +53,7 @@ function recalcAll(params: CalcParams, targetAmount: number) {
 
 export const useCalcStore = create<CalcStore>((set, get) => ({
   mode: 'accumulation',
-  theme: 'dark',
+  theme: 'light',
   params: DEFAULT_PARAMS,
   breakdown: calculateCompound(DEFAULT_PARAMS),
   scenarios: [],

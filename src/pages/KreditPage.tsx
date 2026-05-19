@@ -37,7 +37,7 @@ export default function KreditPage() {
 
   useHistorySync({
     calculatorLabel: 'Кредит',
-    calculatorUrl: '/kredit',
+    calculatorUrl: '/credit',
     summary: `${Math.round(result.monthlyPayment).toLocaleString('ru-RU')} ₽/мес, переплата ${Math.round(result.totalInterest).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${result.monthlyPayment}|${result.totalInterest}`,
   })
@@ -53,8 +53,12 @@ export default function KreditPage() {
 
   const sidebar = (
     <>
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold">Кредитный калькулятор</h2>
+      <div className="mb-5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-400">Параметры расчёта</p>
+        <h2 className="mt-1 text-lg font-semibold">Кредитный калькулятор</h2>
+        <p className="mt-1 text-xs leading-5 text-[hsl(var(--fg-muted))]">
+          Меняйте сумму, ставку и срок — результат пересчитается сразу.
+        </p>
       </div>
       <div className="space-y-4">
         <NumberInput
@@ -150,20 +154,20 @@ export default function KreditPage() {
 
       <AdBlock blockId={AD_SLOTS.result} />
 
-      <div className="glass rounded-2xl p-5">
+      <div className="glass rounded-xl p-5">
         <div className="flex justify-between text-xs text-[hsl(var(--fg-muted))] mb-2">
           <span>Основной долг {((loanAmount / result.totalPayment) * 100).toFixed(0)}%</span>
           <span>Переплата {((result.totalInterest / result.totalPayment) * 100).toFixed(0)}%</span>
         </div>
-        <div className="h-3 rounded-full bg-[hsl(var(--border))] overflow-hidden">
+        <div className="h-3 overflow-hidden rounded-full bg-[hsl(var(--bg)/0.55)] ring-1 ring-[hsl(var(--border))]">
           <div
-            className="h-full bg-emerald-500 rounded-full"
+            className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500"
             style={{ width: `${(loanAmount / result.totalPayment) * 100}%` }}
           />
         </div>
       </div>
 
-      <div className="glass rounded-2xl p-5">
+      <div className="glass rounded-xl p-5">
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))]">
           Структура платежей
         </h2>
@@ -179,29 +183,29 @@ export default function KreditPage() {
         </ResponsiveContainer>
       </div>
 
-      <div className="glass rounded-2xl p-5">
+      <div className="glass rounded-xl p-5">
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-[hsl(var(--fg-muted))]">
           График платежей
         </h2>
-        <div className="max-h-72 overflow-auto">
+        <div className="max-h-72 overflow-auto rounded-lg border border-[hsl(var(--border))]">
           <table className="w-full text-sm">
-            <thead className="sticky top-0 bg-[hsl(var(--bg-card))]">
+            <thead className="sticky top-0 bg-[hsl(var(--bg-card))] shadow-sm">
               <tr className="text-xs text-[hsl(var(--fg-muted))] uppercase tracking-wide">
-                <th className="text-left py-2 pr-4">Месяц</th>
+                <th className="text-left py-2 pl-3 pr-4">Месяц</th>
                 <th className="text-right py-2 pr-4">Платёж</th>
                 <th className="text-right py-2 pr-4">Долг</th>
                 <th className="text-right py-2 pr-4">Проценты</th>
-                <th className="text-right py-2">Остаток</th>
+                <th className="text-right py-2 pr-3">Остаток</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[hsl(var(--border))]">
               {result.schedule.map(row => (
                 <tr key={row.month} className="hover:bg-[hsl(var(--bg-card))]/40 transition-colors">
-                  <td className="py-2 pr-4 tabular">{row.month}</td>
+                  <td className="py-2 pl-3 pr-4 tabular">{row.month}</td>
                   <td className="py-2 pr-4 text-right tabular">{formatMoney(row.payment, params.currency)}</td>
                   <td className="py-2 pr-4 text-right tabular text-emerald-400">{formatMoney(row.principal, params.currency)}</td>
                   <td className="py-2 pr-4 text-right tabular text-red-400">{formatMoney(row.interest, params.currency)}</td>
-                  <td className="py-2 text-right tabular font-medium">{formatMoney(row.balance, params.currency)}</td>
+                  <td className="py-2 pr-3 text-right tabular font-medium">{formatMoney(row.balance, params.currency)}</td>
                 </tr>
               ))}
             </tbody>

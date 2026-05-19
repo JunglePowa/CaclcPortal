@@ -1,21 +1,21 @@
 import type { CalculatorMode } from '@/types'
 
 export const MODE_ROUTES: Record<CalculatorMode, string> = {
-  accumulation: '/investicii',
-  goal: '/investicii/vznoj',
-  duration: '/investicii/srok',
-  rate: '/investicii/stavka',
-  capital: '/investicii/kapital',
-  comparison: '/investicii/sravnenie',
+  accumulation: '/investment',
+  goal: '/investment/contribution',
+  duration: '/investment/term',
+  rate: '/investment/rate',
+  capital: '/investment/capital',
+  comparison: '/investment/comparison',
 }
 
 export const ROUTE_MODES: Record<string, CalculatorMode> = {
-  '/investicii': 'accumulation',
-  '/investicii/vznoj': 'goal',
-  '/investicii/srok': 'duration',
-  '/investicii/stavka': 'rate',
-  '/investicii/kapital': 'capital',
-  '/investicii/sravnenie': 'comparison',
+  '/investment': 'accumulation',
+  '/investment/contribution': 'goal',
+  '/investment/term': 'duration',
+  '/investment/rate': 'rate',
+  '/investment/capital': 'capital',
+  '/investment/comparison': 'comparison',
 }
 
 export const MODE_TITLES: Record<CalculatorMode, string> = {
