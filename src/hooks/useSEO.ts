@@ -13,7 +13,7 @@ interface SEOData {
 }
 
 const BASE_URL: string =
-  (import.meta.env.VITE_BASE_URL as string | undefined) ?? 'https://calcportal.online'
+  ((import.meta.env.VITE_BASE_URL as string | undefined) ?? 'https://calcportal.online').replace(/\/$/, '')
 
 // Данные для каждого маршрута
 const SEO_MAP: Record<string, SEOData> = {
