@@ -5,6 +5,7 @@ import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateImt } from '@/calculators/imt'
 import type { ImtResult } from '@/calculators/imt'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readNumberParam, readStringParam } from '@/utils/historyParams'
 import { NumberInput, InfoCard, labelCls } from '@/components/ui'
 
 const categoryColorMap: Record<ImtResult['categoryColor'], string> = {
@@ -50,18 +51,20 @@ function BmiScale({ bmi }: { bmi: number }) {
 }
 
 export default function ImtPage() {
-  const [weight, setWeight] = useState(70)
-  const [height, setHeight] = useState(175)
-  const [age, setAge] = useState(30)
-  const [sex, setSex] = useState<'male' | 'female'>('male')
+  const initial = getHistorySearchParams()
+  const [weight, setWeight] = useState(() => readNumberParam(initial, 'weight', 70))
+  const [height, setHeight] = useState(() => readNumberParam(initial, 'height', 175))
+  const [age, setAge] = useState(() => readNumberParam(initial, 'age', 30))
+  const [sex, setSex] = useState<'male' | 'female'>(() => readStringParam(initial, 'sex', 'male', ['male', 'female']))
 
   const result = calculateImt({ weight, height, age, sex })
 
   useHistorySync({
     calculatorLabel: 'ИМТ',
     calculatorUrl: '/bmi',
+    calculatorParams: { weight, height, age, sex },
     summary: `ИМТ ${result.bmi.toFixed(1)} — ${result.category}`,
-    triggerKey: `${result.bmi}|${result.category}`,
+    triggerKey: `${weight}|${height}|${age}|${sex}|${result.bmi}|${result.category}`,
     delayMs: 0,
   })
 

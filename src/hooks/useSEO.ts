@@ -20,7 +20,7 @@ const ORGANIZATION_JSON_LD = {
   '@id': `${BASE_URL}/#organization`,
   name: 'Калк Портал',
   url: BASE_URL,
-  logo: `${BASE_URL}/favicon.svg`,
+  logo: `${BASE_URL}/favicon-512x512.png`,
 }
 
 const WEBSITE_JSON_LD = {

@@ -4,6 +4,7 @@ import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
 import { calculatePeni } from '@/calculators/peni'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readBooleanParam, readNumberParam, readStringParam } from '@/utils/historyParams'
 import { NumberInput, ResultRow, InfoCard, Divider, DateInput } from '@/components/ui'
 
 const fmt = (v: number) => `${v.toLocaleString('ru-RU', { maximumFractionDigits: 2 })} ₽`
@@ -13,19 +14,21 @@ function todayISO(): string {
 }
 
 export default function PeniPage() {
-  const [debt, setDebt] = useState(100000)
-  const [startDate, setStartDate] = useState('2026-01-01')
-  const [endDate, setEndDate] = useState(todayISO())
-  const [keyRate, setKeyRate] = useState(16)
-  const [isIndividual, setIsIndividual] = useState(true)
+  const initial = getHistorySearchParams()
+  const [debt, setDebt] = useState(() => readNumberParam(initial, 'debt', 100000))
+  const [startDate, setStartDate] = useState(() => readStringParam(initial, 'startDate', '2026-01-01'))
+  const [endDate, setEndDate] = useState(() => readStringParam(initial, 'endDate', todayISO()))
+  const [keyRate, setKeyRate] = useState(() => readNumberParam(initial, 'keyRate', 16))
+  const [isIndividual, setIsIndividual] = useState(() => readBooleanParam(initial, 'isIndividual', true))
 
   const result = calculatePeni({ debt, startDate, endDate, keyRate, isIndividual })
 
   useHistorySync({
     calculatorLabel: 'Пени',
     calculatorUrl: '/tax-penalties',
+    calculatorParams: { debt, startDate, endDate, keyRate, isIndividual },
     summary: `${result.days} дн., пени ${fmt(result.total)}`,
-    triggerKey: `${result.total}|${result.days}`,
+    triggerKey: `${debt}|${startDate}|${endDate}|${keyRate}|${isIndividual}|${result.total}|${result.days}`,
   })
 
   return (

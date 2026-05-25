@@ -5,6 +5,7 @@ import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateObligacii } from '@/calculators/obligacii'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readNumberParam } from '@/utils/historyParams'
 import {
   NumberInput,
   SliderInput,
@@ -27,13 +28,14 @@ const PAYMENTS_PER_YEAR_OPTIONS = [
 ]
 
 export default function ObligaciiPage() {
-  const [faceValue, setFaceValue] = useState(1000)
-  const [buyPricePercent, setBuyPricePercent] = useState(98.5)
-  const [sellPricePercent, setSellPricePercent] = useState(100)
-  const [couponRate, setCouponRate] = useState(10)
-  const [paymentsPerYear, setPaymentsPerYear] = useState(2)
-  const [years, setYears] = useState(5)
-  const [taxRate, setTaxRate] = useState(13)
+  const initial = getHistorySearchParams()
+  const [faceValue, setFaceValue] = useState(() => readNumberParam(initial, 'faceValue', 1000))
+  const [buyPricePercent, setBuyPricePercent] = useState(() => readNumberParam(initial, 'buyPricePercent', 98.5))
+  const [sellPricePercent, setSellPricePercent] = useState(() => readNumberParam(initial, 'sellPricePercent', 100))
+  const [couponRate, setCouponRate] = useState(() => readNumberParam(initial, 'couponRate', 10))
+  const [paymentsPerYear, setPaymentsPerYear] = useState(() => readNumberParam(initial, 'paymentsPerYear', 2))
+  const [years, setYears] = useState(() => readNumberParam(initial, 'years', 5))
+  const [taxRate, setTaxRate] = useState(() => readNumberParam(initial, 'taxRate', 13))
 
   const result = calculateObligacii({
     faceValue,
@@ -48,8 +50,9 @@ export default function ObligaciiPage() {
   useHistorySync({
     calculatorLabel: 'Облигации',
     calculatorUrl: '/bonds',
+    calculatorParams: { faceValue, buyPricePercent, sellPricePercent, couponRate, paymentsPerYear, years, taxRate },
     summary: `YTM ${result.ytm.toFixed(2)}%, чистый доход ${fmt(result.netIncome)}`,
-    triggerKey: `${result.ytm}|${result.netIncome}`,
+    triggerKey: `${faceValue}|${buyPricePercent}|${sellPricePercent}|${couponRate}|${paymentsPerYear}|${years}|${taxRate}|${result.ytm}|${result.netIncome}`,
   })
 
   const sidebar = (

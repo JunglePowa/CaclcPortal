@@ -4,6 +4,7 @@ import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateTransport } from '@/calculators/transport'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readNumberParam } from '@/utils/historyParams'
 import { ResultRow, InfoCard, Divider, Select, SliderInput } from '@/components/ui'
 
 const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
@@ -28,18 +29,20 @@ const MONTHS_OPTIONS = Array.from({ length: 12 }, (_, i) => i + 1).map(m => ({
 }))
 
 export default function TransportPage() {
-  const [horsePower, setHorsePower] = useState(150)
-  const [monthsOwned, setMonthsOwned] = useState(12)
-  const [regionRate, setRegionRate] = useState(1.0)
-  const [luxuryCoeff, setLuxuryCoeff] = useState(1.0)
+  const initial = getHistorySearchParams()
+  const [horsePower, setHorsePower] = useState(() => readNumberParam(initial, 'horsePower', 150))
+  const [monthsOwned, setMonthsOwned] = useState(() => readNumberParam(initial, 'monthsOwned', 12))
+  const [regionRate, setRegionRate] = useState(() => readNumberParam(initial, 'regionRate', 1.0))
+  const [luxuryCoeff, setLuxuryCoeff] = useState(() => readNumberParam(initial, 'luxuryCoeff', 1.0))
 
   const result = calculateTransport({ horsePower, monthsOwned, regionRate, luxuryCoeff })
 
   useHistorySync({
     calculatorLabel: 'Транспортный налог',
     calculatorUrl: '/transport-tax',
+    calculatorParams: { horsePower, monthsOwned, regionRate, luxuryCoeff },
     summary: `${horsePower} л.с., налог ${Math.round(result.actualTax).toLocaleString('ru-RU')} ₽`,
-    triggerKey: `${horsePower}|${result.actualTax}`,
+    triggerKey: `${horsePower}|${monthsOwned}|${regionRate}|${luxuryCoeff}|${result.actualTax}`,
     delayMs: 0,
   })
 

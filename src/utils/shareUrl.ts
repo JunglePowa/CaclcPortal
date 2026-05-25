@@ -36,8 +36,7 @@ function clamp(v: number, min: number, max: number): number {
   return v
 }
 
-export function buildShareUrl(mode: CalculatorMode, params: CalcParams, targetAmount: number): string {
-  const base = window.location.origin + MODE_ROUTES[mode]
+function buildShareSearch(mode: CalculatorMode, params: CalcParams, targetAmount: number): string {
   const sp = new URLSearchParams()
 
   for (const [key, short] of Object.entries(PARAM_MAP)) {
@@ -51,7 +50,16 @@ export function buildShareUrl(mode: CalculatorMode, params: CalcParams, targetAm
     sp.set('ta', String(targetAmount))
   }
 
-  return `${base}?${sp.toString()}`
+  return sp.toString()
+}
+
+export function buildSharePath(mode: CalculatorMode, params: CalcParams, targetAmount: number): string {
+  const query = buildShareSearch(mode, params, targetAmount)
+  return query ? `${MODE_ROUTES[mode]}?${query}` : MODE_ROUTES[mode]
+}
+
+export function buildShareUrl(mode: CalculatorMode, params: CalcParams, targetAmount: number): string {
+  return window.location.origin + buildSharePath(mode, params, targetAmount)
 }
 
 export type ParsedShare = Partial<CalcParams> & { targetAmount?: number }

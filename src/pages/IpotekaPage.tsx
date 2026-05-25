@@ -8,6 +8,7 @@ import { calculateIpoteka, type EarlyPayment, type EarlyPaymentType } from '@/ca
 import type { PaymentType } from '@/calculators/kredit'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readBooleanParam, readNumberParam, readStringParam } from '@/utils/historyParams'
 import {
   NumberInput,
   SliderInput,
@@ -38,18 +39,19 @@ const EARLY_TYPE_OPTIONS: { value: EarlyPaymentType; label: string }[] = [
 const CURRENCY_OPTIONS = CURRENCIES.map(c => ({ value: c.value, label: `${c.symbol} ${c.value}` }))
 
 export default function IpotekaPage() {
-  const [propertyPrice, setPropertyPrice] = useState(6_000_000)
-  const [downPayment, setDownPayment] = useState(1_000_000)
-  const [annualRate, setAnnualRate] = useState(14)
-  const [termMonths, setTermMonths] = useState(240)
-  const [paymentType, setPaymentType] = useState<PaymentType>('annuity')
-  const [currency, setCurrency] = useState('RUB')
+  const initial = getHistorySearchParams()
+  const [propertyPrice, setPropertyPrice] = useState(() => readNumberParam(initial, 'propertyPrice', 6_000_000))
+  const [downPayment, setDownPayment] = useState(() => readNumberParam(initial, 'downPayment', 1_000_000))
+  const [annualRate, setAnnualRate] = useState(() => readNumberParam(initial, 'annualRate', 14))
+  const [termMonths, setTermMonths] = useState(() => readNumberParam(initial, 'termMonths', 240))
+  const [paymentType, setPaymentType] = useState<PaymentType>(() => readStringParam(initial, 'paymentType', 'annuity', ['annuity', 'differential']))
+  const [currency, setCurrency] = useState(() => readStringParam(initial, 'currency', 'RUB'))
 
   // Одна досрочка для UI (массив поддерживается логикой).
-  const [hasEarly, setHasEarly] = useState(false)
-  const [earlyMonth, setEarlyMonth] = useState(12)
-  const [earlyAmount, setEarlyAmount] = useState(300_000)
-  const [earlyType, setEarlyType] = useState<EarlyPaymentType>('reduce-term')
+  const [hasEarly, setHasEarly] = useState(() => readBooleanParam(initial, 'hasEarly', false))
+  const [earlyMonth, setEarlyMonth] = useState(() => readNumberParam(initial, 'earlyMonth', 12))
+  const [earlyAmount, setEarlyAmount] = useState(() => readNumberParam(initial, 'earlyAmount', 300_000))
+  const [earlyType, setEarlyType] = useState<EarlyPaymentType>(() => readStringParam(initial, 'earlyType', 'reduce-term', ['reduce-term', 'reduce-payment']))
 
   const earlyPayments: EarlyPayment[] = hasEarly
     ? [{ month: earlyMonth, amount: earlyAmount, type: earlyType }]
@@ -68,8 +70,9 @@ export default function IpotekaPage() {
   useHistorySync({
     calculatorLabel: 'Ипотека',
     calculatorUrl: '/mortgage',
+    calculatorParams: { propertyPrice, downPayment, annualRate, termMonths, paymentType, currency, hasEarly, earlyMonth, earlyAmount, earlyType },
     summary: `${Math.round(result.monthlyPayment).toLocaleString('ru-RU')} ₽/мес, переплата ${Math.round(result.totalInterest).toLocaleString('ru-RU')} ₽`,
-    triggerKey: `${result.monthlyPayment}|${result.totalInterest}|${result.actualTermMonths}`,
+    triggerKey: `${propertyPrice}|${downPayment}|${annualRate}|${termMonths}|${paymentType}|${currency}|${hasEarly}|${earlyMonth}|${earlyAmount}|${earlyType}|${result.monthlyPayment}|${result.totalInterest}|${result.actualTermMonths}`,
   })
 
   const chartData = useMemo(() => {

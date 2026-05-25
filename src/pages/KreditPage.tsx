@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useKreditStore } from '@/stores/kreditStore'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
@@ -8,6 +8,7 @@ import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
 import type { PaymentType } from '@/calculators/kredit'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readNumberParam, readStringParam } from '@/utils/historyParams'
 import {
   NumberInput,
   SliderInput,
@@ -35,11 +36,25 @@ const CURRENCY_OPTIONS = CURRENCIES.map(c => ({ value: c.value, label: `${c.symb
 export default function KreditPage() {
   const { params, result, setParams } = useKreditStore()
 
+  useEffect(() => {
+    const search = getHistorySearchParams()
+    if (!search.size) return
+    setParams({
+      loanAmount: readNumberParam(search, 'loanAmount', params.loanAmount),
+      annualRate: readNumberParam(search, 'annualRate', params.annualRate),
+      termMonths: readNumberParam(search, 'termMonths', params.termMonths),
+      paymentType: readStringParam<PaymentType>(search, 'paymentType', params.paymentType, ['annuity', 'differential']),
+      currency: readStringParam(search, 'currency', params.currency),
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useHistorySync({
     calculatorLabel: 'Кредит',
     calculatorUrl: '/credit',
+    calculatorParams: params,
     summary: `${Math.round(result.monthlyPayment).toLocaleString('ru-RU')} ₽/мес, переплата ${Math.round(result.totalInterest).toLocaleString('ru-RU')} ₽`,
-    triggerKey: `${result.monthlyPayment}|${result.totalInterest}`,
+    triggerKey: `${JSON.stringify(params)}|${result.monthlyPayment}|${result.totalInterest}`,
   })
 
   const { loanAmount, annualRate, termMonths, paymentType } = params

@@ -18,7 +18,7 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
 import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
-import { parseShareUrl } from '@/utils/shareUrl'
+import { buildSharePath, parseShareUrl } from '@/utils/shareUrl'
 import { ROUTE_MODES } from '@/utils/modeRoutes'
 
 function ScenarioPanel() {
@@ -99,7 +99,7 @@ function MobileStickyBar() {
 }
 
 export default function InvesticiiPage() {
-  const { mode, setParams, setMode, setTargetAmount, breakdown, params } = useCalcStore()
+  const { mode, setParams, setMode, setTargetAmount, breakdown, params, targetAmount } = useCalcStore()
   const location = useLocation()
 
   const finalTotal = breakdown[breakdown.length - 1]?.total
@@ -108,12 +108,12 @@ export default function InvesticiiPage() {
     const t = setTimeout(() => {
       saveToHistory({
         calculatorLabel: 'Инвестиции',
-        calculatorUrl: location.pathname,
+        calculatorUrl: buildSharePath(mode, params, targetAmount),
         summary: `${Math.round(finalTotal).toLocaleString('ru-RU')} ₽ за ${params.years} лет`,
       })
     }, 1500)
     return () => clearTimeout(t)
-  }, [finalTotal, location.pathname, params.years])
+  }, [finalTotal, mode, params, params.years, targetAmount])
 
   useEffect(() => {
     if (location.search) {

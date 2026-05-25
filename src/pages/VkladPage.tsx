@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useVkladStore } from '@/stores/vkladStore'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
@@ -7,6 +7,7 @@ import { CalcLayout } from '@/components/layout/CalcLayout'
 import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readNumberParam, readStringParam } from '@/utils/historyParams'
 import {
   NumberInput,
   SliderInput,
@@ -32,11 +33,27 @@ const CURRENCY_OPTIONS = CURRENCIES.map(c => ({ value: c.value, label: `${c.symb
 export default function VkladPage() {
   const { params, result, setParams } = useVkladStore()
 
+  useEffect(() => {
+    const search = getHistorySearchParams()
+    if (!search.size) return
+    setParams({
+      initialAmount: readNumberParam(search, 'initialAmount', params.initialAmount),
+      monthlyReplenishment: readNumberParam(search, 'monthlyReplenishment', params.monthlyReplenishment),
+      annualRate: readNumberParam(search, 'annualRate', params.annualRate),
+      termMonths: readNumberParam(search, 'termMonths', params.termMonths),
+      capitalizationPerYear: readNumberParam(search, 'capitalizationPerYear', params.capitalizationPerYear),
+      taxRate: readNumberParam(search, 'taxRate', params.taxRate),
+      currency: readStringParam(search, 'currency', params.currency),
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useHistorySync({
     calculatorLabel: 'Вклад',
     calculatorUrl: '/deposit',
+    calculatorParams: params,
     summary: `${Math.round(result.finalAmount).toLocaleString('ru-RU')} ₽ за ${params.termMonths} мес`,
-    triggerKey: `${result.finalAmount}|${params.termMonths}`,
+    triggerKey: `${JSON.stringify(params)}|${result.finalAmount}`,
   })
 
   const { initialAmount, monthlyReplenishment, annualRate, termMonths, taxRate } = params

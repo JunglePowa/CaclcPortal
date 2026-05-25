@@ -4,22 +4,25 @@ import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateRashod } from '@/calculators/rashod'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readNumberParam } from '@/utils/historyParams'
 import { NumberInput, ResultRow, InfoCard, Divider } from '@/components/ui'
 
 const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 
 export default function RashodPage() {
-  const [fuelConsumed, setFuelConsumed] = useState(45)
-  const [distance, setDistance] = useState(500)
-  const [fuelPrice, setFuelPrice] = useState(57)
+  const initial = getHistorySearchParams()
+  const [fuelConsumed, setFuelConsumed] = useState(() => readNumberParam(initial, 'fuelConsumed', 45))
+  const [distance, setDistance] = useState(() => readNumberParam(initial, 'distance', 500))
+  const [fuelPrice, setFuelPrice] = useState(() => readNumberParam(initial, 'fuelPrice', 57))
 
   const result = calculateRashod({ fuelConsumed, distance, fuelPrice })
 
   useHistorySync({
     calculatorLabel: 'Расход топлива',
     calculatorUrl: '/fuel-consumption',
+    calculatorParams: { fuelConsumed, distance, fuelPrice },
     summary: `${result.per100km.toFixed(1)} л/100км, итого ${Math.round(result.totalCost).toLocaleString('ru-RU')} ₽`,
-    triggerKey: `${result.per100km}|${result.totalCost}`,
+    triggerKey: `${fuelConsumed}|${distance}|${fuelPrice}|${result.per100km}|${result.totalCost}`,
     delayMs: 0,
   })
 

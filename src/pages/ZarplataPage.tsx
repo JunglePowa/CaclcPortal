@@ -5,24 +5,27 @@ import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateZarplata } from '@/calculators/zarplata'
 import type { ZarplataDirection } from '@/calculators/zarplata'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readBooleanParam, readNumberParam, readStringParam } from '@/utils/historyParams'
 import { NumberInput, ResultRow, InfoCard, Divider, selectCls } from '@/components/ui'
 
 const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 
 export default function ZarplataPage() {
-  const [direction, setDirection] = useState<ZarplataDirection>('gross_to_net')
-  const [amount, setAmount] = useState<number>(100000)
-  const [hasChildren, setHasChildren] = useState(false)
-  const [childrenCount, setChildrenCount] = useState(1)
-  const [smallBusiness, setSmallBusiness] = useState(false)
+  const initial = getHistorySearchParams()
+  const [direction, setDirection] = useState<ZarplataDirection>(() => readStringParam(initial, 'direction', 'gross_to_net', ['gross_to_net', 'net_to_gross']))
+  const [amount, setAmount] = useState<number>(() => readNumberParam(initial, 'amount', 100000))
+  const [hasChildren, setHasChildren] = useState(() => readBooleanParam(initial, 'hasChildren', false))
+  const [childrenCount, setChildrenCount] = useState(() => readNumberParam(initial, 'childrenCount', 1))
+  const [smallBusiness, setSmallBusiness] = useState(() => readBooleanParam(initial, 'smallBusiness', false))
 
   const result = calculateZarplata({ amount, direction, hasChildren, childrenCount, smallBusiness })
 
   useHistorySync({
     calculatorLabel: 'Зарплата',
     calculatorUrl: '/salary',
+    calculatorParams: { direction, amount, hasChildren, childrenCount, smallBusiness },
     summary: `На руки ${Math.round(result.netSalary).toLocaleString('ru-RU')} ₽, работодатель ${Math.round(result.totalEmployerCost).toLocaleString('ru-RU')} ₽`,
-    triggerKey: `${result.netSalary}|${result.totalEmployerCost}`,
+    triggerKey: `${direction}|${amount}|${hasChildren}|${childrenCount}|${smallBusiness}|${result.netSalary}|${result.totalEmployerCost}`,
   })
 
   return (

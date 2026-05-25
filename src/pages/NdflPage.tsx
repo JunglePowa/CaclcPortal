@@ -5,6 +5,7 @@ import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateNdfl } from '@/calculators/ndfl'
 import type { NdflDirection, NdflRate } from '@/calculators/ndfl'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readBooleanParam, readNumberParam, readStringParam } from '@/utils/historyParams'
 import { NumberInput, ResultRow, InfoCard, Divider, selectCls } from '@/components/ui'
 
 const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
@@ -16,11 +17,15 @@ const CHILDREN_OPTIONS = [
 ]
 
 export default function NdflPage() {
-  const [direction, setDirection] = useState<NdflDirection>('gross_to_net')
-  const [amount, setAmount] = useState<number>(100000)
-  const [rate, setRate] = useState<NdflRate>('progressive')
-  const [hasChildren, setHasChildren] = useState(false)
-  const [childrenCount, setChildrenCount] = useState(1)
+  const initial = getHistorySearchParams()
+  const [direction, setDirection] = useState<NdflDirection>(() => readStringParam(initial, 'direction', 'gross_to_net', ['gross_to_net', 'net_to_gross']))
+  const [amount, setAmount] = useState<number>(() => readNumberParam(initial, 'amount', 100000))
+  const [rate, setRate] = useState<NdflRate>(() => {
+    const raw = readStringParam(initial, 'rate', 'progressive')
+    return raw === 'progressive' ? raw : Number(raw) as NdflRate
+  })
+  const [hasChildren, setHasChildren] = useState(() => readBooleanParam(initial, 'hasChildren', false))
+  const [childrenCount, setChildrenCount] = useState(() => readNumberParam(initial, 'childrenCount', 1))
 
   const result = calculateNdfl({ amount, rate, direction, hasChildren, childrenCount })
   const taxBase = Math.max(0, result.grossIncome - result.deduction)
@@ -28,8 +33,9 @@ export default function NdflPage() {
   useHistorySync({
     calculatorLabel: 'НДФЛ',
     calculatorUrl: '/income-tax',
+    calculatorParams: { direction, amount, rate, hasChildren, childrenCount },
     summary: `НДФЛ: ${Math.round(result.taxAmount).toLocaleString('ru-RU')} ₽, на руки ${Math.round(result.netIncome).toLocaleString('ru-RU')} ₽`,
-    triggerKey: `${result.taxAmount}|${result.netIncome}`,
+    triggerKey: `${direction}|${amount}|${rate}|${hasChildren}|${childrenCount}|${result.taxAmount}|${result.netIncome}`,
     delayMs: 0,
   })
 

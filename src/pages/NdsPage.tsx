@@ -5,14 +5,16 @@ import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateNds } from '@/calculators/nds'
 import type { NdsOperation, NdsRate } from '@/calculators/nds'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readNumberParam, readStringParam } from '@/utils/historyParams'
 import { NumberInput, ResultRow, InfoCard, Divider } from '@/components/ui'
 
 const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 
 export default function NdsPage() {
-  const [operation, setOperation] = useState<NdsOperation>('charge')
-  const [amount, setAmount] = useState<number>(100000)
-  const [rate, setRate] = useState<NdsRate>(22)
+  const initial = getHistorySearchParams()
+  const [operation, setOperation] = useState<NdsOperation>(() => readStringParam(initial, 'operation', 'charge', ['charge', 'extract']))
+  const [amount, setAmount] = useState<number>(() => readNumberParam(initial, 'amount', 100000))
+  const [rate, setRate] = useState<NdsRate>(() => readNumberParam(initial, 'rate', 22) as NdsRate)
   const [copied, setCopied] = useState(false)
 
   const result = calculateNds({ amount, rate, operation })
@@ -20,8 +22,9 @@ export default function NdsPage() {
   useHistorySync({
     calculatorLabel: 'НДС',
     calculatorUrl: '/vat',
+    calculatorParams: { operation, amount, rate },
     summary: `НДС ${rate}%: ${Math.round(result.ndsAmount).toLocaleString('ru-RU')} ₽`,
-    triggerKey: `${result.ndsAmount}|${rate}`,
+    triggerKey: `${operation}|${amount}|${rate}|${result.ndsAmount}`,
   })
 
   function handleCopy() {

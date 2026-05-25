@@ -7,6 +7,7 @@ import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateDosrochnoe, type EarlyType } from '@/calculators/kreditDosrochnoe'
 import { formatMoney } from '@/utils/formatCurrency'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readNumberParam, readStringParam } from '@/utils/historyParams'
 import {
   NumberInput,
   SliderInput,
@@ -25,12 +26,13 @@ const EARLY_TYPE_OPTIONS: { value: EarlyType; label: string }[] = [
 ]
 
 export default function KreditDosrochnoePage() {
-  const [balance, setBalance] = useState(1_000_000)
-  const [annualRate, setAnnualRate] = useState(15)
-  const [remainingMonths, setRemainingMonths] = useState(60)
-  const [earlyAmount, setEarlyAmount] = useState(200_000)
-  const [earlyType, setEarlyType] = useState<EarlyType>('reduce-term')
-  const [earlyMonth, setEarlyMonth] = useState(1)
+  const initial = getHistorySearchParams()
+  const [balance, setBalance] = useState(() => readNumberParam(initial, 'balance', 1_000_000))
+  const [annualRate, setAnnualRate] = useState(() => readNumberParam(initial, 'annualRate', 15))
+  const [remainingMonths, setRemainingMonths] = useState(() => readNumberParam(initial, 'remainingMonths', 60))
+  const [earlyAmount, setEarlyAmount] = useState(() => readNumberParam(initial, 'earlyAmount', 200_000))
+  const [earlyType, setEarlyType] = useState<EarlyType>(() => readStringParam(initial, 'earlyType', 'reduce-term', ['reduce-term', 'reduce-payment']))
+  const [earlyMonth, setEarlyMonth] = useState(() => readNumberParam(initial, 'earlyMonth', 1))
 
   const result = calculateDosrochnoe({
     balance,
@@ -44,8 +46,9 @@ export default function KreditDosrochnoePage() {
   useHistorySync({
     calculatorLabel: 'Досрочное погашение',
     calculatorUrl: '/early-repayment',
+    calculatorParams: { balance, annualRate, remainingMonths, earlyAmount, earlyType, earlyMonth },
     summary: `Экономия ${Math.round(result.savings).toLocaleString('ru-RU')} ₽`,
-    triggerKey: `${result.savings}|${result.newTermMonths}`,
+    triggerKey: `${balance}|${annualRate}|${remainingMonths}|${earlyAmount}|${earlyType}|${earlyMonth}|${result.savings}|${result.newTermMonths}`,
   })
 
   const chartData = useMemo(() => {

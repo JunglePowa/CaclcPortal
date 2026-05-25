@@ -4,21 +4,24 @@ import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
 import { calculateBeremennost } from '@/calculators/beremennost'
 import { useHistorySync } from '@/hooks/useHistorySync'
+import { getHistorySearchParams, readNumberParam, readStringParam } from '@/utils/historyParams'
 import { NumberInput, ResultRow, InfoCard, Divider, DateInput } from '@/components/ui'
 
 const today = new Date().toISOString().split('T')[0]
 
 export default function BeremenostPage() {
-  const [lastPeriodDate, setLastPeriodDate] = useState('')
-  const [cycleLength, setCycleLength] = useState(28)
+  const initial = getHistorySearchParams()
+  const [lastPeriodDate, setLastPeriodDate] = useState(() => readStringParam(initial, 'lastPeriodDate', ''))
+  const [cycleLength, setCycleLength] = useState(() => readNumberParam(initial, 'cycleLength', 28))
 
   const result = calculateBeremennost({ lastPeriodDate, cycleLength })
 
   useHistorySync({
     calculatorLabel: 'Беременность',
     calculatorUrl: '/pregnancy',
+    calculatorParams: { lastPeriodDate, cycleLength },
     summary: result ? `${result.currentWeek} нед, ПДР ${result.dueDate}` : '',
-    triggerKey: result ? `${result.currentWeek}|${result.dueDate}` : 'empty',
+    triggerKey: result ? `${lastPeriodDate}|${cycleLength}|${result.currentWeek}|${result.dueDate}` : `${lastPeriodDate}|${cycleLength}|empty`,
     delayMs: 0,
   })
 
