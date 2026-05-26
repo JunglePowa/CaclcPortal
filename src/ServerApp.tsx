@@ -33,17 +33,30 @@ export function ServerApp() {
       <Route path="/investment/capital" element={<InvesticiiPage />} />
       <Route path="/investment/comparison" element={<InvesticiiPage />} />
       <Route path="/deposit" element={<VkladPage />} />
+      <Route path="/deposit/capitalization" element={<VkladPage />} />
+      <Route path="/deposit/replenishment" element={<VkladPage />} />
+      <Route path="/deposit/tax" element={<VkladPage />} />
       <Route path="/credit" element={<KreditPage />} />
+      <Route path="/credit/annuity" element={<KreditPage />} />
+      <Route path="/credit/differentiated" element={<KreditPage />} />
       <Route path="/vat" element={<NdsPage />} />
+      <Route path="/vat/add" element={<NdsPage />} />
+      <Route path="/vat/extract" element={<NdsPage />} />
       <Route path="/income-tax" element={<NdflPage />} />
+      <Route path="/income-tax/2026" element={<NdflPage />} />
       <Route path="/salary" element={<ZarplataPage />} />
+      <Route path="/salary/gross-net" element={<ZarplataPage />} />
+      <Route path="/salary/net-gross" element={<ZarplataPage />} />
       <Route path="/fuel-consumption" element={<RashodPage />} />
+      <Route path="/fuel-consumption/trip-cost" element={<RashodPage />} />
       <Route path="/transport-tax" element={<TransportPage />} />
       <Route path="/bmi" element={<ImtPage />} />
       <Route path="/pregnancy" element={<BeremenostPage />} />
       <Route path="/bonds" element={<ObligaciiPage />} />
       <Route path="/mortgage" element={<IpotekaPage />} />
       <Route path="/early-repayment" element={<KreditDosrochnoePage />} />
+      <Route path="/early-repayment/reduce-term" element={<KreditDosrochnoePage />} />
+      <Route path="/early-repayment/reduce-payment" element={<KreditDosrochnoePage />} />
       <Route path="/tax-penalties" element={<PeniPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />

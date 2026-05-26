@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
@@ -17,6 +18,7 @@ const CHILDREN_OPTIONS = [
 ]
 
 export default function NdflPage() {
+  const location = useLocation()
   const initial = getHistorySearchParams()
   const [direction, setDirection] = useState<NdflDirection>(() => readStringParam(initial, 'direction', 'gross_to_net', ['gross_to_net', 'net_to_gross']))
   const [amount, setAmount] = useState<number>(() => readNumberParam(initial, 'amount', 100000))
@@ -32,7 +34,7 @@ export default function NdflPage() {
 
   useHistorySync({
     calculatorLabel: 'НДФЛ',
-    calculatorUrl: '/income-tax',
+    calculatorUrl: location.pathname,
     calculatorParams: { direction, amount, rate, hasChildren, childrenCount },
     summary: `НДФЛ: ${Math.round(result.taxAmount).toLocaleString('ru-RU')} ₽, на руки ${Math.round(result.netIncome).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${direction}|${amount}|${rate}|${hasChildren}|${childrenCount}|${result.taxAmount}|${result.netIncome}`,

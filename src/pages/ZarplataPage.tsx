@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
@@ -10,9 +11,22 @@ import { NumberInput, ResultRow, InfoCard, Divider, selectCls } from '@/componen
 
 const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 
+const DIRECTION_ROUTES: Record<ZarplataDirection, string> = {
+  gross_to_net: '/salary/gross-net',
+  net_to_gross: '/salary/net-gross',
+}
+
+function directionFromPath(pathname: string): ZarplataDirection | null {
+  if (pathname === '/salary/gross-net') return 'gross_to_net'
+  if (pathname === '/salary/net-gross') return 'net_to_gross'
+  return null
+}
+
 export default function ZarplataPage() {
+  const location = useLocation()
+  const navigate = useNavigate()
   const initial = getHistorySearchParams()
-  const [direction, setDirection] = useState<ZarplataDirection>(() => readStringParam(initial, 'direction', 'gross_to_net', ['gross_to_net', 'net_to_gross']))
+  const [direction, setDirection] = useState<ZarplataDirection>(() => directionFromPath(location.pathname) ?? readStringParam(initial, 'direction', 'gross_to_net', ['gross_to_net', 'net_to_gross']))
   const [amount, setAmount] = useState<number>(() => readNumberParam(initial, 'amount', 100000))
   const [hasChildren, setHasChildren] = useState(() => readBooleanParam(initial, 'hasChildren', false))
   const [childrenCount, setChildrenCount] = useState(() => readNumberParam(initial, 'childrenCount', 1))
@@ -20,13 +34,25 @@ export default function ZarplataPage() {
 
   const result = calculateZarplata({ amount, direction, hasChildren, childrenCount, smallBusiness })
 
+  useEffect(() => {
+    const routeDirection = directionFromPath(location.pathname)
+    if (routeDirection && routeDirection !== direction) {
+      setDirection(routeDirection)
+    }
+  }, [location.pathname, direction])
+
   useHistorySync({
     calculatorLabel: 'Зарплата',
-    calculatorUrl: '/salary',
+    calculatorUrl: location.pathname,
     calculatorParams: { direction, amount, hasChildren, childrenCount, smallBusiness },
     summary: `На руки ${Math.round(result.netSalary).toLocaleString('ru-RU')} ₽, работодатель ${Math.round(result.totalEmployerCost).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${direction}|${amount}|${hasChildren}|${childrenCount}|${smallBusiness}|${result.netSalary}|${result.totalEmployerCost}`,
   })
+
+  function handleDirectionChange(nextDirection: ZarplataDirection) {
+    setDirection(nextDirection)
+    navigate(`${DIRECTION_ROUTES[nextDirection]}${location.search}`)
+  }
 
   return (
     <AppLayout>
@@ -46,7 +72,7 @@ export default function ZarplataPage() {
           ] as { value: ZarplataDirection; label: string }[]).map(opt => (
             <button
               key={opt.value}
-              onClick={() => setDirection(opt.value)}
+              onClick={() => handleDirectionChange(opt.value)}
               className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium border transition-all ${
                 direction === opt.value
                   ? 'bg-emerald-500/20 border-emerald-500/60 text-emerald-400'

@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useKreditStore } from '@/stores/kreditStore'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
@@ -33,31 +34,60 @@ const PAYMENT_TYPE_OPTIONS: { value: PaymentType; label: string }[] = [
 ]
 const CURRENCY_OPTIONS = CURRENCIES.map(c => ({ value: c.value, label: `${c.symbol} ${c.value}` }))
 
+const PAYMENT_TYPE_ROUTES: Record<PaymentType, string> = {
+  annuity: '/credit/annuity',
+  differential: '/credit/differentiated',
+}
+
+function paymentTypeFromPath(pathname: string): PaymentType | null {
+  if (pathname === '/credit/annuity') return 'annuity'
+  if (pathname === '/credit/differentiated') return 'differential'
+  return null
+}
+
 export default function KreditPage() {
   const { params, result, setParams } = useKreditStore()
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const search = getHistorySearchParams()
-    if (!search.size) return
+    const routePaymentType = paymentTypeFromPath(location.pathname)
+    if (!search.size) {
+      if (routePaymentType) setParams({ paymentType: routePaymentType })
+      return
+    }
     setParams({
       loanAmount: readNumberParam(search, 'loanAmount', params.loanAmount),
       annualRate: readNumberParam(search, 'annualRate', params.annualRate),
       termMonths: readNumberParam(search, 'termMonths', params.termMonths),
-      paymentType: readStringParam<PaymentType>(search, 'paymentType', params.paymentType, ['annuity', 'differential']),
+      paymentType: routePaymentType ?? readStringParam<PaymentType>(search, 'paymentType', params.paymentType, ['annuity', 'differential']),
       currency: readStringParam(search, 'currency', params.currency),
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    const routePaymentType = paymentTypeFromPath(location.pathname)
+    if (routePaymentType && routePaymentType !== params.paymentType) {
+      setParams({ paymentType: routePaymentType })
+    }
+  }, [location.pathname, params.paymentType, setParams])
+
   useHistorySync({
     calculatorLabel: 'Кредит',
-    calculatorUrl: '/credit',
+    calculatorUrl: location.pathname,
     calculatorParams: params,
     summary: `${Math.round(result.monthlyPayment).toLocaleString('ru-RU')} ₽/мес, переплата ${Math.round(result.totalInterest).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${JSON.stringify(params)}|${result.monthlyPayment}|${result.totalInterest}`,
   })
 
   const { loanAmount, annualRate, termMonths, paymentType } = params
+
+  function handlePaymentTypeChange(nextPaymentType: PaymentType) {
+    setParams({ paymentType: nextPaymentType })
+    navigate(`${PAYMENT_TYPE_ROUTES[nextPaymentType]}${location.search}`)
+  }
 
   const chartData = useMemo(() => {
     const step = termMonths > 60 ? 12 : termMonths > 24 ? 6 : 1
@@ -110,7 +140,7 @@ export default function KreditPage() {
         <Select
           label="Тип платежа"
           value={paymentType}
-          onChange={v => setParams({ paymentType: v })}
+          onChange={handlePaymentTypeChange}
           options={PAYMENT_TYPE_OPTIONS}
           compact
           ariaLabel="Тип платежа"

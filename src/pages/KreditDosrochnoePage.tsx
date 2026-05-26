@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CalcLayout } from '@/components/layout/CalcLayout'
@@ -25,13 +26,26 @@ const EARLY_TYPE_OPTIONS: { value: EarlyType; label: string }[] = [
   { value: 'reduce-payment', label: 'Уменьшить платёж' },
 ]
 
+const EARLY_TYPE_ROUTES: Record<EarlyType, string> = {
+  'reduce-term': '/early-repayment/reduce-term',
+  'reduce-payment': '/early-repayment/reduce-payment',
+}
+
+function earlyTypeFromPath(pathname: string): EarlyType | null {
+  if (pathname === '/early-repayment/reduce-term') return 'reduce-term'
+  if (pathname === '/early-repayment/reduce-payment') return 'reduce-payment'
+  return null
+}
+
 export default function KreditDosrochnoePage() {
+  const location = useLocation()
+  const navigate = useNavigate()
   const initial = getHistorySearchParams()
   const [balance, setBalance] = useState(() => readNumberParam(initial, 'balance', 1_000_000))
   const [annualRate, setAnnualRate] = useState(() => readNumberParam(initial, 'annualRate', 15))
   const [remainingMonths, setRemainingMonths] = useState(() => readNumberParam(initial, 'remainingMonths', 60))
   const [earlyAmount, setEarlyAmount] = useState(() => readNumberParam(initial, 'earlyAmount', 200_000))
-  const [earlyType, setEarlyType] = useState<EarlyType>(() => readStringParam(initial, 'earlyType', 'reduce-term', ['reduce-term', 'reduce-payment']))
+  const [earlyType, setEarlyType] = useState<EarlyType>(() => earlyTypeFromPath(location.pathname) ?? readStringParam(initial, 'earlyType', 'reduce-term', ['reduce-term', 'reduce-payment']))
   const [earlyMonth, setEarlyMonth] = useState(() => readNumberParam(initial, 'earlyMonth', 1))
 
   const result = calculateDosrochnoe({
@@ -43,13 +57,25 @@ export default function KreditDosrochnoePage() {
     earlyMonth,
   })
 
+  useEffect(() => {
+    const routeEarlyType = earlyTypeFromPath(location.pathname)
+    if (routeEarlyType && routeEarlyType !== earlyType) {
+      setEarlyType(routeEarlyType)
+    }
+  }, [location.pathname, earlyType])
+
   useHistorySync({
     calculatorLabel: 'Досрочное погашение',
-    calculatorUrl: '/early-repayment',
+    calculatorUrl: location.pathname,
     calculatorParams: { balance, annualRate, remainingMonths, earlyAmount, earlyType, earlyMonth },
     summary: `Экономия ${Math.round(result.savings).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${balance}|${annualRate}|${remainingMonths}|${earlyAmount}|${earlyType}|${earlyMonth}|${result.savings}|${result.newTermMonths}`,
   })
+
+  function handleEarlyTypeChange(nextType: EarlyType) {
+    setEarlyType(nextType)
+    navigate(`${EARLY_TYPE_ROUTES[nextType]}${location.search}`)
+  }
 
   const chartData = useMemo(() => {
     const step = result.schedule.length > 60 ? 6 : result.schedule.length > 24 ? 3 : 1
@@ -113,7 +139,7 @@ export default function KreditDosrochnoePage() {
         <Select
           label="Тип досрочки"
           value={earlyType}
-          onChange={setEarlyType}
+          onChange={handleEarlyTypeChange}
           options={EARLY_TYPE_OPTIONS}
           compact
         />

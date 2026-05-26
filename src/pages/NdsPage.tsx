@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
@@ -10,22 +11,47 @@ import { NumberInput, ResultRow, InfoCard, Divider } from '@/components/ui'
 
 const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 
+const OPERATION_ROUTES: Record<NdsOperation, string> = {
+  charge: '/vat/add',
+  extract: '/vat/extract',
+}
+
+function operationFromPath(pathname: string): NdsOperation | null {
+  if (pathname === '/vat/add') return 'charge'
+  if (pathname === '/vat/extract') return 'extract'
+  return null
+}
+
 export default function NdsPage() {
+  const location = useLocation()
+  const navigate = useNavigate()
   const initial = getHistorySearchParams()
-  const [operation, setOperation] = useState<NdsOperation>(() => readStringParam(initial, 'operation', 'charge', ['charge', 'extract']))
+  const [operation, setOperation] = useState<NdsOperation>(() => operationFromPath(location.pathname) ?? readStringParam(initial, 'operation', 'charge', ['charge', 'extract']))
   const [amount, setAmount] = useState<number>(() => readNumberParam(initial, 'amount', 100000))
   const [rate, setRate] = useState<NdsRate>(() => readNumberParam(initial, 'rate', 22) as NdsRate)
   const [copied, setCopied] = useState(false)
 
   const result = calculateNds({ amount, rate, operation })
 
+  useEffect(() => {
+    const routeOperation = operationFromPath(location.pathname)
+    if (routeOperation && routeOperation !== operation) {
+      setOperation(routeOperation)
+    }
+  }, [location.pathname, operation])
+
   useHistorySync({
     calculatorLabel: 'НДС',
-    calculatorUrl: '/vat',
+    calculatorUrl: location.pathname,
     calculatorParams: { operation, amount, rate },
     summary: `НДС ${rate}%: ${Math.round(result.ndsAmount).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${operation}|${amount}|${rate}|${result.ndsAmount}`,
   })
+
+  function handleOperationChange(nextOperation: NdsOperation) {
+    setOperation(nextOperation)
+    navigate(`${OPERATION_ROUTES[nextOperation]}${location.search}`)
+  }
 
   function handleCopy() {
     const text = [
@@ -56,7 +82,7 @@ export default function NdsPage() {
           {(['charge', 'extract'] as NdsOperation[]).map(op => (
             <button
               key={op}
-              onClick={() => setOperation(op)}
+              onClick={() => handleOperationChange(op)}
               className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-medium border transition-all ${
                 operation === op
                   ? 'bg-emerald-500/20 border-emerald-500/60 text-emerald-400'

@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useVkladStore } from '@/stores/vkladStore'
 import { formatMoney, CURRENCIES } from '@/utils/formatCurrency'
@@ -30,12 +31,28 @@ const TAX_OPTIONS = [
 ]
 const CURRENCY_OPTIONS = CURRENCIES.map(c => ({ value: c.value, label: `${c.symbol} ${c.value}` }))
 
+type DepositIntent = 'capitalization' | 'replenishment' | 'tax'
+
+function depositIntentFromPath(pathname: string): DepositIntent | null {
+  if (pathname === '/deposit/capitalization') return 'capitalization'
+  if (pathname === '/deposit/replenishment') return 'replenishment'
+  if (pathname === '/deposit/tax') return 'tax'
+  return null
+}
+
 export default function VkladPage() {
   const { params, result, setParams } = useVkladStore()
+  const location = useLocation()
 
   useEffect(() => {
     const search = getHistorySearchParams()
-    if (!search.size) return
+    const intent = depositIntentFromPath(location.pathname)
+    if (!search.size) {
+      if (intent === 'capitalization') setParams({ capitalizationPerYear: 12 })
+      if (intent === 'replenishment' && params.monthlyReplenishment === 0) setParams({ monthlyReplenishment: 10000 })
+      if (intent === 'tax') setParams({ taxRate: 13 })
+      return
+    }
     setParams({
       initialAmount: readNumberParam(search, 'initialAmount', params.initialAmount),
       monthlyReplenishment: readNumberParam(search, 'monthlyReplenishment', params.monthlyReplenishment),
@@ -50,7 +67,7 @@ export default function VkladPage() {
 
   useHistorySync({
     calculatorLabel: 'Вклад',
-    calculatorUrl: '/deposit',
+    calculatorUrl: location.pathname,
     calculatorParams: params,
     summary: `${Math.round(result.finalAmount).toLocaleString('ru-RU')} ₽ за ${params.termMonths} мес`,
     triggerKey: `${JSON.stringify(params)}|${result.finalAmount}`,

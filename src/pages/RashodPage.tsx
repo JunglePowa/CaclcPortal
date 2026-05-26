@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
@@ -10,6 +11,7 @@ import { NumberInput, ResultRow, InfoCard, Divider } from '@/components/ui'
 const fmt = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`
 
 export default function RashodPage() {
+  const location = useLocation()
   const initial = getHistorySearchParams()
   const [fuelConsumed, setFuelConsumed] = useState(() => readNumberParam(initial, 'fuelConsumed', 45))
   const [distance, setDistance] = useState(() => readNumberParam(initial, 'distance', 500))
@@ -19,7 +21,7 @@ export default function RashodPage() {
 
   useHistorySync({
     calculatorLabel: 'Расход топлива',
-    calculatorUrl: '/fuel-consumption',
+    calculatorUrl: location.pathname,
     calculatorParams: { fuelConsumed, distance, fuelPrice },
     summary: `${result.per100km.toFixed(1)} л/100км, итого ${Math.round(result.totalCost).toLocaleString('ru-RU')} ₽`,
     triggerKey: `${fuelConsumed}|${distance}|${fuelPrice}|${result.per100km}|${result.totalCost}`,

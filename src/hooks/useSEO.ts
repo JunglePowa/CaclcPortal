@@ -94,11 +94,41 @@ const SEO_MAP: Record<string, SEOData> = {
     canonical: `${BASE_URL}/deposit`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор вклада', url: `${BASE_URL}/deposit`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
+  '/deposit/capitalization': {
+    title: 'Калькулятор вклада с капитализацией процентов',
+    description: 'Рассчитайте вклад с капитализацией: итоговая сумма, эффективная ставка, начисленные проценты и график роста.',
+    canonical: `${BASE_URL}/deposit/capitalization`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор вклада с капитализацией', url: `${BASE_URL}/deposit/capitalization`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/deposit/replenishment': {
+    title: 'Калькулятор вклада с пополнением онлайн',
+    description: 'Посчитайте вклад с ежемесячным пополнением: итоговую сумму, чистый доход, капитализацию и график начислений.',
+    canonical: `${BASE_URL}/deposit/replenishment`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор вклада с пополнением', url: `${BASE_URL}/deposit/replenishment`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/deposit/tax': {
+    title: 'Калькулятор налога на вклад — доход после налога',
+    description: 'Оцените доход по вкладу после налога: начисленные проценты, налог к удержанию и чистый результат.',
+    canonical: `${BASE_URL}/deposit/tax`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор налога на вклад', url: `${BASE_URL}/deposit/tax`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
   '/credit': {
     title: 'Кредитный калькулятор онлайн — платёж, переплата, график',
     description: 'Рассчитайте ежемесячный платёж, переплату и график погашения кредита для аннуитетной или дифференцированной схемы.',
     canonical: `${BASE_URL}/credit`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Кредитный калькулятор', url: `${BASE_URL}/credit`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/credit/annuity': {
+    title: 'Аннуитетный платёж по кредиту — калькулятор онлайн',
+    description: 'Рассчитайте аннуитетный платёж по кредиту: ежемесячный платёж, переплата, итоговая сумма и график погашения.',
+    canonical: `${BASE_URL}/credit/annuity`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор аннуитетного платежа', url: `${BASE_URL}/credit/annuity`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/credit/differentiated': {
+    title: 'Дифференцированный платёж по кредиту — калькулятор',
+    description: 'Посчитайте дифференцированный кредит: первый и последний платёж, переплату, итоговую сумму и график погашения.',
+    canonical: `${BASE_URL}/credit/differentiated`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор дифференцированного платежа', url: `${BASE_URL}/credit/differentiated`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/vat': {
     title: 'Калькулятор НДС 22% онлайн — начислить и выделить НДС',
@@ -106,11 +136,29 @@ const SEO_MAP: Record<string, SEOData> = {
     canonical: `${BASE_URL}/vat`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор НДС', url: `${BASE_URL}/vat`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
+  '/vat/add': {
+    title: 'Начислить НДС сверху онлайн — калькулятор НДС',
+    description: 'Начислите НДС сверху к сумме без налога: ставки 22%, 20%, 10% и 0%, итоговая сумма с НДС и размер налога.',
+    canonical: `${BASE_URL}/vat/add`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Начислить НДС сверху', url: `${BASE_URL}/vat/add`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/vat/extract': {
+    title: 'Выделить НДС из суммы онлайн — калькулятор НДС',
+    description: 'Выделите НДС из суммы с налогом онлайн: расчет НДС 22%, 20%, 10% и суммы без НДС по формуле.',
+    canonical: `${BASE_URL}/vat/extract`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Выделить НДС из суммы', url: `${BASE_URL}/vat/extract`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
   '/income-tax': {
     title: 'Калькулятор НДФЛ 2026 онлайн — прогрессивная шкала 13–22%',
     description: 'Рассчитайте НДФЛ с дохода или сумму до налога по прогрессивной шкале 13–22%, с учётом стандартных вычетов на детей.',
     canonical: `${BASE_URL}/income-tax`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор НДФЛ', url: `${BASE_URL}/income-tax`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/income-tax/2026': {
+    title: 'Калькулятор НДФЛ 2026 — прогрессивная шкала',
+    description: 'Рассчитайте НДФЛ в 2026 году по прогрессивной шкале 13–22%, с учетом суммы на руки и стандартных вычетов.',
+    canonical: `${BASE_URL}/income-tax/2026`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор НДФЛ 2026', url: `${BASE_URL}/income-tax/2026`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/salary': {
     title: 'Калькулятор зарплаты онлайн — гросс, нетто, НДФЛ и взносы',
@@ -118,11 +166,29 @@ const SEO_MAP: Record<string, SEOData> = {
     canonical: `${BASE_URL}/salary`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор зарплаты', url: `${BASE_URL}/salary`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
+  '/salary/gross-net': {
+    title: 'Калькулятор гросс в нетто — зарплата на руки',
+    description: 'Рассчитайте зарплату на руки из гросс-оклада: НДФЛ, детские вычеты, страховые взносы и расходы работодателя.',
+    canonical: `${BASE_URL}/salary/gross-net`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор гросс в нетто', url: `${BASE_URL}/salary/gross-net`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/salary/net-gross': {
+    title: 'Калькулятор нетто в гросс — зарплата до налога',
+    description: 'Узнайте, какой гросс-оклад нужен для заданной суммы на руки с учетом НДФЛ, вычетов и взносов работодателя.',
+    canonical: `${BASE_URL}/salary/net-gross`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор нетто в гросс', url: `${BASE_URL}/salary/net-gross`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
   '/fuel-consumption': {
     title: 'Калькулятор расхода топлива онлайн — литры на 100 км и стоимость поездки',
     description: 'Рассчитайте расход топлива на 100 км и стоимость поездки онлайн.',
     canonical: `${BASE_URL}/fuel-consumption`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор расхода топлива', url: `${BASE_URL}/fuel-consumption`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/fuel-consumption/trip-cost': {
+    title: 'Калькулятор стоимости поездки на авто — топливо',
+    description: 'Рассчитайте стоимость поездки на автомобиле по расстоянию, расходу топлива и цене за литр.',
+    canonical: `${BASE_URL}/fuel-consumption/trip-cost`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор стоимости поездки', url: `${BASE_URL}/fuel-consumption/trip-cost`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/transport-tax': {
     title: 'Калькулятор транспортного налога онлайн — налог по лошадиным силам',
@@ -159,6 +225,18 @@ const SEO_MAP: Record<string, SEOData> = {
     description: 'Рассчитайте экономию при досрочном погашении кредита: сократить срок или уменьшить платёж.',
     canonical: `${BASE_URL}/early-repayment`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор досрочного погашения', url: `${BASE_URL}/early-repayment`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/early-repayment/reduce-term': {
+    title: 'Досрочное погашение с уменьшением срока — калькулятор',
+    description: 'Посчитайте досрочное погашение кредита с сокращением срока: экономия на процентах, новый срок и график.',
+    canonical: `${BASE_URL}/early-repayment/reduce-term`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Досрочное погашение с уменьшением срока', url: `${BASE_URL}/early-repayment/reduce-term`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/early-repayment/reduce-payment': {
+    title: 'Досрочное погашение с уменьшением платежа',
+    description: 'Рассчитайте досрочное погашение кредита с уменьшением ежемесячного платежа и сравните экономию.',
+    canonical: `${BASE_URL}/early-repayment/reduce-payment`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Досрочное погашение с уменьшением платежа', url: `${BASE_URL}/early-repayment/reduce-payment`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/tax-penalties': {
     title: 'Калькулятор пеней по налогам онлайн — ст. 75 НК РФ',
