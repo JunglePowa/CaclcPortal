@@ -126,3 +126,11 @@
 .light .text-emerald-400 {
   color: hsl(161 94% 22%);
 }
+
+@media (max-width: 640px) {
+  input:not([type="range"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
