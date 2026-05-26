@@ -2,35 +2,46 @@
 // Скрипты подгружаются динамически только если в env заданы ID,
 // чтобы в dev-сборке не было лишних запросов и шума в Network.
 
-const YM_ID = (import.meta.env.VITE_YM_ID as string | undefined) ?? ''
+const YM_ID = (import.meta.env.VITE_YM_ID as string | undefined) ?? '109428632'
 const GA_ID = (import.meta.env.VITE_GA_ID as string | undefined) ?? ''
 
 let initialized = false
+let lastYandexHitUrl = ''
 
 function initYandexMetrika(id: string): void {
   if (typeof window === 'undefined' || typeof document === 'undefined') return
 
-  // Стандартный snippet, переписан в TS-совместимом виде.
+  window.dataLayer = window.dataLayer || []
+
+  // SPA-инициализация Метрики: первичный и последующие просмотры отправляем через hit.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ;(function (m: any, e: Document, t: string, r: string) {
-    m[t] =
-      m[t] ||
+  ;(function (m: any, e: Document, t: string, r: string, i: string) {
+    m[i] =
+      m[i] ||
       function () {
-        ;(m[t].a = m[t].a || []).push(arguments)
+        ;(m[i].a = m[i].a || []).push(arguments)
       }
-    m[t].l = 1 * (new Date() as unknown as number)
+    m[i].l = 1 * (new Date() as unknown as number)
+    for (let j = 0; j < document.scripts.length; j++) {
+      if (document.scripts[j].src === r) return
+    }
     const k = e.createElement('script') as HTMLScriptElement
     const a = e.getElementsByTagName('script')[0]
     k.async = true
     k.src = r
     a?.parentNode?.insertBefore(k, a)
-  })(window, document, 'ym', 'https://mc.yandex.ru/metrika/tag.js')
+  })(window, document, 'script', `https://mc.yandex.ru/metrika/tag.js?id=${encodeURIComponent(id)}`, 'ym')
 
   window.ym?.(Number(id), 'init', {
-    clickmap: true,
-    trackLinks: true,
-    accurateTrackBounce: true,
+    ssr: true,
+    defer: true,
     webvisor: true,
+    clickmap: true,
+    ecommerce: 'dataLayer',
+    referrer: document.referrer,
+    url: location.href,
+    accurateTrackBounce: true,
+    trackLinks: true,
   })
 }
 
@@ -59,9 +70,16 @@ export function initAnalytics(): void {
 }
 
 export function trackPageview(path: string): void {
+  const pageUrl = `${window.location.origin}${path}`
   if (YM_ID) {
     try {
-      window.ym?.(Number(YM_ID), 'hit', path)
+      if (lastYandexHitUrl !== pageUrl) {
+        window.ym?.(Number(YM_ID), 'hit', pageUrl, {
+          title: document.title,
+          referer: lastYandexHitUrl || document.referrer,
+        })
+        lastYandexHitUrl = pageUrl
+      }
     } catch {
       /* no-op */
     }
