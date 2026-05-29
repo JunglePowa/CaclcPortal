@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { TrendingUp, CreditCard, Receipt, Car, Heart, Search, Clock, X, ArrowRight } from 'lucide-react'
+import { TrendingUp, CreditCard, Receipt, Car, Heart, Search, Clock, X, ArrowRight, Percent, BriefcaseBusiness } from 'lucide-react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
@@ -20,6 +20,10 @@ const POPULAR_CALCULATORS = [
   { label: 'НДС', href: '/vat' },
   { label: 'Зарплата', href: '/salary' },
   { label: 'Ипотека', href: '/mortgage' },
+  { label: 'Проценты', href: '/percentage' },
+  { label: 'Отпускные', href: '/vacation-pay' },
+  { label: 'Скидка', href: '/discount' },
+  { label: 'Сложный процент', href: '/compound-interest' },
 ]
 
 const CATEGORIES = [
@@ -31,6 +35,7 @@ const CATEGORIES = [
     color: 'emerald',
     items: [
       { label: 'Инвестиции', desc: 'Сложный процент, сценарии роста', href: '/investment', ready: true },
+      { label: 'Сложный процент', desc: 'Рост капитала с пополнениями', href: '/compound-interest', ready: true },
       { label: 'Вклад', desc: 'Депозит с капитализацией', href: '/deposit', ready: true },
       { label: 'Облигации', desc: 'Доходность ОФЗ и корпоративных', href: '/bonds', ready: true },
     ],
@@ -43,6 +48,7 @@ const CATEGORIES = [
     color: 'blue',
     items: [
       { label: 'Кредит', desc: 'Ежемесячный платёж и переплата', href: '/credit', ready: true },
+      { label: 'Кредитная карта', desc: 'Срок закрытия долга', href: '/credit-card', ready: true },
       { label: 'Ипотека', desc: 'Аннуитет и дифференциал', href: '/mortgage', ready: true },
       { label: 'Досрочное погашение', desc: 'Экономия на процентах', href: '/early-repayment', ready: true },
     ],
@@ -67,6 +73,7 @@ const CATEGORIES = [
     icon: Car,
     color: 'violet',
     items: [
+      { label: 'Автокредит', desc: 'Платёж и переплата', href: '/autocredit', ready: true },
       { label: 'Расход топлива', desc: 'Литры на 100 км', href: '/fuel-consumption', ready: true },
       { label: 'Транспортный налог', desc: 'По мощности двигателя', href: '/transport-tax', ready: true },
     ],
@@ -82,9 +89,38 @@ const CATEGORIES = [
       { label: 'Срок беременности', desc: 'Дата родов по последней менструации', href: '/pregnancy', ready: true },
     ],
   },
+  {
+    id: 'math',
+    href: '/math',
+    label: 'Математика',
+    icon: Percent,
+    color: 'cyan',
+    items: [
+      { label: 'Проценты', desc: 'Процент от числа, скидки и рост', href: '/percentage', ready: true },
+      { label: 'Дни между датами', desc: 'Дни, недели и примерный срок', href: '/days-between-dates', ready: true },
+      { label: 'Дата плюс дни', desc: 'Прибавить дни, месяцы и годы', href: '/date-add', ready: true },
+      { label: 'Время между датами', desc: 'Дни, часы и минуты', href: '/time-between', ready: true },
+      { label: 'Скидка', desc: 'Цена со скидкой и экономия', href: '/discount', ready: true },
+      { label: 'Возраст', desc: 'Возраст по дате рождения', href: '/age', ready: true },
+      { label: 'Прибавить процент', desc: 'Увеличить число на процент', href: '/percentage/add-percent', ready: true },
+      { label: 'Сколько процентов', desc: 'Доля одного числа от другого', href: '/percentage/what-percent', ready: true },
+    ],
+  },
+  {
+    id: 'work',
+    href: '/work',
+    label: 'Работа',
+    icon: BriefcaseBusiness,
+    color: 'slate',
+    items: [
+      { label: 'Отпускные', desc: 'Средний заработок и НДФЛ', href: '/vacation-pay', ready: true },
+      { label: 'Стаж', desc: 'Сумма периодов работы', href: '/work-experience', ready: true },
+      { label: 'Зарплата', desc: 'Гросс, нетто и взносы', href: '/salary', ready: true },
+    ],
+  },
 ]
 
-type ColorKey = 'emerald' | 'blue' | 'amber' | 'violet' | 'rose'
+type ColorKey = 'emerald' | 'blue' | 'amber' | 'violet' | 'rose' | 'cyan' | 'slate'
 
 const colorMap: Record<ColorKey, string> = {
   emerald: 'border-emerald-500/30 hover:border-emerald-500/60 hover:bg-emerald-500/5',
@@ -92,6 +128,8 @@ const colorMap: Record<ColorKey, string> = {
   amber: 'border-amber-500/30 hover:border-amber-500/60 hover:bg-amber-500/5',
   violet: 'border-violet-500/30 hover:border-violet-500/60 hover:bg-violet-500/5',
   rose: 'border-rose-500/30 hover:border-rose-500/60 hover:bg-rose-500/5',
+  cyan: 'border-cyan-500/30 hover:border-cyan-500/60 hover:bg-cyan-500/5',
+  slate: 'border-slate-500/30 hover:border-slate-500/60 hover:bg-slate-500/5',
 }
 
 const iconColorMap: Record<ColorKey, string> = {
@@ -100,6 +138,8 @@ const iconColorMap: Record<ColorKey, string> = {
   amber: 'text-amber-400',
   violet: 'text-violet-400',
   rose: 'text-rose-400',
+  cyan: 'text-cyan-400',
+  slate: 'text-slate-400',
 }
 
 function CalcCard({ item, color }: { item: CategoryItem; color: string }) {

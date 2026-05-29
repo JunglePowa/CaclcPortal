@@ -25,6 +25,17 @@ const ContactsPage = lazy(() => import('@/pages/ContactsPage'))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
 const MethodologyPage = lazy(() => import('@/pages/MethodologyPage'))
+const PercentagePage = lazy(() => import('@/pages/PercentagePage'))
+const OtpuskPage = lazy(() => import('@/pages/OtpuskPage'))
+const StazhPage = lazy(() => import('@/pages/StazhPage'))
+const DaysBetweenPage = lazy(() => import('@/pages/DaysBetweenPage'))
+const DiscountPage = lazy(() => import('@/pages/DiscountPage'))
+const AgePage = lazy(() => import('@/pages/AgePage'))
+const AutocreditPage = lazy(() => import('@/pages/AutocreditPage'))
+const CreditCardPage = lazy(() => import('@/pages/CreditCardPage'))
+const CompoundInterestPage = lazy(() => import('@/pages/CompoundInterestPage'))
+const DateAddPage = lazy(() => import('@/pages/DateAddPage'))
+const TimeBetweenPage = lazy(() => import('@/pages/TimeBetweenPage'))
 
 export default function App() {
   useSEO()
@@ -86,6 +97,7 @@ export default function App() {
         <Route path="/early-repayment" element={<KreditDosrochnoePage />} />
         <Route path="/early-repayment/reduce-term" element={<KreditDosrochnoePage />} />
         <Route path="/early-repayment/reduce-payment" element={<KreditDosrochnoePage />} />
+        <Route path="/credit-card" element={<CreditCardPage />} />
         <Route path="/tax-penalties" element={<PeniPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
@@ -97,6 +109,23 @@ export default function App() {
         <Route path="/taxes" element={<CategoryPage />} />
         <Route path="/auto" element={<CategoryPage />} />
         <Route path="/health" element={<CategoryPage />} />
+        <Route path="/math" element={<CategoryPage />} />
+        <Route path="/work" element={<CategoryPage />} />
+        <Route path="/percentage" element={<PercentagePage />} />
+        <Route path="/percentage/percent-of-number" element={<PercentagePage />} />
+        <Route path="/percentage/add-percent" element={<PercentagePage />} />
+        <Route path="/percentage/subtract-percent" element={<PercentagePage />} />
+        <Route path="/percentage/percentage-change" element={<PercentagePage />} />
+        <Route path="/percentage/what-percent" element={<PercentagePage />} />
+        <Route path="/compound-interest" element={<CompoundInterestPage />} />
+        <Route path="/days-between-dates" element={<DaysBetweenPage />} />
+        <Route path="/date-add" element={<DateAddPage />} />
+        <Route path="/time-between" element={<TimeBetweenPage />} />
+        <Route path="/discount" element={<DiscountPage />} />
+        <Route path="/age" element={<AgePage />} />
+        <Route path="/vacation-pay" element={<OtpuskPage />} />
+        <Route path="/work-experience" element={<StazhPage />} />
+        <Route path="/autocredit" element={<AutocreditPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>

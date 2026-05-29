@@ -21,6 +21,17 @@ import ContactsPage from '@/pages/ContactsPage'
 import MethodologyPage from '@/pages/MethodologyPage'
 import CategoryPage from '@/pages/CategoryPage'
 import NotFoundPage from '@/pages/NotFoundPage'
+import PercentagePage from '@/pages/PercentagePage'
+import OtpuskPage from '@/pages/OtpuskPage'
+import StazhPage from '@/pages/StazhPage'
+import DaysBetweenPage from '@/pages/DaysBetweenPage'
+import DiscountPage from '@/pages/DiscountPage'
+import AgePage from '@/pages/AgePage'
+import AutocreditPage from '@/pages/AutocreditPage'
+import CreditCardPage from '@/pages/CreditCardPage'
+import CompoundInterestPage from '@/pages/CompoundInterestPage'
+import DateAddPage from '@/pages/DateAddPage'
+import TimeBetweenPage from '@/pages/TimeBetweenPage'
 
 export function ServerApp() {
   return (
@@ -57,6 +68,7 @@ export function ServerApp() {
       <Route path="/early-repayment" element={<KreditDosrochnoePage />} />
       <Route path="/early-repayment/reduce-term" element={<KreditDosrochnoePage />} />
       <Route path="/early-repayment/reduce-payment" element={<KreditDosrochnoePage />} />
+      <Route path="/credit-card" element={<CreditCardPage />} />
       <Route path="/tax-penalties" element={<PeniPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
@@ -68,6 +80,23 @@ export function ServerApp() {
       <Route path="/taxes" element={<CategoryPage />} />
       <Route path="/auto" element={<CategoryPage />} />
       <Route path="/health" element={<CategoryPage />} />
+      <Route path="/math" element={<CategoryPage />} />
+      <Route path="/work" element={<CategoryPage />} />
+      <Route path="/percentage" element={<PercentagePage />} />
+      <Route path="/percentage/percent-of-number" element={<PercentagePage />} />
+      <Route path="/percentage/add-percent" element={<PercentagePage />} />
+      <Route path="/percentage/subtract-percent" element={<PercentagePage />} />
+      <Route path="/percentage/percentage-change" element={<PercentagePage />} />
+      <Route path="/percentage/what-percent" element={<PercentagePage />} />
+      <Route path="/compound-interest" element={<CompoundInterestPage />} />
+      <Route path="/days-between-dates" element={<DaysBetweenPage />} />
+      <Route path="/date-add" element={<DateAddPage />} />
+      <Route path="/time-between" element={<TimeBetweenPage />} />
+      <Route path="/discount" element={<DiscountPage />} />
+      <Route path="/age" element={<AgePage />} />
+      <Route path="/vacation-pay" element={<OtpuskPage />} />
+      <Route path="/work-experience" element={<StazhPage />} />
+      <Route path="/autocredit" element={<AutocreditPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )

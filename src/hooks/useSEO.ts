@@ -88,6 +88,12 @@ const SEO_MAP: Record<string, SEOData> = {
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' },
     },
   },
+  '/compound-interest': {
+    title: 'Калькулятор сложного процента онлайн — капитализация и пополнения',
+    description: 'Рассчитайте сложный процент онлайн: стартовая сумма, ежемесячные пополнения, ставка, срок, капитализация и итоговый доход.',
+    canonical: `${BASE_URL}/compound-interest`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор сложного процента', url: `${BASE_URL}/compound-interest`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
   '/deposit': {
     title: 'Калькулятор вклада онлайн — доходность, капитализация, налог',
     description: 'Рассчитайте сумму вклада, проценты, пополнения, капитализацию и чистый доход после налога за выбранный срок.',
@@ -178,6 +184,18 @@ const SEO_MAP: Record<string, SEOData> = {
     canonical: `${BASE_URL}/salary/net-gross`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор нетто в гросс', url: `${BASE_URL}/salary/net-gross`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
+  '/vacation-pay': {
+    title: 'Калькулятор отпускных онлайн — средний заработок, НДФЛ и сумма на руки',
+    description: 'Рассчитайте отпускные онлайн: средний дневной заработок, сумма до НДФЛ, налог и выплата на руки за дни отпуска.',
+    canonical: `${BASE_URL}/vacation-pay`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор отпускных', url: `${BASE_URL}/vacation-pay`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/work-experience': {
+    title: 'Калькулятор стажа онлайн — трудовой стаж по периодам работы',
+    description: 'Посчитайте трудовой стаж онлайн по нескольким периодам работы: годы, месяцы, дни и общий стаж без двойного учёта пересечений.',
+    canonical: `${BASE_URL}/work-experience`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор стажа', url: `${BASE_URL}/work-experience`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
   '/fuel-consumption': {
     title: 'Калькулятор расхода топлива онлайн — литры на 100 км и стоимость поездки',
     description: 'Рассчитайте расход топлива на 100 км и стоимость поездки онлайн.',
@@ -195,6 +213,78 @@ const SEO_MAP: Record<string, SEOData> = {
     description: 'Рассчитайте транспортный налог по мощности двигателя и сроку владения.',
     canonical: `${BASE_URL}/transport-tax`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор транспортного налога', url: `${BASE_URL}/transport-tax`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/autocredit': {
+    title: 'Калькулятор автокредита онлайн — платёж, первый взнос и переплата',
+    description: 'Рассчитайте автокредит онлайн: ежемесячный платёж, сумму кредита, первый взнос, переплату и полную стоимость автомобиля.',
+    canonical: `${BASE_URL}/autocredit`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор автокредита', url: `${BASE_URL}/autocredit`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/percentage': {
+    title: 'Калькулятор процентов онлайн — процент от числа, прибавить и вычесть',
+    description: 'Посчитайте процент от числа, прибавьте или вычтите процент, найдите процентное изменение и сколько процентов одно число от другого.',
+    canonical: `${BASE_URL}/percentage`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор процентов', url: `${BASE_URL}/percentage`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/percentage/percent-of-number': {
+    title: 'Процент от числа онлайн — калькулятор процентов',
+    description: 'Найдите, сколько будет X процентов от числа: быстрый онлайн расчёт с формулой и примером.',
+    canonical: `${BASE_URL}/percentage/percent-of-number`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Процент от числа', url: `${BASE_URL}/percentage/percent-of-number`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/percentage/add-percent': {
+    title: 'Прибавить процент к числу — калькулятор онлайн',
+    description: 'Увеличьте число на заданный процент онлайн: итоговое значение, формула и быстрый расчёт.',
+    canonical: `${BASE_URL}/percentage/add-percent`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Прибавить процент к числу', url: `${BASE_URL}/percentage/add-percent`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/percentage/subtract-percent': {
+    title: 'Вычесть процент из числа — калькулятор онлайн',
+    description: 'Уменьшите число на заданный процент онлайн: итоговое значение, формула и быстрый расчёт.',
+    canonical: `${BASE_URL}/percentage/subtract-percent`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Вычесть процент из числа', url: `${BASE_URL}/percentage/subtract-percent`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/percentage/percentage-change': {
+    title: 'Процентное изменение онлайн — рост и снижение в процентах',
+    description: 'Рассчитайте, на сколько процентов изменилось число: рост, снижение, разница между старым и новым значением.',
+    canonical: `${BASE_URL}/percentage/percentage-change`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Процентное изменение', url: `${BASE_URL}/percentage/percentage-change`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/percentage/what-percent': {
+    title: 'Сколько процентов составляет число от числа — калькулятор',
+    description: 'Узнайте, сколько процентов одно число составляет от другого: доля в процентах, формула и пример.',
+    canonical: `${BASE_URL}/percentage/what-percent`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Сколько процентов составляет число', url: `${BASE_URL}/percentage/what-percent`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/days-between-dates': {
+    title: 'Калькулятор дней между датами онлайн — сколько дней прошло',
+    description: 'Посчитайте количество дней между двумя датами онлайн: дни, недели, примерные месяцы и годы, с учётом или без учёта конечной даты.',
+    canonical: `${BASE_URL}/days-between-dates`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор дней между датами', url: `${BASE_URL}/days-between-dates`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/date-add': {
+    title: 'Калькулятор даты плюс дни онлайн — прибавить дни, месяцы и годы',
+    description: 'Прибавьте к дате дни, месяцы или годы онлайн. Калькулятор покажет итоговую дату и день недели.',
+    canonical: `${BASE_URL}/date-add`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор даты плюс дни', url: `${BASE_URL}/date-add`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/time-between': {
+    title: 'Калькулятор времени между датами — дни, часы и минуты',
+    description: 'Посчитайте разницу между двумя датами и временем: всего минут, дни, часы и минуты между событиями.',
+    canonical: `${BASE_URL}/time-between`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор времени между датами', url: `${BASE_URL}/time-between`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/discount': {
+    title: 'Калькулятор скидки онлайн — цена со скидкой и экономия',
+    description: 'Посчитайте цену со скидкой онлайн: исходная цена, процент скидки, сумма экономии и итоговая стоимость товара.',
+    canonical: `${BASE_URL}/discount`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор скидки', url: `${BASE_URL}/discount`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/age': {
+    title: 'Калькулятор возраста онлайн — возраст по дате рождения',
+    description: 'Рассчитайте точный возраст по дате рождения: годы, месяцы, дни, всего дней и сколько осталось до следующего дня рождения.',
+    canonical: `${BASE_URL}/age`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор возраста', url: `${BASE_URL}/age`, applicationCategory: 'UtilityApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/bmi': {
     title: 'Калькулятор ИМТ онлайн — индекс массы тела и категория веса',
@@ -237,6 +327,12 @@ const SEO_MAP: Record<string, SEOData> = {
     description: 'Рассчитайте досрочное погашение кредита с уменьшением ежемесячного платежа и сравните экономию.',
     canonical: `${BASE_URL}/early-repayment/reduce-payment`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Досрочное погашение с уменьшением платежа', url: `${BASE_URL}/early-repayment/reduce-payment`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/credit-card': {
+    title: 'Калькулятор кредитной карты онлайн — срок закрытия долга',
+    description: 'Рассчитайте, за сколько месяцев закрыть долг по кредитной карте: ежемесячный платёж, проценты, переплата и общая сумма выплат.',
+    canonical: `${BASE_URL}/credit-card`,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор кредитной карты', url: `${BASE_URL}/credit-card`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/tax-penalties': {
     title: 'Калькулятор пеней по налогам онлайн — ст. 75 НК РФ',
