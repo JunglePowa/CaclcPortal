@@ -24,6 +24,7 @@ export const CALCULATOR_CATEGORIES: CalculatorCategory[] = [
     intro: 'Финансовые калькуляторы помогают быстро оценить доходность, будущую стоимость капитала и влияние регулярных пополнений. Используйте их для сравнения сценариев перед тем, как принимать решение.',
     items: [
       { href: '/investment', label: 'Калькулятор роста капитала', desc: 'Инвестиции, сложный процент, инфляция и налог' },
+      { href: '/capital-growth-calculator', label: 'Рост капитала с пополнениями', desc: 'Отдельная посадочная под накопления и пополнения' },
       { href: '/compound-interest', label: 'Сложный процент', desc: 'Капитализация раз в месяц или год' },
       { href: '/deposit', label: 'Калькулятор вклада', desc: 'Доходность депозита, капитализация и пополнения' },
       { href: '/deposit/capitalization', label: 'Вклад с капитализацией', desc: 'Эффективная доходность и рост процентов' },
@@ -67,6 +68,9 @@ export const CALCULATOR_CATEGORIES: CalculatorCategory[] = [
       { href: '/salary/gross-net', label: 'Гросс в нетто', desc: 'Посчитать зарплату на руки из оклада' },
       { href: '/salary/net-gross', label: 'Нетто в гросс', desc: 'Подобрать оклад по сумме на руки' },
       { href: '/tax-penalties', label: 'Счетчик пени по налогам', desc: 'Пени по налогам и страховым взносам по ст. 75 НК РФ' },
+      { href: '/tax-penalties/online', label: 'Счетчик пени онлайн', desc: 'Быстрая проверка просрочки по датам и ставке ЦБ' },
+      { href: '/tax-penalties/individuals', label: 'Пени для физлиц', desc: 'Расчёт по правилу 1/300 ключевой ставки' },
+      { href: '/tax-penalties/legal-entities', label: 'Пени для юрлиц', desc: 'Расчёт для организаций по периодам просрочки' },
     ],
   },
   {

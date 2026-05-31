@@ -38,6 +38,7 @@ const INVESTICII_SUBROUTES = [
 const STATIC_ROUTES = [
   { path: '/', changefreq: 'weekly', priority: '1.0' },
   { path: '/investment', changefreq: 'monthly', priority: '0.9' },
+  { path: '/capital-growth-calculator', changefreq: 'monthly', priority: '0.8' },
   { path: '/compound-interest', changefreq: 'monthly', priority: '0.9' },
   { path: '/deposit', changefreq: 'monthly', priority: '0.9' },
   { path: '/deposit/capitalization', changefreq: 'monthly', priority: '0.8' },
@@ -80,6 +81,9 @@ const STATIC_ROUTES = [
   { path: '/early-repayment/reduce-payment', changefreq: 'monthly', priority: '0.8' },
   { path: '/credit-card', changefreq: 'monthly', priority: '0.8' },
   { path: '/tax-penalties', changefreq: 'monthly', priority: '0.7' },
+  { path: '/tax-penalties/online', changefreq: 'monthly', priority: '0.8' },
+  { path: '/tax-penalties/individuals', changefreq: 'monthly', priority: '0.7' },
+  { path: '/tax-penalties/legal-entities', changefreq: 'monthly', priority: '0.7' },
   { path: '/about', changefreq: 'yearly', priority: '0.3' },
   { path: '/methodology', changefreq: 'yearly', priority: '0.4' },
   { path: '/contacts', changefreq: 'yearly', priority: '0.3' },

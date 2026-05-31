@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { AdBlock } from '@/components/AdBlock'
 import { AD_SLOTS } from '@/lib/adSlots'
@@ -9,17 +10,41 @@ import { NumberInput, ResultRow, InfoCard, Divider, DateInput } from '@/componen
 
 const fmt = (v: number) => `${v.toLocaleString('ru-RU', { maximumFractionDigits: 2 })} ₽`
 
+const PAGE_COPY: Record<string, { title: string; subtitle: string; individual: boolean }> = {
+  '/tax-penalties/online': {
+    title: 'Счетчик пени онлайн',
+    subtitle: 'Налоги, взносы, дни просрочки и ставка ЦБ',
+    individual: true,
+  },
+  '/tax-penalties/individuals': {
+    title: 'Калькулятор пени по налогам для физлиц',
+    subtitle: 'Расчёт по правилу 1/300 ключевой ставки',
+    individual: true,
+  },
+  '/tax-penalties/legal-entities': {
+    title: 'Калькулятор пени по налогам для юрлиц',
+    subtitle: 'Расчёт с учётом правил для организаций',
+    individual: false,
+  },
+}
+
 function todayISO(): string {
   return new Date().toISOString().slice(0, 10)
 }
 
 export default function PeniPage() {
+  const location = useLocation()
+  const copy = PAGE_COPY[location.pathname] ?? {
+    title: 'Счетчик пени по налогам онлайн',
+    subtitle: 'Калькулятор по ст. 75 НК РФ',
+    individual: true,
+  }
   const initial = getHistorySearchParams()
   const [debt, setDebt] = useState(() => readNumberParam(initial, 'debt', 100000))
   const [startDate, setStartDate] = useState(() => readStringParam(initial, 'startDate', '2026-01-01'))
   const [endDate, setEndDate] = useState(() => readStringParam(initial, 'endDate', todayISO()))
   const [keyRate, setKeyRate] = useState(() => readNumberParam(initial, 'keyRate', 16))
-  const [isIndividual, setIsIndividual] = useState(() => readBooleanParam(initial, 'isIndividual', true))
+  const [isIndividual, setIsIndividual] = useState(() => readBooleanParam(initial, 'isIndividual', copy.individual))
 
   const result = calculatePeni({ debt, startDate, endDate, keyRate, isIndividual })
 
@@ -36,8 +61,8 @@ export default function PeniPage() {
       <div className="max-w-lg mx-auto py-8 px-4">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold mb-1">Счетчик пени по налогам онлайн</h1>
-            <p className="text-sm text-[hsl(var(--fg-muted))]">Калькулятор по ст. 75 НК РФ</p>
+            <h1 className="text-2xl font-bold mb-1">{copy.title}</h1>
+            <p className="text-sm text-[hsl(var(--fg-muted))]">{copy.subtitle}</p>
           </div>
         </div>
 

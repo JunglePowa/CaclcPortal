@@ -88,6 +88,12 @@ const SEO_MAP: Record<string, SEOData> = {
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' },
     },
   },
+  '/capital-growth-calculator': {
+    title: 'Калькулятор роста капитала с пополнениями онлайн',
+    description: 'Онлайн калькулятор роста капитала: стартовая сумма, регулярные пополнения, доходность, сложный процент, налог и инфляция.',
+    canonical: `${BASE_URL}/capital-growth-calculator`,
+    jsonLd: buildWebApplicationJsonLd('/capital-growth-calculator', 'Калькулятор роста капитала', 'Расчёт роста капитала с пополнениями, сложным процентом, налогом и инфляцией'),
+  },
   '/compound-interest': {
     title: 'Калькулятор сложного процента онлайн — реинвестирование и пополнения',
     description: 'Рассчитайте сложный процент онлайн: стартовая сумма, пополнения, капитализация раз в месяц или год, реинвестирование и итоговый доход.',
@@ -339,6 +345,24 @@ const SEO_MAP: Record<string, SEOData> = {
     description: 'Онлайн счетчик пени по налогам и страховым взносам: расчёт по сумме долга, дням просрочки и ключевой ставке для физлиц и юрлиц.',
     canonical: `${BASE_URL}/tax-penalties`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор пеней', url: `${BASE_URL}/tax-penalties`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
+  },
+  '/tax-penalties/online': {
+    title: 'Счетчик пени онлайн — налоги и страховые взносы',
+    description: 'Быстрый счетчик пени онлайн: рассчитайте просрочку по налогам и страховым взносам по сумме долга, датам и ключевой ставке.',
+    canonical: `${BASE_URL}/tax-penalties/online`,
+    jsonLd: buildWebApplicationJsonLd('/tax-penalties/online', 'Счетчик пени онлайн', 'Онлайн расчёт пени по налогам и страховым взносам'),
+  },
+  '/tax-penalties/individuals': {
+    title: 'Калькулятор пени по налогам для физлиц онлайн',
+    description: 'Рассчитайте пени по налогам для физлица: сумма недоимки, даты просрочки, ключевая ставка и правило 1/300 ставки ЦБ.',
+    canonical: `${BASE_URL}/tax-penalties/individuals`,
+    jsonLd: buildWebApplicationJsonLd('/tax-penalties/individuals', 'Калькулятор пени для физлиц', 'Расчёт пени по налогам для физических лиц'),
+  },
+  '/tax-penalties/legal-entities': {
+    title: 'Калькулятор пени по налогам для юрлиц онлайн',
+    description: 'Рассчитайте пени по налогам для организации: сумма недоимки, дни просрочки, ключевая ставка и правила для юрлиц.',
+    canonical: `${BASE_URL}/tax-penalties/legal-entities`,
+    jsonLd: buildWebApplicationJsonLd('/tax-penalties/legal-entities', 'Калькулятор пени для юрлиц', 'Расчёт пени по налогам для юридических лиц'),
   },
   '/privacy': {
     title: 'Политика конфиденциальности — Калк Портал',

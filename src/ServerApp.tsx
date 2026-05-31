@@ -38,6 +38,7 @@ export function ServerApp() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/investment" element={<InvesticiiPage />} />
+      <Route path="/capital-growth-calculator" element={<InvesticiiPage />} />
       <Route path="/investment/contribution" element={<InvesticiiPage />} />
       <Route path="/investment/term" element={<InvesticiiPage />} />
       <Route path="/investment/rate" element={<InvesticiiPage />} />
@@ -70,6 +71,9 @@ export function ServerApp() {
       <Route path="/early-repayment/reduce-payment" element={<KreditDosrochnoePage />} />
       <Route path="/credit-card" element={<CreditCardPage />} />
       <Route path="/tax-penalties" element={<PeniPage />} />
+      <Route path="/tax-penalties/online" element={<PeniPage />} />
+      <Route path="/tax-penalties/individuals" element={<PeniPage />} />
+      <Route path="/tax-penalties/legal-entities" element={<PeniPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/about" element={<AboutPage />} />
