@@ -104,6 +104,21 @@ describe('calculateCompound', () => {
     expect(withTax[9].interest).toBeLessThan(noTax[9].interest)
   })
 
+  it('applies tax once to final cumulative profit, not every year', () => {
+    const result = calculateCompound({
+      initialAmount: 100_000,
+      monthlyContribution: 0,
+      annualRate: 10,
+      compoundingPerYear: 1,
+      years: 2,
+      taxRate: 13,
+    })
+
+    expect(result[0].total).toBeCloseTo(110_000, 2)
+    expect(result[1].total).toBeCloseTo(118_270, 2)
+    expect(result[1].interest).toBeCloseTo(18_270, 2)
+  })
+
   it('inflation adjusts realValue below total', () => {
     const result = calculateCompound({ ...base, inflationRate: 5 })
     result.forEach(row => {

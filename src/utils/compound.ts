@@ -38,7 +38,6 @@ export function calculateCompound(params: CalcParams): YearlyBreakdown[] {
 
   const n = compoundingPerYear
   const rn = annualRate / 100 / n
-  const taxMultiplier = 1 - taxRate / 100
 
   // monthlyContribution здесь — это взнос за один период выбранной частоты
   // (т.е. за месяц при 'monthly', за квартал при 'quarterly', за год при 'yearly').
@@ -54,27 +53,28 @@ export function calculateCompound(params: CalcParams): YearlyBreakdown[] {
   for (let year = 1; year <= years; year++) {
     const annualContrib = baseAnnualContrib * Math.pow(1 + contributionGrowthRate / 100, year - 1)
     const pmtPerPeriod = annualContrib / n
-    const startBalance = balance
 
     for (let p = 0; p < n; p++) {
       balance = balance * (1 + rn) + pmtPerPeriod
     }
 
-    const grossInterest = balance - startBalance - annualContrib
-    const netBalance = startBalance + annualContrib + grossInterest * taxMultiplier
-    balance = netBalance
     cumulativeContributions += annualContrib
+    const grossCumulativeInterest = balance - initialAmount - cumulativeContributions
+    const isFinalYear = year === years
+    const finalTax = isFinalYear ? Math.max(0, grossCumulativeInterest) * (taxRate / 100) : 0
+    const displayedTotal = balance - finalTax
+    const displayedInterest = displayedTotal - initialAmount - cumulativeContributions
 
     const realValue = inflationRate && inflationRate > 0
-      ? adjustForInflation(balance, inflationRate, year)
+      ? adjustForInflation(displayedTotal, inflationRate, year)
       : undefined
 
     results.push({
       year,
       principal: initialAmount,
       contributions: cumulativeContributions,
-      interest: balance - initialAmount - cumulativeContributions,
-      total: balance,
+      interest: displayedInterest,
+      total: displayedTotal,
       realValue,
     })
   }

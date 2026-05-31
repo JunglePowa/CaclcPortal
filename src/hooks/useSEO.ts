@@ -89,8 +89,8 @@ const SEO_MAP: Record<string, SEOData> = {
     },
   },
   '/compound-interest': {
-    title: 'Калькулятор сложного процента онлайн — капитализация и пополнения',
-    description: 'Рассчитайте сложный процент онлайн: стартовая сумма, ежемесячные пополнения, ставка, срок, капитализация и итоговый доход.',
+    title: 'Калькулятор сложного процента онлайн — реинвестирование и пополнения',
+    description: 'Рассчитайте сложный процент онлайн: стартовая сумма, пополнения, капитализация раз в месяц или год, реинвестирование и итоговый доход.',
     canonical: `${BASE_URL}/compound-interest`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор сложного процента', url: `${BASE_URL}/compound-interest`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },

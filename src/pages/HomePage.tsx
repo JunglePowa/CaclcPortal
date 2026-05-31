@@ -35,7 +35,7 @@ const CATEGORIES = [
     color: 'emerald',
     items: [
       { label: 'Инвестиции', desc: 'Сложный процент, сценарии роста', href: '/investment', ready: true },
-      { label: 'Сложный процент', desc: 'Рост капитала с пополнениями', href: '/compound-interest', ready: true },
+      { label: 'Сложный процент', desc: 'Капитализация месяц или год', href: '/compound-interest', ready: true },
       { label: 'Вклад', desc: 'Депозит с капитализацией', href: '/deposit', ready: true },
       { label: 'Облигации', desc: 'Доходность ОФЗ и корпоративных', href: '/bonds', ready: true },
     ],
