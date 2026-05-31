@@ -74,8 +74,8 @@ const SEO_MAP: Record<string, SEOData> = {
     },
   },
   '/investment': {
-    title: 'Калькулятор инвестиций онлайн — сложный процент и накопления',
-    description: 'Рассчитайте будущую стоимость капитала, регулярные пополнения, сложный процент, налог и инфляцию. 6 режимов инвестиционного расчёта.',
+    title: 'Калькулятор роста капитала онлайн — инвестиции и сложный процент',
+    description: 'Рассчитайте рост капитала онлайн: стартовая сумма, пополнения, сложный процент, налог, инфляция и 6 режимов инвестиционного расчёта.',
     canonical: `${BASE_URL}/investment`,
     jsonLd: {
       '@context': 'https://schema.org',
@@ -335,8 +335,8 @@ const SEO_MAP: Record<string, SEOData> = {
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор кредитной карты', url: `${BASE_URL}/credit-card`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },
   '/tax-penalties': {
-    title: 'Калькулятор пеней по налогам онлайн — ст. 75 НК РФ',
-    description: 'Рассчитайте пени по налогам и страховым взносам по ст. 75 НК РФ. Для физлиц и юрлиц.',
+    title: 'Счетчик пени по налогам онлайн — калькулятор ст. 75 НК РФ',
+    description: 'Онлайн счетчик пени по налогам и страховым взносам: расчёт по сумме долга, дням просрочки и ключевой ставке для физлиц и юрлиц.',
     canonical: `${BASE_URL}/tax-penalties`,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Калькулятор пеней', url: `${BASE_URL}/tax-penalties`, applicationCategory: 'FinanceApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' } },
   },

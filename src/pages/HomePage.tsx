@@ -34,7 +34,7 @@ const CATEGORIES = [
     icon: TrendingUp,
     color: 'emerald',
     items: [
-      { label: 'Инвестиции', desc: 'Сложный процент, сценарии роста', href: '/investment', ready: true },
+      { label: 'Рост капитала', desc: 'Инвестиции и сложный процент', href: '/investment', ready: true },
       { label: 'Сложный процент', desc: 'Капитализация месяц или год', href: '/compound-interest', ready: true },
       { label: 'Вклад', desc: 'Депозит с капитализацией', href: '/deposit', ready: true },
       { label: 'Облигации', desc: 'Доходность ОФЗ и корпоративных', href: '/bonds', ready: true },
@@ -63,7 +63,7 @@ const CATEGORIES = [
       { label: 'НДС', desc: 'Начислить и выделить НДС', href: '/vat', ready: true },
       { label: 'НДФЛ', desc: 'Налог на доходы физлиц', href: '/income-tax', ready: true },
       { label: 'Зарплата', desc: 'Гросс → нетто и наоборот', href: '/salary', ready: true },
-      { label: 'Пени', desc: 'По налогам и страховым взносам', href: '/tax-penalties', ready: true },
+      { label: 'Пени по налогам', desc: 'Счетчик по ст. 75 НК РФ', href: '/tax-penalties', ready: true },
     ],
   },
   {

@@ -130,9 +130,9 @@ export default function InvesticiiPage() {
     <>
       <div className="mb-5">
         <p className="text-xs font-semibold uppercase tracking-wide text-emerald-400">Параметры расчёта</p>
-        <h1 className="mt-1 text-lg font-semibold">Калькулятор инвестиций</h1>
+        <h1 className="mt-1 text-lg font-semibold">Калькулятор роста капитала</h1>
         <p className="mt-1 text-xs leading-5 text-[hsl(var(--fg-muted))]">
-          Выберите режим расчёта, ставку и срок, чтобы оценить накопления и сценарии.
+          Выберите режим расчёта, ставку и срок, чтобы оценить инвестиции, накопления и сценарии.
         </p>
       </div>
       <ModeSelector />

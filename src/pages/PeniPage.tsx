@@ -36,8 +36,8 @@ export default function PeniPage() {
       <div className="max-w-lg mx-auto py-8 px-4">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold mb-1">Пени по налогам</h1>
-            <p className="text-sm text-[hsl(var(--fg-muted))]">Расчёт по ст. 75 НК РФ</p>
+            <h1 className="text-2xl font-bold mb-1">Счетчик пени по налогам онлайн</h1>
+            <p className="text-sm text-[hsl(var(--fg-muted))]">Калькулятор по ст. 75 НК РФ</p>
           </div>
         </div>
 

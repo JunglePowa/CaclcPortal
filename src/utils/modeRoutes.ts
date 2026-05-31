@@ -19,7 +19,7 @@ export const ROUTE_MODES: Record<string, CalculatorMode> = {
 }
 
 export const MODE_TITLES: Record<CalculatorMode, string> = {
-  accumulation: 'Инвестиции — Калк Портал',
+  accumulation: 'Калькулятор роста капитала онлайн — Калк Портал',
   goal: 'Нужный взнос — Калк Портал',
   duration: 'Срок накопления — Калк Портал',
   rate: 'Нужная ставка — Калк Портал',
@@ -28,7 +28,7 @@ export const MODE_TITLES: Record<CalculatorMode, string> = {
 }
 
 export const MODE_DESCRIPTIONS: Record<CalculatorMode, string> = {
-  accumulation: 'Рассчитайте итоговую сумму накоплений с учётом сложного процента, налога и инфляции.',
+  accumulation: 'Рассчитайте рост капитала с учётом сложного процента, пополнений, налога и инфляции.',
   goal: 'Узнайте, какой ежемесячный взнос нужен для достижения финансовой цели.',
   duration: 'Рассчитайте, за сколько лет вы накопите нужную сумму.',
   rate: 'Найдите необходимую процентную ставку для достижения цели.',
